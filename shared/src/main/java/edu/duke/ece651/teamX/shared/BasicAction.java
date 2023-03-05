@@ -1,6 +1,6 @@
 package edu.duke.ece651.teamX.shared;
 
-public abstract class basicAction implements Action {
+public abstract class BasicAction implements Action {
 
   @Override
   public boolean checkValid() {

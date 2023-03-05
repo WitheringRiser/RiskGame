@@ -36,11 +36,11 @@ public class Player {
     return true;
   }
 
-  public playError receiveError() {
+  public PlayError receiveError() {
     return null;
   }
 
-  public void errorHandling(playError err) {
+  public void errorHandling(PlayError err) {
 
   }
 

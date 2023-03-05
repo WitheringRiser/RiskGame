@@ -1,5 +1,5 @@
 package edu.duke.ece651.teamX.shared;
 
-public interface playError {
+public class BasicUnit implements Unit {
 
 }
