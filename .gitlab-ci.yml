@@ -47,7 +47,7 @@ include:
 
 code_quality:
   stage:
-    - code_quality
+    code_quality
   services:
   tags:
     - cq-sans-dind     # Set this job to only run on our new specialized runner
