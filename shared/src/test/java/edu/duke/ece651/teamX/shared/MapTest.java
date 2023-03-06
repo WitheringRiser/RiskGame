@@ -42,4 +42,26 @@ public class MapTest {
     assertEquals(true, my_map.addTerritory(new Territory("eTerritory")));
     assertEquals(5, my_map.getTerritoryNum());
   }
+
+  @Test
+  public void test_setOwner() {
+    Map my_map = new Map();
+    Territory t1 = new Territory("aTerritory");
+    Territory t2 = new Territory("aTerritory");
+    Territory t3 = new Territory("bTerritory");
+    Territory t4 = new Territory("cTerritory");
+    assertEquals(true, my_map.addTerritory(t1));
+    assertEquals(true, my_map.addTerritory(t3));
+    assertEquals(true, my_map.addTerritory(t4));
+    Player p1 = new Player("Red", 20, 4);
+    Player p2 = new Player("Blue", 20, 4);
+    //Test normal function of setOwner
+    assertEquals(true, my_map.setOwner(t1, p1));
+    assertEquals(p1, my_map.getOwner(t1));
+    assertEquals(true, my_map.setOwner(t2, p2));
+    assertEquals(p2, my_map.getOwner(t1));
+    //Set null or non-exist territory
+    assertEquals(false, my_map.setOwner(null, p2));
+    assertEquals(false, my_map.setOwner(new Territory("dTerritory"), p2));
+  }
 }
