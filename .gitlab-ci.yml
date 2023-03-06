@@ -3,7 +3,7 @@ before_script:
   - whoami
   - pwd
   - ls -la
-  - docker --version
+#  - docker --version
 
 stages:
   - build
