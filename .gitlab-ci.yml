@@ -26,15 +26,15 @@ test:
     paths:
       - coverage
 
-pages:
-  stage: coverage
-  tags:
-    - ece651
-  dependencies:
-    - test
-  script:
-    - mv coverage public/
-  artifacts:
-    paths:
-      - public
+#pages:
+#  stage: coverage
+#  tags:
+#    - ece651
+#  dependencies:
+#    - test
+#  script:
+#    - mv coverage public/
+#  artifacts:
+#    paths:
+#      - public
 
