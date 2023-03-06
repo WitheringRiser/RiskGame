@@ -28,6 +28,8 @@ test:
       - coverage
 
 qodana:
+  stage:
+    qodana
   image:
     name: jetbrains/qodana-jvm:2022.3-eap
     entrypoint: [ "" ]
