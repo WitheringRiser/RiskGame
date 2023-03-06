@@ -10,6 +10,7 @@ stages:
   - test
   - coverage
   - qodana
+  - page
 
 
 build:
@@ -41,15 +42,14 @@ qodana:
       - qodana/report/
     expose_as: 'Qodana report'
 
-#pages:
-#  stage: coverage
-#  tags:
-#    - ece651
-#  dependencies:
-#    - test
-#  script:
-#    - mv coverage public/
-#  artifacts:
-#    paths:
-#      - public
-
+pages:
+  stage: page
+  tags:
+    - ece651
+  dependencies:
+    - qodana
+  script:
+    - cp -r qodana/report/ public/
+  artifacts:
+    paths:
+      - public
