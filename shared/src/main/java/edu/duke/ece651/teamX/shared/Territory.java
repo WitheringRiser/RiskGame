@@ -7,11 +7,12 @@ import java.util.Objects;
 public class Territory {
   private ArrayList<Unit> units;
   private ArrayList<Territory> neighbours;
-  private final String name;  // a territory is uniquely defined by name
+  private final String name; // a territory is uniquely defined by name
 
   /**
-   *Constructs a Territory object with the specified name
-   *@param in_name is the name of the Territory
+   * Constructs a Territory object with the specified name
+   * 
+   * @param in_name is the name of the Territory
    */
   public Territory(String in_name) {
     this.units = new ArrayList<Unit>();
@@ -20,20 +21,50 @@ public class Territory {
   }
 
   /**
-   *Get the name of a territory
+   * Get the name of a territory
    */
-  public String getName() { return name; }
-  public int getUnitsNumber() { return units.size(); }
-  public Iterator<Territory> getNeighbours() { return neighbours.iterator(); }
-  public Iterator<Unit> getUnits() { return units.iterator(); }
+  public String getName() {
+    return name;
+  }
 
-  public void addUnits(Unit unit, int number) {}
+  public int getUnitsNumber() {
+    return units.size();
+  }
 
-  public boolean removeUnits(Unit unit) { return true; }
+  public Iterator<Territory> getNeighbours() {
+    return neighbours.iterator();
+  }
+
+  public Iterator<Unit> getUnits() {
+    return units.iterator();
+  }
+
+  public boolean hasNeighbor(Territory t) {
+    return neighbours.contains(t);
+  }
+
+  public void addUnits(Unit unit, int number) {
+    for (int i = 0; i < number; ++i) {
+      units.add(unit);
+    }
+  }
+
+  public void addNeighbors(Territory t) {
+    if (!hasNeighbor(t)) {
+      neighbours.add(t);
+      if (!t.hasNeighbor(this)) {
+        t.addNeighbors(this);
+      }
+    }
+  }
+
+  public boolean removeUnits(Unit unit) {
+    return true;
+  }
 
   /**
-   *Check if two territory are equals
-   *Currently only use name to compare
+   * Check if two territory are equals
+   * Currently only use name to compare
    */
   @Override
   public boolean equals(Object o) {
@@ -41,13 +72,14 @@ public class Territory {
       return true;
     }
     if (o != null && o.getClass().equals(getClass())) {
-      Territory otherTerr = (Territory)o;
+      Territory otherTerr = (Territory) o;
       return name.equals(otherTerr.getName());
     }
     return false;
   }
+
   /**
-   *Use name to generate hashcode since name is unique and fixed
+   * Use name to generate hashcode since name is unique and fixed
    */
   @Override
   public int hashCode() {
