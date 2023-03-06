@@ -58,6 +58,9 @@ include:
   - template: Code-Quality.gitlab-ci.yml
 
 code_quality:
+  services:
+  tags:
+    - cq-sans-dind     # Set this job to only run on our new specialized runner
   variables:
     REPORT_FORMAT: html
   artifacts:
