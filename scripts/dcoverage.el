@@ -85,8 +85,8 @@
            (concat (file-name-as-directory project-root) "client/build/reports/clover/clover.xml"))
           ((file-exists-p (concat (file-name-as-directory project-root) "server/build/reports/clover/clover.xml"))
            (concat (file-name-as-directory project-root) "server/build/reports/clover/clover.xml"))
-          ((file-exists-p (concat (file-name-as-directory project-root) "share/build/reports/clover/clover.xml"))
-           (concat (file-name-as-directory project-root) "share/build/reports/clover/clover.xml"))
+          ((file-exists-p (concat (file-name-as-directory project-root) "shared/build/reports/clover/clover.xml"))
+           (concat (file-name-as-directory project-root) "shared/build/reports/clover/clover.xml"))
           (t (error "Cannot find coverage file")))))
 
 (defvar dcoverage-find-cov-file-fn (symbol-function 'dcoverage-default-find-cov-file))
