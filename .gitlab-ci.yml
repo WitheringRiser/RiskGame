@@ -29,7 +29,7 @@ test:
 
 qodana:
   image:
-    name: jetbrains/qodana-<linter>
+    name: jetbrains/qodana-jvm:2022.3-eap
     entrypoint: [ "" ]
   script:
     - qodana --save-report --results-dir=$CI_PROJECT_DIR/qodana
