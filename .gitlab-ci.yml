@@ -38,7 +38,8 @@ qodana:
       --report-dir=$CI_PROJECT_DIR/qodana/report
   artifacts:
     paths:
-      - qodana
+      - qodana/report/
+    expose_as: 'Qodana report'
 
 #pages:
 #  stage: coverage
