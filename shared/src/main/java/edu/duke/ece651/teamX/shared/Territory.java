@@ -5,51 +5,52 @@ import java.util.Iterator;
 import java.util.Objects;
 
 public class Territory {
-
   private ArrayList<Unit> units;
   private ArrayList<Territory> neighbours;
-  private String name;
+  private final String name;  // a territory is uniquely defined by name
 
-  public Territory() {
-
+  /**
+   *Constructs a Territory object with the specified name
+   *@param in_name is the name of the Territory
+   */
+  public Territory(String in_name) {
+    this.units = new ArrayList<Unit>();
+    this.neighbours = new ArrayList<Territory>();
+    this.name = in_name;
   }
 
-  public void addUnits(Unit unit, int number) {
+  /**
+   *Get the name of a territory
+   */
+  public String getName() { return name; }
+  public int getUnitsNumber() { return units.size(); }
+  public Iterator<Territory> getNeighbours() { return neighbours.iterator(); }
+  public Iterator<Unit> getUnits() { return units.iterator(); }
 
-  }
+  public void addUnits(Unit unit, int number) {}
 
-  public Iterator<Territory> getNeighbours() {
-    return neighbours.iterator();
-  }
+  public boolean removeUnits(Unit unit) { return true; }
 
-  public int GetUnitsNumber() {
-    return 0;
-  }
-
-  public Iterator<Unit> getUnits() {
-    return units.iterator();
-  }
-
-  public boolean removeUnits(Unit unit) {
-    return true;
-  }
-
+  /**
+   *Check if two territory are equals
+   *Currently only use name to compare
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+    if (o != null && o.getClass().equals(getClass())) {
+      Territory otherTerr = (Territory)o;
+      return name.equals(otherTerr.getName());
     }
-    Territory territory = (Territory) o;
-    return Objects.equals(getUnits(), territory.getUnits()) && Objects
-        .equals(getNeighbours(), territory.getNeighbours()) && Objects
-        .equals(name, territory.name);
+    return false;
   }
-
+  /**
+   *Use name to generate hashcode since name is unique and fixed
+   */
   @Override
   public int hashCode() {
-    return Objects.hash(getUnits(), getNeighbours(), name);
+    return name.hashCode();
   }
 }
