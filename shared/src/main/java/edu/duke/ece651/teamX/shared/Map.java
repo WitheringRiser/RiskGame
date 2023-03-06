@@ -51,7 +51,23 @@ public class Map {
                                          " does not exist");
     }
   }
-  public boolean setOwner(Territory terr, Player player) { return true; }
+  /**
+   *Change the owner player of the territory
+   *@param terr is the territory to change ownership
+   *@param player is the new owner of this territory
+   *@return false if the territory does not exist
+   *@return true to indicate success
+   */
+  public boolean setOwner(Territory terr, Player player) {
+    if (terr == null) {
+      return false;
+    }
+    if (!alreadyExist(terr)) {
+      return false;
+    }
+    map_dict.put(terr, player);
+    return true;
+  }
 
   /**
    *Get the owner of the input terr
