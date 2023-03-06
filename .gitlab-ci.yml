@@ -3,12 +3,14 @@ before_script:
   - whoami
   - pwd
   - ls -la
-  - docker --version
+#  - docker --version
 
 stages:
   - build
   - test
   - coverage
+  - qodana
+  - page
 
 
 build:
@@ -26,15 +28,28 @@ test:
     paths:
       - coverage
 
-#pages:
-#  stage: coverage
-#  tags:
-#    - ece651
-#  dependencies:
-#    - test
-#  script:
-#    - mv coverage public/
-#  artifacts:
-#    paths:
-#      - public
+qodana:
+  stage:
+    qodana
+  image:
+    name: jetbrains/qodana-jvm:2022.3-eap
+    entrypoint: [ "" ]
+  script:
+    - qodana --save-report --results-dir=$CI_PROJECT_DIR/qodana
+      --report-dir=$CI_PROJECT_DIR/qodana/report
+  artifacts:
+    paths:
+      - qodana/report/
+    expose_as: 'Qodana report'
 
+pages:
+  stage: page
+  tags:
+    - ece651
+  dependencies:
+    - qodana
+  script:
+    - cp -r qodana/report/ public/
+  artifacts:
+    paths:
+      - public
