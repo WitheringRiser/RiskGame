@@ -3,15 +3,20 @@
  */
 package edu.duke.ece651.teamX.client;
 
+import edu.duke.ece651.teamX.shared.Communicate;
 import edu.duke.ece651.teamX.shared.MyName;
+import java.io.IOException;
+import java.net.Socket;
+import org.checkerframework.checker.units.qual.C;
 
 
 public class App {
-  public String getMessage() {
-    return "Hello from the client for "+ MyName.getName();
-  }
-  public static void main(String[] args) {
-    App a = new App();
-    System.out.println(a.getMessage());
+
+  public static void main(String[] args) throws IOException {
+    Socket socket = new Socket("localhost", 4444);
+    Communicate communicate = new Communicate();
+    String send_str = "hello world\n";
+    communicate.sendObject(socket, send_str);
+
   }
 }

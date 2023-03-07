@@ -3,15 +3,21 @@
  */
 package edu.duke.ece651.teamX.server;
 
+import edu.duke.ece651.teamX.shared.Communicate;
 import edu.duke.ece651.teamX.shared.MyName;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 
 public class App {
-  public String getMessage() {
-    return "Hello from the server for "+ MyName.getName();
+
+  public static void main(String[] args) throws IOException, ClassNotFoundException {
+    Communicate communicate = new Communicate();
+    ServerSocket ss = new ServerSocket(4444);
+    Socket socket = ss.accept();
+    String recv_string = (String) communicate.receiveObject(socket);
+    System.out.println(recv_string);
   }
-  public static void main(String[] args) {
-    App a = new App();
-    System.out.println(a.getMessage());
-  }
+
 }
