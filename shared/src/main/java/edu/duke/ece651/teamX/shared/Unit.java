@@ -1,5 +1,7 @@
 package edu.duke.ece651.teamX.shared;
 
-public interface Unit {
+import java.io.Serializable;
+
+public abstract class Unit implements Serializable {
 
 }

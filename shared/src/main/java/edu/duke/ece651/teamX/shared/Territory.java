@@ -1,17 +1,19 @@
 package edu.duke.ece651.teamX.shared;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Objects;
 
-public class Territory {
+public class Territory implements Serializable {
+
   private ArrayList<Unit> units;
   private ArrayList<Territory> neighbours;
   private final String name; // a territory is uniquely defined by name
 
   /**
    * Constructs a Territory object with the specified name
-   * 
+   *
    * @param in_name is the name of the Territory
    */
   public Territory(String in_name) {
@@ -63,8 +65,7 @@ public class Territory {
   }
 
   /**
-   * Check if two territory are equals
-   * Currently only use name to compare
+   * Check if two territory are equals Currently only use name to compare
    */
   @Override
   public boolean equals(Object o) {

@@ -3,15 +3,31 @@
  */
 package edu.duke.ece651.teamX.client;
 
+import com.sun.org.apache.xerces.internal.impl.io.UCSReader;
+import edu.duke.ece651.teamX.shared.Communicate;
+import edu.duke.ece651.teamX.shared.Map;
 import edu.duke.ece651.teamX.shared.MyName;
+import edu.duke.ece651.teamX.shared.Territory;
+import java.io.IOException;
+import java.net.Socket;
+import org.checkerframework.checker.units.qual.C;
 
 
 public class App {
-  public String getMessage() {
-    return "Hello from the client for "+ MyName.getName();
+
+  private static Map createMap() {
+    Map my_map = new Map();
+    Territory t1 = new Territory("Territory_1");
+    Territory t2 = new Territory("Terrotory_2");
+    my_map.addTerritory(t1);
+    my_map.addTerritory(t2);
+    return my_map;
   }
-  public static void main(String[] args) {
-    App a = new App();
-    System.out.println(a.getMessage());
+
+  public static void main(String[] args) throws IOException {
+    Socket socket = new Socket("localhost", 4444);
+    Communicate communicate = new Communicate();
+    Map myMpp = App.createMap();
+    communicate.sendMap(socket, myMpp);
   }
 }

@@ -1,8 +1,11 @@
 package edu.duke.ece651.teamX.shared;
 
+import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Objects;
 
-public class Map {
+public class Map implements Serializable {
+
   private HashMap<Territory, Player> map_dict;
 
   /**
@@ -21,9 +24,9 @@ public class Map {
   }
 
   /**
-   * Check if the territory is already in the hashmap
-   * Note: We do not allow have multiple territories with the same name
-   * 
+   * Check if the territory is already in the hashmap Note: We do not allow have multiple
+   * territories with the same name
+   *
    * @param terr is the territory to check
    * @return true is terr is in the hashmap and false otherwise
    */
@@ -33,9 +36,8 @@ public class Map {
 
   /**
    * Add a new territory to the map if the territory is ok to add
-   * 
+   *
    * @param terr is the territory to add
-   * @return false if the terr is not ok to add (i.e. is null or already exist)
    * @return true if the terr is ok to add and indicate the success of adding
    */
   public boolean addTerritory(Territory terr) {
@@ -51,7 +53,7 @@ public class Map {
 
   /**
    * Check the existence of the input terr and throw if not exists
-   * 
+   *
    * @param terr is the territory to check
    * @throw IllegalArgumentException if the input is null
    * @throw IllegalArgumentException if the input is not exist in the map
@@ -68,10 +70,9 @@ public class Map {
 
   /**
    * Change the owner player of the territory
-   * 
+   *
    * @param terr   is the territory to change ownership
    * @param player is the new owner of this territory
-   * @return false if the territory does not exist
    * @return true to indicate success
    */
   public boolean setOwner(Territory terr, Player player) {
@@ -86,9 +87,8 @@ public class Map {
   }
 
   /**
-   * Get the owner of the input terr
-   * Will check the existence of the territory first
-   * 
+   * Get the owner of the input terr Will check the existence of the territory first
+   *
    * @param terr is the territory we want to get the owner of
    * @return the owner of the territory. null indicates no owner
    * @throw IllegalArgumentException if the input is null
@@ -97,5 +97,22 @@ public class Map {
   public Player getOwner(Territory terr) {
     checkAndThrow(terr);
     return map_dict.get(terr);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Map map = (Map) o;
+    return Objects.equals(map_dict, map.map_dict);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(map_dict);
   }
 }
