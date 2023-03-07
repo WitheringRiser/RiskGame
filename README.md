@@ -5,3 +5,4 @@ Pipeline: ![pipeline](https://gitlab.oit.duke.edu/jh622/ece651_risk_proj/badges/
 
 Code Report can be found [HERE](https://jh622.pages.oit.duke.edu/ece651_risk_proj/)
 
+Code quality report can be found [HERE](https://jh622.pages.oit.duke.edu/ece651_risk_proj/gl-code-quality-report.html)

@@ -8,8 +8,8 @@ before_script:
 stages:
   - build
   - test
-  - coverage
   - qodana
+  - code_quality
   - page
 
 
@@ -42,14 +42,27 @@ qodana:
       - qodana/report/
     expose_as: 'Qodana report'
 
+include:
+  - template: Code-Quality.gitlab-ci.yml
+
+code_quality:
+  stage:
+    code_quality
+  variables:
+    REPORT_FORMAT: html
+  artifacts:
+    paths: [ gl-code-quality-report.html ]
+
 pages:
   stage: page
   tags:
     - ece651
   dependencies:
     - qodana
+    - code_quality
   script:
     - cp -r qodana/report/ public/
+    - cp gl-code-quality-report.html public/
   artifacts:
     paths:
       - public
