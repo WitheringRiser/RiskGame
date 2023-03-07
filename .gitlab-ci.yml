@@ -48,7 +48,7 @@ include:
 code_quality:
   stage:
     code_quality
-  services:
+  services:            # Shut off Docker-in-Docker
   tags:
     - cq-sans-dind     # Set this job to only run on our new specialized runner
   variables:
@@ -64,7 +64,7 @@ pages:
     - qodana
   script:
     - cp -r qodana/report/ public/
-    - cp  gl-code-quality-report.html public/
+    - cp code_quality/gl-code-quality-report.html public/
   artifacts:
     paths:
       - public
