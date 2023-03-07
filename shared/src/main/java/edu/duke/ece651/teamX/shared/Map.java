@@ -2,6 +2,7 @@ package edu.duke.ece651.teamX.shared;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class Map implements Serializable {
 
@@ -96,5 +97,22 @@ public class Map implements Serializable {
   public Player getOwner(Territory terr) {
     checkAndThrow(terr);
     return map_dict.get(terr);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Map map = (Map) o;
+    return Objects.equals(map_dict, map.map_dict);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(map_dict);
   }
 }

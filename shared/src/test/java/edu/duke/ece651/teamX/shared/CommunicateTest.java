@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.Test;
 
 class CommunicateTest {
@@ -21,15 +20,20 @@ class CommunicateTest {
 
   @Test
   void send_receive_Map() throws IOException, ClassNotFoundException {
-//    Map myMap = createMap();
-//
-//    Communicate communicate = new Communicate();
-//    ServerSocket ss = new ServerSocket(4444);
-//    Socket clientSocket = new Socket("localhost", 4444);
-//    Socket serverSocket = ss.accept();
-//    communicate.sendMap(clientSocket, myMap);
-//    Map recv_map = communicate.receiveMap(serverSocket);
-//    assertEquals(myMap, recv_map);
+    Map myMap = createMap();
+
+    Communicate communicate = new Communicate();
+    ServerSocket ss = new ServerSocket(4444);
+    Socket clientSocket = new Socket("localhost", 4444);
+    Socket serverSocket = ss.accept();
+
+    communicate.sendMap(clientSocket, myMap);
+    Map recv_map = communicate.receiveMap(serverSocket);
+    assertEquals(myMap, recv_map);
+
+    communicate.sendObject(clientSocket, myMap);
+    Map recv_map_obj = (Map) communicate.receiveObject(serverSocket);
+    assertEquals(myMap, recv_map_obj);
   }
 
 }
