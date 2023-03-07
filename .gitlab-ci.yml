@@ -48,9 +48,6 @@ include:
 code_quality:
   stage:
     code_quality
-  services:            # Shut off Docker-in-Docker
-  tags:
-    - cq-sans-dind     # Set this job to only run on our new specialized runner
   variables:
     REPORT_FORMAT: html
   artifacts:
@@ -65,12 +62,7 @@ pages:
     - code_quality
   script:
     - cp -r qodana/report/ public/
-    - mkdir -p public/code_quality
-    - curl \
-      --location \
-      --header "PRIVATE-TOKEN: $CI_JOB_TOKEN" \
-      "$CI_API_V4_URL/projects/$CI_PROJECT_ID/jobs/$CI_JOB_ID/artifacts/gl-code-quality-report.html/download" \
-      --output public/code_quality/gl-code-quality-report.html
+    - cp gl-code-quality-report.html public/
   artifacts:
     paths:
       - public
