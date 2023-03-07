@@ -62,9 +62,11 @@ pages:
     - ece651
   dependencies:
     - qodana
+    - code_quality
   script:
     - cp -r qodana/report/ public/
-    - cp code_quality/gl-code-quality-report.html public/
+    - mkdir -p public/code_quality
+    - curl --location --header "PRIVATE-TOKEN: $CI_JOB_TOKEN" "$CI_API_V4_URL/projects/$CI_PROJECT_ID/jobs/$CI_JOB_ID/artifacts/gl-code-quality-report.html/download" --output public/code_quality/gl-code-quality-report.html
   artifacts:
     paths:
       - public
