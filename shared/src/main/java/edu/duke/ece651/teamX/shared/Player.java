@@ -1,13 +1,16 @@
 package edu.duke.ece651.teamX.shared;
 
-public class Player {
+import java.io.Serializable;
+
+public class Player implements Serializable {
+
   private final String name;
   private final int unit_num; // The initial number of units
   private final int territory_num; // The initial number of territory
 
   /**
    * Construct a Player Object for passing player related information
-   * 
+   *
    * @param n is the name of the Player assigned by server
    * @param u is the initial number of units set by server
    * @param t is the initial number of territories set by server
@@ -42,8 +45,7 @@ public class Player {
   }
 
   /**
-   * Check if two Player equals
-   * Compare name, number of units, and number of territories
+   * Check if two Player equals Compare name, number of units, and number of territories
    */
   @Override
   public boolean equals(Object o) {
