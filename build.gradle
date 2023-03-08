@@ -7,6 +7,7 @@
 plugins {
     id 'com.bmuschko.clover' version '2.2.3'
     id 'java'
+    id "org.sonarqube" version "3.5.0.2730"
 }
 
 
@@ -44,6 +45,11 @@ subprojects{
     test {
         // Use junit platform for unit tests
         useJUnitPlatform()
+    }
+    sonar {
+        properties {
+            property "sonar.sources", "src"
+        }
     }
 
 }
@@ -102,4 +108,12 @@ task resolveDependencies {
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+sonarqube {
+    properties {
+        property "sonar.exclusions", "**/test/**/*"
+        property "sonar.test.inclusions", "**/test/**/*.java"
+        property "sonar.test.exclusions", "**/test/**/*"
+    }
 }
