@@ -90,4 +90,4 @@ sonarqube-check:
   script: gradle sonarqube -Dsonar.qualitygate.wait=true -Dsonar.host.url=http://vcm-30976.vm.duke.edu:9000 -Dsonar.login=admin -Dsonar.password=ece651_risk --info
   allow_failure: true
   rules:
-    - if: $CI_COMMIT_REF_NAME == 'master' || $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_REF_NAME == 'master' # || $CI_PIPELINE_SOURCE == 'merge_request_event'
