@@ -4,7 +4,7 @@
 
 "player_1":[{"soldiers":3, "neighbor":[{"neighbor_0":"Desert"},{"neighbor_1":"Swamp"},{"neighbor_2":"Jungle"},{"neighbor_3":"Savanna"}], "territoryName":"Beach"},
 {"soldiers":3, "neighbor":[{"neighbor_0":"Beach"},{"neighbor_1":"Jungle"},{"neighbor_2":"Plains"}], "territoryName":"Savanna"},
-{"soldiers":3, "neighbor":[{"neighbor_0":"Beach"},{"neighbor_1":"Jungle"},{"neighbor_2":"Mesa"},{"neighbor_3":"Forest"},{"neighbor_4":"Plains"},{"neighbor_5":"Savanna"}], "territoryName":"Jungle"}],
+{"soldiers":3, "neighbor":[{"neighbor_0":"Beach"},{"neighbor_1":"Swamp"},{"neighbor_2":"Mesa"},{"neighbor_3":"Forest"},{"neighbor_4":"Plains"},{"neighbor_5":"Savanna"}], "territoryName":"Jungle"}],
 
 "player_2":[{"soldiers":3, "neighbor":[{"neighbor_0":"Savanna"},{"neighbor_1":"Jungle"},{"neighbor_2":"Forest"}, {"neighbor_3":"Rocky Cliffs"}], "territoryName":"Plains"},
 {"soldiers":3, "neighbor":[{"neighbor_0":"Plains"},{"neighbor_1":"Forest"}], "territoryName":"Rocky Cliffs"},
