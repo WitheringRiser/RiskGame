@@ -1,0 +1,16 @@
+{"player_0":[ {"soldiers":3, "neighbor":[{"neighbor_0":"Mountains"},{"neighbor_1":"Swamp"},{"neighbor_2":"Beach"}], "territoryName":"Desert"},
+{"soldiers":3, "neighbor":[{"neighbor_0":"Desert"},{"neighbor_1":"Swamp"},{"neighbor_2":"River"}], "territoryName":"Mountains"},
+{"soldiers":3, "neighbor":[{"neighbor_0":"Desert"},{"neighbor_1":"Mountains"},{"neighbor_2":"River"},{"neighbor_3":"Mesa"},{"neighbor_4":"Jungle"},{"neighbor_5":"Beach"}], "territoryName":"Swamp"},
+{"soldiers":3, "neighbor":[{"neighbor_0":"Desert"},{"neighbor_1":"Beach"},{"neighbor_2":"Jungle"},{"neighbor_3":"Savanna"}], "territoryName":"Beach"}],
+
+"player_1":[{"soldiers":3, "neighbor":[{"neighbor_0":"Beach"},{"neighbor_1":"Jungle"},{"neighbor_2":"Plains"}], "territoryName":"Savanna"},
+{"soldiers":3, "neighbor":[{"neighbor_0":"Beach"},{"neighbor_1":"Jungle"},{"neighbor_2":"Mesa"},{"neighbor_3":"Forest"},{"neighbor_4":"Plains"},{"neighbor_5":"Savanna"}], "territoryName":"Jungle"},
+{"soldiers":3, "neighbor":[{"neighbor_0":"Savanna"},{"neighbor_1":"Jungle"},{"neighbor_2":"Forest"}, {"neighbor_3":"Rocky Cliffs"}], "territoryName":"Plains"},
+{"soldiers":3, "neighbor":[{"neighbor_0":"Plains"},{"neighbor_1":"Forest"}], "territoryName":"Rocky Cliffs"}],
+
+"player_2":[{"soldiers":3, "neighbor":[{"neighbor_0":"Jungle"},{"neighbor_1":"Mesa"},{"neighbor_2":"Lake"},{"neighbor_3":"Rocky Cliffs"},{"neighbor_4":"Plains"}], "territoryName":"Forest"},
+{"soldiers":3, "neighbor":[{"neighbor_0":"Swamp"},{"neighbor_1":"River"},{"neighbor_2":"Lake"},{"neighbor_3":"Forest"},{"neighbor_4":"Jungle"}], "territoryName":"Mesa"},
+{"soldiers":3, "neighbor":[{"neighbor_0":"Forest"},{"neighbor_1":"Mesa"},{"neighbor_2":"River"}], "territoryName":"Lake"},
+{"soldiers":3, "neighbor":[{"neighbor_0":"Mountains"},{"neighbor_1":"Swamp"},{"neighbor_2":"Mesa"},{"neighbor_3":"Lake"}], "territoryName":"River"}]
+
+}
