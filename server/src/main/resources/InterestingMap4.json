@@ -1,17 +1,29 @@
-{"player_0":[ {"soldiers":3, "neighbor":[{"neighbor_0":"Mountains"},{"neighbor_1":"Swamp"},{"neighbor_2":"Beach"}], "territoryName":"Desert"},
-{"soldiers":3, "neighbor":[{"neighbor_0":"Desert"},{"neighbor_1":"Swamp"},{"neighbor_2":"River"}], "territoryName":"Mountains"},
-{"soldiers":3, "neighbor":[{"neighbor_0":"Desert"},{"neighbor_1":"Mountains"},{"neighbor_2":"River"},{"neighbor_3":"Mesa"},{"neighbor_4":"Jungle"},{"neighbor_5":"Beach"}], "territoryName":"Swamp"}],
+{"player_0":[ {"neighbor":[{"neighbor_0":"Mountains"},{"neighbor_1":"Swamp"},{"neighbor_2":"Beach"}], "territoryName":"Desert"},
+{"neighbor":[{"neighbor_0":"Desert"},{"neighbor_1":"Swamp"},{"neighbor_2":"River"}], "territoryName":"Mountains"},
+{"neighbor":[{"neighbor_0":"Desert"},{"neighbor_1":"Mountains"},{"neighbor_2":"River"},{"neighbor_3":"Mesa"},{"neighbor_4":"Jungle"},{"neighbor_5":"Beach"}], "territoryName":"Swamp"},
+{"neighbor":[{"neighbor_0":"Desert"},{"neighbor_1":"Swamp"},{"neighbor_2":"Jungle"},{"neighbor_3":"Savanna"}], "territoryName":"Beach"},
+{"neighbor":[{"neighbor_0":"Beach"},{"neighbor_1":"Jungle"},{"neighbor_2":"Plains"}], "territoryName":"Savanna"},
+{"neighbor":[{"neighbor_0":"Beach"},{"neighbor_1":"Swamp"},{"neighbor_2":"Mesa"},{"neighbor_3":"Forest"},{"neighbor_4":"Plains"},{"neighbor_5":"Savanna"}], "territoryName":"Jungle"}],
 
-"player_1":[{"soldiers":3, "neighbor":[{"neighbor_0":"Desert"},{"neighbor_1":"Swamp"},{"neighbor_2":"Jungle"},{"neighbor_3":"Savanna"}], "territoryName":"Beach"},
-{"soldiers":3, "neighbor":[{"neighbor_0":"Beach"},{"neighbor_1":"Jungle"},{"neighbor_2":"Plains"}], "territoryName":"Savanna"},
-{"soldiers":3, "neighbor":[{"neighbor_0":"Beach"},{"neighbor_1":"Swamp"},{"neighbor_2":"Mesa"},{"neighbor_3":"Forest"},{"neighbor_4":"Plains"},{"neighbor_5":"Savanna"}], "territoryName":"Jungle"}],
+"player_1":[{"neighbor":[{"neighbor_0":"Jincheng Taiga"},{"neighbor_1":"Dark Forest"},{"neighbor_2":"Lukas Tundra"}], "territoryName":"Bamboo Forest"},
+{"neighbor":[{"neighbor_0":"Jincheng Taiga"},{"neighbor_1":"Bamboo Forest"},{"neighbor_2":"Mountains"},{"neighbor_3":"Lukas Tundra"}], "territoryName":"Dark Forest"},
+{"neighbor":[{"neighbor_0":"Bamboo Forest"},{"neighbor_1":"Dark Forest"},{"neighbor_2":"Desert"},{"neighbor_3":"Frozen Ocean"}], "territoryName":"Lukas Tundra"},
+{"neighbor":[{"neighbor_0":"Lukas Tundra"},{"neighbor_1":"Desert"},{"neighbor_2":"Desert Hills"}], "territoryName":"Frozen Ocean"},
+{"neighbor":[{"neighbor_0":"Beach"},{"neighbor_1":"Savanna"},{"neighbor_2":"Desert"},{"neighbor_3":"Desert Hills"}], "territoryName":"Plateau"},
+{"neighbor":[{"neighbor_0":"Plateau"},{"neighbor_1":"Frozen Ocean"}], "territoryName":"Desert Hills"}],
 
-"player_2":[{"soldiers":3, "neighbor":[{"neighbor_0":"Savanna"},{"neighbor_1":"Jungle"},{"neighbor_2":"Forest"}, {"neighbor_3":"Rocky Cliffs"}], "territoryName":"Plains"},
-{"soldiers":3, "neighbor":[{"neighbor_0":"Plains"},{"neighbor_1":"Forest"}], "territoryName":"Rocky Cliffs"},
-{"soldiers":3, "neighbor":[{"neighbor_0":"Jungle"},{"neighbor_1":"Mesa"},{"neighbor_2":"Lake"},{"neighbor_3":"Rocky Cliffs"},{"neighbor_4":"Plains"}], "territoryName":"Forest"}],
 
-"player_3":[{"soldiers":3, "neighbor":[{"neighbor_0":"Swamp"},{"neighbor_1":"River"},{"neighbor_2":"Lake"},{"neighbor_3":"Forest"},{"neighbor_4":"Jungle"}], "territoryName":"Mesa"},
-{"soldiers":3, "neighbor":[{"neighbor_0":"Forest"},{"neighbor_1":"Mesa"},{"neighbor_2":"River"}], "territoryName":"Lake"},
-{"soldiers":3, "neighbor":[{"neighbor_0":"Mountains"},{"neighbor_1":"Swamp"},{"neighbor_2":"Mesa"},{"neighbor_3":"Lake"}], "territoryName":"River"}]
+"player_2":[ {"neighbor":[{"neighbor_0":"Savanna"},{"neighbor_1":"Jungle"},{"neighbor_2":"Forest"}, {"neighbor_3":"Rocky Cliffs"}], "territoryName":"Plains"},
+{"neighbor":[{"neighbor_0":"Plains"},{"neighbor_1":"Forest"}], "territoryName":"Rocky Cliffs"},
+{"neighbor":[{"neighbor_0":"Jungle"},{"neighbor_1":"Mesa"},{"neighbor_2":"Lake"},{"neighbor_3":"Rocky Cliffs"},{"neighbor_4":"Plains"}], "territoryName":"Forest"},
+{"neighbor":[{"neighbor_0":"Swamp"},{"neighbor_1":"River"},{"neighbor_2":"Lake"},{"neighbor_3":"Forest"},{"neighbor_4":"Jungle"}], "territoryName":"Mesa"},
+{"neighbor":[{"neighbor_0":"Forest"},{"neighbor_1":"Mesa"},{"neighbor_2":"River"}], "territoryName":"Lake"},
+{"neighbor":[{"neighbor_0":"Mountains"},{"neighbor_1":"Swamp"},{"neighbor_2":"Mesa"},{"neighbor_3":"Lake"}], "territoryName":"River"}],
 
+"player_3":[{"neighbor":[{"neighbor_0":"Badlands"},{"neighbor_1":"River"},{"neighbor_2":"Bamboo Forest"}, {"neighbor_3":"Dark Forest"}], "territoryName":"Jincheng Taiga"},
+{"neighbor":[{"neighbor_0":"Jincheng Taiga"},{"neighbor_1":"River"},{"neighbor_2":"Russ Mushroom Fields"}], "territoryName":"Badlands"},
+{"neighbor":[{"neighbor_0":"Badlands"},{"neighbor_1":"Xinmeng Ocean"},{"neighbor_2":"Lake"}], "territoryName":"Russ Mushroom Fields"},
+{"neighbor":[{"neighbor_0":"Russ Mushroom Fields"},{"neighbor_1":"Lake"},{"neighbor_2":"Snowy Beach"}], "territoryName":"Xinmeng Ocean"},
+{"neighbor":[{"neighbor_0":"Xinmeng Ocean"},{"neighbor_1":"Zhou Caves"}], "territoryName":"Snowy Beach"},
+{"neighbor":[{"neighbor_0":"Snowy Beach"},{"neighbor_1":"Lake"},{"neighbor_2":"Forest"},{"neighbor_3":"Rocky Cliffs"}], "territoryName":"Zhou Caves"}]
 }
