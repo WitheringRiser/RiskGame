@@ -1,0 +1,88 @@
+package edu.duke.ece651.teamX.server;
+import edu.duke.ece651.teamX.shared.*;
+import java.util.*;
+import org.json.JSONObject;
+import org.json.JSONArray;
+
+
+public class MapToJson {
+  private JSONObject ans;
+  private HashMap<Integer, ArrayList<Territory>> myTerrMap;
+
+  public MapToJson() {}
+
+  public MapToJson(HashMap<Integer, ArrayList<Territory>> rhsTerrMap) {
+    this.ans = new JSONObject();
+    this.myTerrMap = new HashMap<>();
+    this.myTerrMap = rhsTerrMap;
+    getPlayerObj();
+  }
+
+  //changes HashMap<Integer, ArrayList<Territory>> to JSONObject
+  public JSONObject getJSON() {
+    return this.ans;
+  }
+
+  public void getPlayerObj() {
+    for (HashMap.Entry<Integer, ArrayList<Territory>> entry : myTerrMap.entrySet()) {
+      int key = entry.getKey();
+      StringBuilder playerID = new StringBuilder();
+      playerID.append("player_").append(key);
+
+      JSONArray territoryArray = new JSONArray();
+      getTerritoryArray(territoryArray, entry.getValue());
+      ans.put(playerID.toString(), territoryArray);
+    }
+  }
+
+  public String getTerritoryArray(JSONArray territoryArray, ArrayList<Territory> TerritoryList) {
+    for (int i = 0; i < TerritoryList.size(); i++) {
+      JSONObject terrObj = new JSONObject();
+      Territory myTerr = TerritoryList.get(i);
+      getTerritoryObj(terrObj, myTerr);
+      territoryArray.put(terrObj);
+      return "";
+    }
+  }
+
+  public void getTerritoryObj(JSONObject terrObj, Territory myTerr) {
+    String owner = myTerr.getOwner();
+    terrObj.put("owner", owner);
+
+    HashMap<Integer, Integer> soldierMap = myTerr.getSoldiers();
+    JSONArray soldierArray = new JSONArray();
+    getSoldierArray(soldierArray, soldierMap);
+    terrObj.put("soldiers", soldierArray);
+
+    ArrayList<String> neighborList = myTerr.getNeighbor();
+    JSONArray neighborArray = new JSONArray();
+    getNeighborArray(neighborArray, neighborList);
+    terrObj.put("neighbor", neighborArray);
+    String name = myTerr.getTerritoryName();
+    terrObj.put("territoryName", name);
+  }
+
+  public void getNeighborArray(JSONArray neighborArray, ArrayList<String> neighborList) {
+    for (int i = 0; i < neighborList.size(); i++) {
+      JSONObject neighborObj = new JSONObject();
+      StringBuilder neighborID = new StringBuilder();
+      neighborID.append("neighbor_").append(i);
+      neighborObj.put(neighborID.toString(), neighborList.get(i));
+      neighborArray.put(neighborObj);
+    }
+  }
+
+  public void getSoldierArray(JSONArray soldierArray, HashMap<Integer, Integer> soldierMap) {
+    for (HashMap.Entry<Integer, Integer> entry : soldierMap.entrySet()) {
+      int key = entry.getKey();
+      StringBuilder level = new StringBuilder();
+      level.append("level_").append(key);
+
+      JSONObject soldierObj = new JSONObject();
+      soldierObj.put(level.toString(), entry.getValue());
+      soldierArray.put(soldierObj);
+    }
+  }
+
+  
+}

@@ -1,0 +1,19 @@
+package edu.duke.ece651.teamX.shared;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.*;
+import org.junit.jupiter.api.Test;
+
+public class MyFormatterTest {
+  @Test
+  public void test_Formater() {
+    System.out.println("--------Test Map--------");
+    String Input =
+        "{'player_0': ['neighbor': [{'neighbor_0': 'a_neigh1'}, {'neighbor_1': 'a_neigh2'}], 'territoryName': 'aTerr1'}, {'neighbor': [{'neighbor_0': 'a_neigh3'}, {'neighbor_1': 'a_neigh4'}], 'territoryName': 'aTerr2'}],'player_1': ['neighbor': [{'neighbor_0': 'b_neigh1'}, {'neighbor_1': 'b_neigh2'}], 'territoryName': 'bTerr1'}, {'owner': 'bbb', 'neighbor': [{'neighbor_0': 'b_neigh3'}, {'neighbor_1': 'b_neigh4'}], 'territoryName': 'bTerr2'}]}";
+    MyFormatter Map = new MyFormatter(2);
+    HashMap<Integer, ArrayList<Territory>> TerritoryMap = new HashMap<>();
+    Map.MapParse(TerritoryMap, Input);
+
+  }
+}
