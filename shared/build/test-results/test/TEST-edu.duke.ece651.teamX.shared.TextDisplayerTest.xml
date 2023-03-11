@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="edu.duke.ece651.teamX.shared.TextDisplayerTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2023-03-11T22:22:35" hostname="vcm-31014.vm.duke.edu" time="0.013">
-  <properties/>
-  <testcase name="test_makeHeader()" classname="edu.duke.ece651.teamX.shared.TextDisplayerTest" time="0.007"/>
-  <testcase name="test_display()" classname="edu.duke.ece651.teamX.shared.TextDisplayerTest" time="0.004"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

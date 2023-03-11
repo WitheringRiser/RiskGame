@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="edu.duke.ece651.teamX.server.MapToJsonTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-03-11T22:07:29" hostname="vcm-31014.vm.duke.edu" time="0.06">
-  <properties/>
-  <testcase name="test_toJSON()" classname="edu.duke.ece651.teamX.server.MapToJsonTest" time="0.06"/>
-  <system-out><![CDATA[{"player_1":[],"player_0":[{"territoryName":"A","soldiers":3,"neighbor":[{"neighbor_0":"edu.duke.ece651.teamX.shared.Territory@42"},{"neighbor_1":"edu.duke.ece651.teamX.shared.Territory@44"}]}]}
-]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
