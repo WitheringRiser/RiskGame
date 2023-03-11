@@ -1,41 +1,27 @@
 package edu.duke.ece651.teamX.shared;
-
+import edu.duke.ece651.teamX.server.*;
 import java.util.ArrayList;
 
 public class Game {
-
+  private int num_player;
   private ArrayList<Player> players;
   private Map map;
 
-  public void init() {
-  }
+  public void init() {}
 
-  public void createMap() {
-  }
+  public void createMap() {}
 
-  public void divideMap() {
-  }
+  public void setOwner() {}
 
-  public void setOwner() {
-  }
+  public void setUnits() {}
 
-  public void setUnits() {
-  }
+  public void setTerritoryName() {}
 
-  public void setTerritoryName() {
-  }
+  public void sendMap(Player player) {}
 
-  public void sendMap(Player player) {
-  }
+  public void receiveActions() {}
 
-  public void receiveActions() {
-  }
+  public void checkAction() {}
 
-  public void checkAction() {
-  }
-
-  public void handleActions(Iterable<Action> actions) {
-  }
-
-
+  public void handleActions(Iterable<Action> actions) {}
 }

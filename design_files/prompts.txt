@@ -1,0 +1,188 @@
+1. Begin: (Show to the user before they can choose the territory group)
+---------------------------------------------------------------------------
+Welcome to the RISK game!
+Please wait a few moments while we gather all players before we start...
+---------------------------------------------------------------------------
+
+2. Prompt to choose starting groups:
+	we need at least 6 territories for each player as requirement
+	This is shown to players in turn
+	Already chosen groups should not be shown 
+	(e.g. the last player can only see 1 option)
+---------------------------------------------------------------------------
+Please choose one territory group as your initial territories:
+(type the corresponding number to indicate your choice, e.g. 1) 
+
+(1) Group Green:
+	- Narnia (next to: Elantris, Midkemia)
+	- Midkemia (next to: Narnia, Elantris, Scadrial, Oz)
+	- Oz (next to: Midkemia, Scadrial, Mordor, Gondor)
+	
+(2) Group Blue:
+	- Elantris (next to: Roshar, Scadrial, Midkemia, Narnia)
+	- Roshar (next to: Hogwarts, Scadrial, Elantris)
+	- Scadrial (next to: Elantris, Roshar, Hogwats, Mordor)
+	
+(3) Group Red:
+	- Gondor (next to: Oz, Mordor)
+	- Mordor (next to: Hogwarts, Gondor, Oz, Scadrial)
+	- Hogwarts (next to: Mordor, Scadrial, Roshar)	
+---------------------------------------------------------------------------
+
+2.1 if the input is not valid (e.g. user input 4 or a):
+---------------------------------------------------------------------------
+The input is not a valid option, please choose again.
+---------------------------------------------------------------------------
+
+3. Put units in territories by players:
+	I think in this part, we do not need to show full map
+	the number of units can be set later
+	the available number of units and units in territories should change
+	each time after input
+---------------------------------------------------------------------------
+Red player: you are going to place the units in your territories.
+
+You have 24 available units to place.
+Please choose a territory to place units:
+	(1) Gondor (next to: Oz, Mordor) with 0  units
+	(2) Mordor (next to: Hogwarts, Gondor, Oz, Scadrial) with 0  units
+	(3) Hogwarts (next to: Mordor, Scadrial, Roshar) with 0  units
+---------------------------------------------------------------------------
+
+3.1 after select a territory:
+---------------------------------------------------------------------------
+Please input the number of units you want to place in this territory:
+(type B to go back)
+---------------------------------------------------------------------------
+
+
+4. Each turn:
+---------------------------------------------------------------------------
+Green player:
+-------------
+	10 units in Narnia (next to: Elantris, Midkemia)
+	12 units in Midkemia (next to: Narnia, Elantris, Scadrial, Oz)
+	8 units in Oz (next to: Midkemia, Scadrial, Mordor, Gondor)
+	
+Blue player:
+------------
+	6 units in Elantris (next to: Roshar, Scadrial, Midkemia, Narnia)
+	3 units in Roshar (next to: Hogwarts, Scadrial, Elantris)
+	5 units in Scadrial (next to: Elantris, Roshar, Hogwats, Mordor)
+	
+Red player:
+-----------
+	13 units in Gondor (next to: Oz, Mordor)
+	14 units in Mordor (next to: Hogwarts, Gondor, Oz, Scadrial)
+	3 units in Hogwarts (next to: Mordor, Scadrial, Roshar)
+
+You are the Green player, what would you like to do?
+	(M)ove
+	(A)ttack
+	(D)one
+---------------------------------------------------------------------------
+
+4.1 Move:
+	It will only show the possible neighbor
+---------------------------------------------------------------------------
+Please choose a territory to move from:
+	(1) Narnia (next to: Elantris, Midkemia) 
+	(2) Midkemia (next to: Narnia, Elantris, Scadrial, Oz)
+	(3) Oz (next to: Midkemia, Scadrial, Mordor, Gondor)
+	(B)ack
+---------------------------------------------------------------------------
+
+4.1.1 After chose a territory :
+	Should only show the territory they can move to 
+	(Assume we choose Narnia)
+---------------------------------------------------------------------------
+Please to choose a territory to move to:
+	(1) Midkemia
+	(B)ack
+---------------------------------------------------------------------------
+
+4.1.2 If no neighbor can move to:
+---------------------------------------------------------------------------
+You cannot move units from this territory, please choose again.
+
+Please to choose a territory to move from:
+	(1) Narnia (next to: Elantris, Midkemia) 
+	(2) Midkemia (next to: Narnia, Elantris, Scadrial, Oz)
+	(3) Oz (next to: Midkemia, Scadrial, Mordor, Gondor)
+	(B)ack
+---------------------------------------------------------------------------
+
+4.1.3 After chose 2 territories:
+	Should check the number not exceed units in that territory
+---------------------------------------------------------------------------
+Please input the number of units you want to move:
+(type B to go back)
+---------------------------------------------------------------------------
+
+4.2 Attack:
+---------------------------------------------------------------------------
+Please choose a source territory to start attack:
+	(1) Narnia (next to: Elantris, Midkemia) 
+	(2) Midkemia (next to: Narnia, Elantris, Scadrial, Oz)
+	(3) Oz (next to: Midkemia, Scadrial, Mordor, Gondor)
+	(B)ack
+---------------------------------------------------------------------------
+
+4.2.1 After chose a source territory, show all possible neighbor to attack:
+(Assume we choose Narnia) BFS
+---------------------------------------------------------------------------
+Please choose a destination territory to attack to:
+	(1) Elantris
+	(2) Scadrial
+	(3) Oz
+	(B)ack
+---------------------------------------------------------------------------
+
+4.2.2 After choose 2 territories:
+	Should check the number not exceed units in that territory
+---------------------------------------------------------------------------
+Please input the number of units you want to use to attack:
+(type B to go back)
+---------------------------------------------------------------------------
+
+4.3 Done:
+---------------------------------------------------------------------------
+Actions received!
+Waiting for the server to process the actions...
+---------------------------------------------------------------------------
+
+5. Lose:
+---------------------------------------------------------------------------
+Green player:
+-------------
+	10 units in Narnia (next to: Elantris, Midkemia)
+	12 units in Midkemia (next to: Narnia, Elantris, Scadrial, Oz)
+	8 units in Oz (next to: Midkemia, Scadrial, Mordor, Gondor)
+	
+Blue player:
+------------
+
+	
+Red player:
+-----------
+	13 units in Gondor (next to: Oz, Mordor)
+	14 units in Mordor (next to: Hogwarts, Gondor, Oz, Scadrial)
+	3 units in Hogwarts (next to: Mordor, Scadrial, Roshar)
+
+Unfortunately, you have lost the game.
+---------------------------------------------------------------------------
+
+6. Win:
+---------------------------------------------------------------------------
+Congratulations! You have won the game!!
+---------------------------------------------------------------------------
+
+6.1 inform other players:
+---------------------------------------------------------------------------
+Red Player has won the game. Thank you for playing!!
+---------------------------------------------------------------------------
+
+
+
+
+
