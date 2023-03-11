@@ -133,5 +133,5 @@ hs_err_pid*
 *\#
 .classpath
 
-# vscode files
-.vscode
+# VSCode
+*.vscode

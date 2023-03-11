@@ -2,6 +2,7 @@ package edu.duke.ece651.teamX.shared;
 import java.util.*;
 import org.json.*;
 
+// Parses world json files into useable objects
 public class MyFormatter {
   private int NumPlayers;
 
@@ -9,16 +10,21 @@ public class MyFormatter {
     NumPlayers = num;
   }
 
-
+  /* input: a map object to write to, and the string representing the contents of a json file
+   * converts a json string object into a map
+   */
   public void MapParse(HashMap<Integer, ArrayList<Territory>> Input, String MapJson) {
     // receive the json string and parse to a territoryMap
     JSONObject InputMap = new JSONObject(MapJson);
     // go through all players to set their territories
-    for (int i = 1; i <= NumPlayers; i++) {
+    for (int i = 0; i < NumPlayers; i++) {
       JSONArray PlayerTemp = new JSONArray();
 
       PlayerTemp = InputMap.optJSONArray("player_" + Integer.toString(i));
-
+      if (NumPlayers == 1){
+        PlayerTemp = null;
+      }
+      //System.out.println(PlayerTemp);
       if (PlayerTemp != null) {
         ArrayList<Territory> InnerTerr = new ArrayList<Territory>();
         for (int j = 0; j < PlayerTemp.length(); j++) {
@@ -26,16 +32,19 @@ public class MyFormatter {
           Territory Inner = JsonToTerritory(TerrTemp);
           InnerTerr.add(Inner);
         }
-        if (InnerTerr.size() == 0) {
-          int tell = 0;
-        }
-        else{
-          Input.put(i, InnerTerr);
-        }
+
+        Input.put(i, InnerTerr);
+
+
       }
     }
   }
 
+  /* input: JSONObject
+   * output: Territory
+   * takes a JSONObject, creates a Territory object, and sets the Territory values
+   * to the fields from the JSONObject
+   */
   public Territory JsonToTerritory(JSONObject TerrTemp) {
     // parse a JsonObject which is a territory
     // "<Default name>" is a placeholder for territory name. Will need to
@@ -44,13 +53,10 @@ public class MyFormatter {
     Territory Inner = new Territory(TerritoryName);
     String owner = TerrTemp.optString("owner");
 
-    JSONArray Soldiers = TerrTemp.optJSONArray("soldiers");
-    for (int i = 0; i < Soldiers.length(); i++) {
-      JSONObject InnerSoldier = Soldiers.optJSONObject(i);
-      int num = InnerSoldier.optInt("level_" + Integer.toString(i));
-      BasicUnit u = new BasicUnit(num);
-      Inner.addUnits(u, num);
-    }
+    Integer numSoldiers = 0;
+    BasicUnit u = new BasicUnit();
+    Inner.addUnits(u, numSoldiers);
+
     // neighbor stored in JsonArray Format
     JSONArray Neighbors = TerrTemp.optJSONArray("neighbor");
     for (int j = 0; j < Neighbors.length(); j++) {
@@ -61,6 +67,15 @@ public class MyFormatter {
     }
     return Inner;
   }
+
+/* input: map object
+*  output: JSONObject
+*  converts a map into a JSONObject
+*/
+public JSONObject MapCompose(HashMap<Integer, ArrayList<Territory>> territoryMap) {
+  MapToJson myMaptoJson = new MapToJson(territoryMap);
+  return myMaptoJson.getJSON();
+}
 }
 
   
