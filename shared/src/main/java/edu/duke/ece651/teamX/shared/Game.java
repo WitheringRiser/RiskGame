@@ -1,5 +1,5 @@
 package edu.duke.ece651.teamX.shared;
-import edu.duke.ece651.teamX.server.*;
+
 import java.util.ArrayList;
 
 public class Game {
