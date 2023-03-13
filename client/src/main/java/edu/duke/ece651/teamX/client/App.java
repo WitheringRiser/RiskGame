@@ -19,8 +19,8 @@ public class App {
     Map my_map = new Map();
     Territory t1 = new Territory("Territory_1");
     Territory t2 = new Territory("Terrotory_2");
-    my_map.addTerritory(t1);
-    my_map.addTerritory(t2);
+    my_map.addTerritory(t1,null);
+    my_map.addTerritory(t2,null);
     return my_map;
   }
 
