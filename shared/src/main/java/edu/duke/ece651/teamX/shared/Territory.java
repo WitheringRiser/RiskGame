@@ -51,16 +51,26 @@ public class Territory implements Serializable {
     }
   }
 
-  public void addNeighbors(Territory t) {
+  public boolean addNeighbors(Territory t) {
     if (!hasNeighbor(t)) {
       neighbours.add(t);
       if (!t.hasNeighbor(this)) {
         t.addNeighbors(this);
       }
+      return true;
     }
+    return false;
   }
 
-  public boolean removeUnits(Unit unit) {
+  public boolean removeUnits(int number) {
+    int removed = 0;
+    while (removed < number) {
+      if (getUnitsNumber() < 1) {
+        return false;
+      }
+      units.remove(0);
+      removed += 1;
+    }
     return true;
   }
 
