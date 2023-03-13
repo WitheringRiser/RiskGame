@@ -24,8 +24,8 @@ public class TextDisplayerTest {
     t1.addUnits(null, 2);
     t2.addUnits(null, 3);
     t3.addUnits(null, 1);
-    Player p1 = new Player("red", 0, 0);
-    Player p2 = new Player("green", 0, 0);
+    Player p1 = new Player("red", 0);
+    Player p2 = new Player("green", 0);
     Map m = new Map();
     m.addTerritory(t1, null);
     m.addTerritory(t2, null);

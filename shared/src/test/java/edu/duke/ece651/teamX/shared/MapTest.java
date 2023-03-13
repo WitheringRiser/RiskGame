@@ -2,18 +2,26 @@ package edu.duke.ece651.teamX.shared;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.HashMap;
 import org.junit.jupiter.api.Test;
-
 public class MapTest {
   @Test
   public void test_MapBasics() {
     //Set up the map
     Map my_map = new Map();
+    assertEquals(my_map, my_map);
+    assertNotEquals(my_map, null);
     Territory t1 = new Territory("aTerritory");
     Territory t2 = new Territory("aTerritory");
     assertEquals(0, my_map.getTerritoryNum());
+    HashMap<Map, String> try_dict = new HashMap<Map, String>();
+    Map try_map = new Map();
+    try_dict.put(my_map, "0");
+    assertEquals(true, try_dict.containsKey(my_map));
+    assertEquals(true, try_dict.containsKey(try_map));
     //Test addTerritory
     assertEquals(true, my_map.addTerritory(t1, null));
+    assertEquals(false, try_dict.containsKey(my_map));
     //Should not add the same territory more than once
     assertEquals(1, my_map.getTerritoryNum());
     assertEquals(false, my_map.addTerritory(t1, null));
@@ -53,8 +61,8 @@ public class MapTest {
     assertEquals(true, my_map.addTerritory(t1, null));
     assertEquals(true, my_map.addTerritory(t3, null));
     assertEquals(true, my_map.addTerritory(t4, null));
-    Player p1 = new Player("Red", 20, 4);
-    Player p2 = new Player("Blue", 20, 4);
+    Player p1 = new Player("Red", 20);
+    Player p2 = new Player("Blue", 20);
     //Test normal function of setOwner
     assertEquals(true, my_map.setOwner(t1, p1));
     assertEquals(p1, my_map.getOwner(t1));

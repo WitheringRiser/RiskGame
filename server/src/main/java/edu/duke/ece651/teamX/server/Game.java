@@ -1,5 +1,6 @@
 package edu.duke.ece651.teamX.server;
 import edu.duke.ece651.teamX.shared.*;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -55,10 +56,20 @@ public class Game {
   public void sendTerrGroup(HashMap<Integer, ArrayList<Territory> > free_groups,
                             Player player) {}
 
-  public void createMap() {
+  public void createPlayer(Socket player_socket, String name) {
+    Player p = new Player(name, init_units);
+    player_dict.put(p, player_socket);
+  }
+  /**
+   *Create the map by adding territories and their owners
+   */
+  public void createMap() throws IOException, ClassNotFoundException {
     HashMap<Integer, ArrayList<Territory> > terr_groups = setupGroup();
     for (Player p : player_dict.keySet()) {
-      sendTerrGroup(terr_groups, p);
+      sendTerrGroup(terr_groups, p);  //Let client make decision
+      int choice = communicate.receiveInt(player_dict.get(p));
+      setGroupOwner(terr_groups.get(choice), p);  //Set owner of the group
+      terr_groups.remove(choice);                 //remove this option
     }
   }
 

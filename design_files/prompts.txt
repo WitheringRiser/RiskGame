@@ -13,17 +13,17 @@ Please wait a few moments while we gather all players before we start...
 Please choose one territory group as your initial territories:
 (type the corresponding number to indicate your choice, e.g. 1) 
 
-(1) Group Green:
+(1) Group 0:
 	- Narnia (next to: Elantris, Midkemia)
 	- Midkemia (next to: Narnia, Elantris, Scadrial, Oz)
 	- Oz (next to: Midkemia, Scadrial, Mordor, Gondor)
 	
-(2) Group Blue:
+(2) Group 1:
 	- Elantris (next to: Roshar, Scadrial, Midkemia, Narnia)
 	- Roshar (next to: Hogwarts, Scadrial, Elantris)
 	- Scadrial (next to: Elantris, Roshar, Hogwats, Mordor)
 	
-(3) Group Red:
+(3) Group 2:
 	- Gondor (next to: Oz, Mordor)
 	- Mordor (next to: Hogwarts, Gondor, Oz, Scadrial)
 	- Hogwarts (next to: Mordor, Scadrial, Roshar)	
