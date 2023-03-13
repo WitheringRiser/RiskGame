@@ -1,14 +1,23 @@
-package edu.duke.ece651.teamX.shared;
-
+package edu.duke.ece651.teamX.client;
+import edu.duke.ece651.teamX.shared.*;
+import java.io.IOException;
+import java.net.Socket;
 import java.util.ArrayList;
 
 public class Client {
-  private Map map;
+  private Socket socket;
+  private Communicate communicate;
   private Player player;
+  private Map map;
   private ArrayList<Action> actions;
 
-  public Client() { actions = new ArrayList<Action>(); }
-  public void init() {}
+  public Client(Socket s) {
+    socket = s;
+    communicate = new Communicate();
+  }
+  public void init() throws IOException, ClassNotFoundException {
+    player = communicate.receivePlayer(socket);
+  }
 
   public boolean chooseTerritory() { return true; }
 
@@ -16,7 +25,7 @@ public class Client {
 
   public void receiveMap() {}
 
-  public void receivePlayer() {}
+  // public Player receivePlayer() {}
 
   public void addAction(Action action) {}
 

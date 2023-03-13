@@ -38,5 +38,10 @@ class CommunicateTest {
     communicate.sendInt(clientSocket, num);
     int recv_int = communicate.receiveInt(serverSocket);
     assertEquals(num, recv_int);
+
+    Player player = new Player("Red", 20);
+    communicate.sendPlayer(clientSocket, player);
+    Player recv_player = communicate.receivePlayer(serverSocket);
+    assertEquals(recv_player, player);
   }
 }
