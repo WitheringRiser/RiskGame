@@ -1,4 +1,4 @@
-package edu.duke.ece651.teamX.shared;
+package edu.duke.ece651.teamX.server;
 
 import java.util.ArrayList;
 

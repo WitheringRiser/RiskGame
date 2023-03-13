@@ -27,23 +27,21 @@ public class TextDisplayerTest {
     Player p1 = new Player("red", 0, 0);
     Player p2 = new Player("green", 0, 0);
     Map m = new Map();
-    m.addTerritory(t1);
-    m.addTerritory(t2);
-    m.addTerritory(t3);
+    m.addTerritory(t1, null);
+    m.addTerritory(t2, null);
+    m.addTerritory(t3, null);
     m.setOwner(t1, p1);
     m.setOwner(t2, p1);
     m.setOwner(t3, p2);
 
     TextDisplayer dis = new TextDisplayer(m);
-    String expected = "red player:\n" +
-        "-----------\n" +
-        "2 units in duke (next to: cary)\n" +
-        "3 units in cary (next to: duke, durham)\n\n" +
-        "green player:\n" +
-        "-----------\n" +
-        "1 units in durham (next to: cary)\n\n";
+    String expected = "red player:\n"
+                      + "-----------\n"
+                      + "2 units in duke (next to: cary)\n"
+                      + "3 units in cary (next to: duke, durham)\n\n"
+                      + "green player:\n"
+                      + "-----------\n"
+                      + "1 units in durham (next to: cary)\n\n";
     assertEquals(expected, dis.display());
-
   }
-
 }
