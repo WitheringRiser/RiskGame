@@ -18,7 +18,7 @@ class CommunicateTest {
   }
 
   @Test
-  void send_receive_Map() throws IOException, ClassNotFoundException {
+  void test_send_receive() throws IOException, ClassNotFoundException {
     Map myMap = createMap();
 
     Communicate communicate = new Communicate();
@@ -33,5 +33,10 @@ class CommunicateTest {
     communicate.sendObject(clientSocket, myMap);
     Map recv_map_obj = (Map)communicate.receiveObject(serverSocket);
     assertEquals(myMap, recv_map_obj);
+
+    int num = 0;
+    communicate.sendInt(clientSocket, num);
+    int recv_int = communicate.receiveInt(serverSocket);
+    assertEquals(num, recv_int);
   }
 }
