@@ -3,37 +3,37 @@ package edu.duke.ece651.teamX.shared;
 import java.util.ArrayList;
 
 public class MultiAttack {
-  private ArrayList<Territory> enemies;
+  private ArrayList<Attacker> enemies;
   private Territory defender;
   private Map map;
+  private ArrayList<Attack> attackList = null;
 
-  MultiAttack(ArrayList<Territory> enemies, Territory defender, Map map) {
+  MultiAttack(ArrayList<Attacker> enemies, Territory defender, Map map) {
     this.enemies = enemies;
     this.defender = defender;
     this.map = map;
   }
 
-  public void enemiesFight(Territory enemy1, Territory enemy2) {
+  public void enemiesFight(Attacker enemy1, Attacker enemy2) {
     // assert (enemy1.getUnitsNumber() > 0 && enemy2.getUnitsNumber() > 0);
-    Attack attack = new Attack(enemy1, enemy2);
-    attack.enemyFight(20);
-    if (enemy1.getUnitsNumber() == 0) {
+    enemy1.fight(enemy2, 20);
+    if (enemy1.LosesAll()) {
       enemies.remove(enemy1);
-    } else if (enemy2.getUnitsNumber() == 0) {
+    } else if (enemy2.LosesAll()) {
       enemies.remove(enemy2);
     }
   }
 
   public boolean onlyOneEnemy() {
     for (int i = 1; i < enemies.size(); ++i) {
-      if (!map.getOwner(enemies.get(i)).equals(map.getOwner(enemies.get(0)))) {
+      if (!map.getOwner(enemies.get(i).getTerritory()).equals(map.getOwner(enemies.get(0).getTerritory()))) {
         return false;
       }
     }
     return true;
   }
 
-  public ArrayList<Territory> getFinalAttacker() {
+  public ArrayList<Attacker> getFinalAttacker() {
     int index1 = 0;
     int index2 = 1;
     while (!onlyOneEnemy()) {
@@ -44,17 +44,31 @@ public class MultiAttack {
     return enemies;
   }
 
-  public boolean perform() {
-    ArrayList<Territory> enemy = getFinalAttacker();
+  public void prepare() {
+    attackList = new ArrayList<Attack>();
+    ArrayList<Attacker> enemy = getFinalAttacker();
     for (int i = 0; i < enemy.size(); ++i) {
-      if (map.getOwner(defender).equals(map.getOwner(enemy.get(i)))) {
-        ArrayList<Unit> move = enemy.get(i).removeUnits(enemy.get(i).getUnitsNumber());
+      Territory attackerTerritory = enemy.get(i).getTerritory();
+      Player enemyPlayer = enemy.get(i).getOwner();
+      Attack attack = new Attack(attackerTerritory, defender, enemy.get(i).getAttackNumber(), 0, enemyPlayer);
+      attackList.add(attack);
+    }
+  }
+
+  public boolean perform() {
+    // assert (attackList != null && attackList.size() > 0);
+    if (attackList == null || attackList.size() == 0) {
+      throw new IllegalArgumentException("need to call prepare() before perform()");
+    }
+    for (int i = 0; i < attackList.size(); ++i) {
+      Attack attack = attackList.get(i);
+      Player player = attack.getEnemyPlayer();
+      if (map.getOwner(defender).equals(player)) {
+        ArrayList<Unit> move = attack.getAttackerUnits();
         defender.addUnits(move);
       } else {
-        Attack attack = new Attack(enemy.get(i), defender);
         if (attack.perform()) {
-          Player p = map.getOwner(enemy.get(i));
-          map.setOwner(defender, p);
+          map.setOwner(defender, player);
         }
       }
     }

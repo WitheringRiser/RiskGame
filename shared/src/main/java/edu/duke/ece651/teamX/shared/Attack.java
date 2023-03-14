@@ -5,22 +5,36 @@ import java.util.Random;
 
 public class Attack extends BasicAction {
   private static Random rand = null;
-  final private int attackNum;
+  private ArrayList<Unit> attacker;
+  private Player enemyPlayer;
 
   Attack(Territory _source, Territory _destination) {
-    this(_source, _destination, _source.getUnitsNumber(), 0);
+    this(_source, _destination, _source.getUnitsNumber(), 0, null);
   }
 
   Attack(Territory _source, Territory _destination, int num) {
-    this(_source, _destination, num, 0);
+    this(_source, _destination, num, 0, null);
   }
 
   Attack(Territory _source, Territory _destination, int num, int seed) {
+    this(_source, _destination, num, seed, null);
+  }
+
+  Attack(Territory _source, Territory _destination, int num, int seed, Player player) {
     super(_source, _destination);
     if (rand == null) {
       rand = new Random(seed);
     }
-    attackNum = num;
+    attacker = source.removeUnits(num);
+    enemyPlayer = player;
+  }
+
+  public ArrayList<Unit> getAttackerUnits() {
+    return attacker;
+  }
+
+  public Player getEnemyPlayer() {
+    return enemyPlayer;
   }
 
   public int rollDice(int max) {
@@ -30,7 +44,7 @@ public class Attack extends BasicAction {
   /**
    * perform one unit attck
    */
-  public void unitAttack(int max, ArrayList<Unit> attacker) {
+  public void unitAttack(int max) {
     int enemyDice = rollDice(max);
     int defenderDice = rollDice(max);
     if (enemyDice > defenderDice) {
@@ -41,30 +55,12 @@ public class Attack extends BasicAction {
   }
 
   /**
-   * enemyFight with each other
-   * if ties, both enemy will not lose a unit
-   * 
-   * @param max: sides number of dice.
-   */
-  public void enemyFight(int max) {
-    int enemyDice1 = rollDice(max);
-    int enemyDice2 = rollDice(max);
-    if (enemyDice1 > enemyDice2) {
-      destination.removeUnits(1);
-    } else if (enemyDice1 < enemyDice2) {
-      source.removeUnits(1);
-    }
-
-  }
-
-  /**
    * @return true if attacker wins
    */
   @Override
   public boolean perform() {
-    ArrayList<Unit> attacker = source.removeUnits(attackNum);
     while (attacker.size() > 0 && destination.getUnitsNumber() > 0) {
-      unitAttack(20, attacker);
+      unitAttack(20);
     }
     if (attacker.size() == 0) {
       return false;
