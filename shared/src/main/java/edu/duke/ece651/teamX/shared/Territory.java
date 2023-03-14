@@ -22,6 +22,13 @@ public class Territory implements Serializable {
     this.name = in_name;
   }
 
+  public Territory(String in_name, int num) {
+    this.units = new ArrayList<Unit>();
+    addUnits(null, num);
+    this.neighbours = new ArrayList<Territory>();
+    this.name = in_name;
+  }
+
   /**
    * Get the name of a territory
    */

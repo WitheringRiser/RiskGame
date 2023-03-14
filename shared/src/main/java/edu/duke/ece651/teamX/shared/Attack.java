@@ -29,8 +29,6 @@ public class Attack extends BasicAction {
 
   /**
    * perform one unit attck
-   * 
-   * @return true if remove successfully
    */
   public void unitAttack(int max, ArrayList<Unit> attacker) {
     int enemyDice = rollDice(max);
@@ -40,6 +38,23 @@ public class Attack extends BasicAction {
     } else {
       attacker.remove(0);
     }
+  }
+
+  /**
+   * enemyFight with each other
+   * if ties, both enemy will not lose a unit
+   * 
+   * @param max: sides number of dice.
+   */
+  public void enemyFight(int max) {
+    int enemyDice1 = rollDice(max);
+    int enemyDice2 = rollDice(max);
+    if (enemyDice1 > enemyDice2) {
+      destination.removeUnits(1);
+    } else if (enemyDice1 < enemyDice2) {
+      source.removeUnits(1);
+    }
+
   }
 
   /**
