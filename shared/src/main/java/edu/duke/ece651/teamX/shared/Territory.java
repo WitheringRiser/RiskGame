@@ -22,6 +22,13 @@ public class Territory implements Serializable {
     this.name = in_name;
   }
 
+  public Territory(String in_name, int num) {
+    this.units = new ArrayList<Unit>();
+    addUnits(null, num);
+    this.neighbours = new ArrayList<Territory>();
+    this.name = in_name;
+  }
+
   /**
    * Get the name of a territory
    */
@@ -36,10 +43,11 @@ public class Territory implements Serializable {
   public Iterator<Territory> getNeighbours() {
     return neighbours.iterator();
   }
-
-  public Iterator<Unit> getUnits() {
-    return units.iterator();
-  }
+  /*
+   * public Iterator<Unit> getUnits() {
+   * return units.iterator();
+   * }
+   */
 
   public boolean hasNeighbor(Territory t) {
     return neighbours.contains(t);
@@ -51,17 +59,36 @@ public class Territory implements Serializable {
     }
   }
 
-  public void addNeighbors(Territory t) {
+  public void addUnits(ArrayList<Unit> list) {
+    for (int i = 0; i < list.size(); ++i) {
+      units.add(list.get(i));
+    }
+  }
+
+  public void setUnits(ArrayList<Unit> units) {
+    this.units = units;
+  }
+
+  public boolean addNeighbors(Territory t) {
     if (!hasNeighbor(t)) {
       neighbours.add(t);
       if (!t.hasNeighbor(this)) {
         t.addNeighbors(this);
       }
+      return true;
     }
+    return false;
   }
 
-  public boolean removeUnits(Unit unit) {
-    return true;
+  public ArrayList<Unit> removeUnits(int number) {
+    ArrayList<Unit> unitList = new ArrayList<Unit>();
+    while (unitList.size() < number) {
+      if (getUnitsNumber() < 1) {
+        throw new IllegalArgumentException("can not remove unit from empty units");
+      }
+      unitList.add(units.remove(0));
+    }
+    return unitList;
   }
 
   /**
