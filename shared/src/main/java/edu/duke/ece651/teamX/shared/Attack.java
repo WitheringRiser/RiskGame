@@ -22,9 +22,9 @@ public class Attack extends BasicAction {
 
   Attack(Territory _source, Territory _destination, int num, int seed, Player player) {
     super(_source, _destination);
-    if (rand == null) {
-      rand = new Random(seed);
-    }
+
+    rand = new Random(seed);
+
     attacker = source.removeUnits(num);
     enemyPlayer = player;
   }

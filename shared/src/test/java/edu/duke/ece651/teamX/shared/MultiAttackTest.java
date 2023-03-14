@@ -43,8 +43,8 @@ public class MultiAttackTest {
     assertEquals(true, ma2.perform());
     assertEquals(true, ma3.perform());
     System.out.println(displayer.display());
-    assertEquals(12, t1.getUnitsNumber());
-    assertEquals(80, t2.getUnitsNumber());
+    assertEquals(11, t1.getUnitsNumber());
+    assertEquals(79, t2.getUnitsNumber());
     assertEquals(78, t3.getUnitsNumber());
     
     assertEquals(p1, map.getOwner(t1));
@@ -121,7 +121,7 @@ public class MultiAttackTest {
     ma.prepare();
     assertEquals(true, ma.perform());
     System.out.println(displayer.display());
-    assertEquals(135, defender.getUnitsNumber());
+    assertEquals(153, defender.getUnitsNumber());
 
   }
 
@@ -165,8 +165,8 @@ public class MultiAttackTest {
 
   @Test
   public void test_perform() {
-    test_perform_helper(108, 63);
-    test_perform_helper(8, 17);
+    test_perform_helper(108, 74);
+    test_perform_helper(8, 18);
   }
 
 }

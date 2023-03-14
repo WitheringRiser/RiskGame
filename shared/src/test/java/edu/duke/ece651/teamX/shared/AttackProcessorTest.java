@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 public class AttackProcessorTest {
   @Test
   public void test_resovle() {
-    
     ArrayList<AttackSender> allAttack = new ArrayList<AttackSender>();
     Territory t1 = new Territory("duke", 100);
     Territory t2 = new Territory("cary", 80);

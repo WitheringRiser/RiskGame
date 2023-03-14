@@ -16,9 +16,7 @@ public class Attacker {
     attacker = _attacker;
     this.player = _player;
     num = _num;
-    if (rand == null) {
-      rand = new Random(seed);
-    }
+    rand = new Random(seed);
   }
 
   public Territory getTerritory() {

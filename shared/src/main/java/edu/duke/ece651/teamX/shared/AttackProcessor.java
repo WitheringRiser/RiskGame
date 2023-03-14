@@ -49,8 +49,4 @@ public class AttackProcessor {
       m.perform();
     }
   }
-
-  public Map getMap() {
-    return map;
-  }
 }
