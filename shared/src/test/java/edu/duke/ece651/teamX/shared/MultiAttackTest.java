@@ -10,13 +10,49 @@ public class MultiAttackTest {
   @Test
   public void test_getFinalAttacker() {
     ArrayList<Territory> enemies = new ArrayList<Territory>();
-    enemies.add(new Territory("duke",8));
-    enemies.add(new Territory("cary",8));
-    enemies.add(new Territory("rdu",7));
-    enemies.add(new Territory("boston",3));
-    MultiAttack ma = new MultiAttack(enemies);
+    enemies.add(new Territory("duke", 108));
+    enemies.add(new Territory("cary", 8));
+    enemies.add(new Territory("rdu", 7));
+    enemies.add(new Territory("boston", 3));
+    MultiAttack ma = new MultiAttack(enemies, null, null);
     Territory ans = ma.getFinalAttacker();
     assertEquals("duke", ans.getName());
+  }
+
+  @Test
+  public void test_perform() {
+    Territory t1 = new Territory("duke", 108);
+    Territory t2 = new Territory("cary", 8);
+    Territory t3 = new Territory("rdu", 7);
+    Territory t4 = new Territory("boston", 3);
+    ArrayList<Territory> enemies = new ArrayList<Territory>();
+    enemies.add(t1);
+    enemies.add(t2);
+    enemies.add(t3);
+    enemies.add(t4);
+
+    Territory defender = new Territory("nyu", 5);
+
+    Player p1 = new Player("zhou", 20);
+    Player p2 = new Player("an", 15);
+    Player p3 = new Player("andre", 15);
+    Player p4 = new Player("andrew", 15);
+    Player p5 = new Player("defender", 15);
+
+    Map map = new Map();
+    map.addTerritory(t1, p1);
+    map.addTerritory(t2, p2);
+    map.addTerritory(t3, p3);
+    map.addTerritory(t4, p4);
+    map.addTerritory(defender, p5);
+
+    TextDisplayer displayer = new TextDisplayer(map);
+    System.out.println(displayer.display());
+
+    MultiAttack ma = new MultiAttack(enemies, defender, map);
+    assertEquals(true, ma.perform());
+    System.out.println(displayer.display());
+
   }
 
 }

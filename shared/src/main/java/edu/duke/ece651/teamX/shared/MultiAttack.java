@@ -35,13 +35,13 @@ public class MultiAttack {
     return enemies.get(0);
   }
 
-  public Map perform() {
+  public boolean perform() {
     Territory enemy = getFinalAttacker();
     Attack attack = new Attack(enemy, defender);
     if (attack.perform()) {
       Player p = map.getOwner(enemy);
-      map.setOwner(defender, p);
+      return map.setOwner(defender, p);
     }
-    return map;
+    return true;
   }
 }
