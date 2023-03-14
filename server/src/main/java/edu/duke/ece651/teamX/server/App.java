@@ -10,15 +10,14 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-
 public class App {
-
   public static void main(String[] args) throws IOException, ClassNotFoundException {
     Communicate communicate = new Communicate();
     ServerSocket ss = new ServerSocket(4444);
-    Socket socket = ss.accept();
-    Map recv_map = (Map) communicate.receiveMap(socket);
-    System.out.println(recv_map.getTerritoryNum());
+    Socket p1Socket = ss.accept();
+    Game game = new Game(3, 20);
+    game.createPlayer(p1Socket, "A");
+    game.createMap();
+    //System.out.println();
   }
-
 }

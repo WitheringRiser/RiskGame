@@ -54,11 +54,14 @@ public class Game {
   }
 
   public void sendTerrGroup(HashMap<Integer, ArrayList<Territory> > free_groups,
-                            Player player) {}
+                            Player player) throws IOException {
+    communicate.sendObject(player_dict.get(player), free_groups);
+  }
 
-  public void createPlayer(Socket player_socket, String name) {
+  public void createPlayer(Socket player_socket, String name) throws IOException {
     Player p = new Player(name, init_units);
     player_dict.put(p, player_socket);
+    communicate.sendPlayer(player_socket, p);
   }
   /**
    *Create the map by adding territories and their owners
