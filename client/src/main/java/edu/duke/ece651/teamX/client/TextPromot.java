@@ -30,13 +30,27 @@ public class TextPromot {
   }
 
   public TextPromot(Player p) { player = p; }
-  public String displayBegin() {
+  public String startPromot() {
     StringBuilder ans = new StringBuilder("");
     ans.append("Welcome to the RISK game, Player " + player.getName() + "!\n");
     ans.append(
         "Please wait a few moments while we gather all players before we start...\n");
     return ans.toString();
   }
+  public String setUnitPromot(ArrayList<Territory> territories, int num_units) {
+    StringBuilder ans = new StringBuilder("");
+    ans.append(player.getName() +
+               " player: you are going to place the units in your territories.\n\n");
+    ans.append("You have " + num_units + " available units to place.\n");
+    ans.append("Please choose a territory to place units:\n");
+    for (int i = 0; i < territories.size(); i++) {
+      ans.append("   (" + i + ") ");
+      ans.append(displayTerrWithUnit(territories.get(i)));
+      ans.append("\n");
+    }
+    return ans.toString();
+  }
+
   public String displayTerrGroup(HashMap<Integer, ArrayList<Territory> > free_groups) {
     StringBuilder ans = new StringBuilder("");
     ans.append("Please choose one territory group as your initial territories:\n");

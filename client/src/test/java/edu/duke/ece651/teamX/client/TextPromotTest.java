@@ -36,8 +36,9 @@ public class TextPromotTest {
     String expected =
         "Welcome to the RISK game, Player A!\n"
         + "Please wait a few moments while we gather all players before we start...\n";
-    assertEquals(expected, promot.displayBegin());
+    assertEquals(expected, promot.startPromot());
   }
+
   @Test
   public void test_displayGroup() {
     Player p1 = new Player("A", 20);
@@ -54,5 +55,18 @@ public class TextPromotTest {
                       + "   - C (next to: A, D)\n"
                       + "   - D (next to: B, C)\n";
     assertEquals(expected, promot.displayTerrGroup(groups));
+  }
+  @Test
+  public void test_setUnitPromot() {
+    Player p1 = new Player("A", 20);
+    TextPromot promot = new TextPromot(p1);
+    HashMap<Integer, ArrayList<Territory> > groups = formGroup();
+    String expected =
+        "A player: you are going to place the units in your territories.\n\n"
+        + "You have 20 available units to place.\n"
+        + "Please choose a territory to place units:\n"
+        + "   (0) A (next to: B, C) with 0 units\n"
+        + "   (1) B (next to: A, D) with 0 units\n";
+    assertEquals(expected, promot.setUnitPromot(groups.get(0), 20));
   }
 }
