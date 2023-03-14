@@ -4,30 +4,20 @@
 package edu.duke.ece651.teamX.client;
 
 import com.sun.org.apache.xerces.internal.impl.io.UCSReader;
-import edu.duke.ece651.teamX.shared.Communicate;
-import edu.duke.ece651.teamX.shared.Map;
-import edu.duke.ece651.teamX.shared.MyName;
-import edu.duke.ece651.teamX.shared.Territory;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.net.Socket;
 import org.checkerframework.checker.units.qual.C;
 
-
 public class App {
+  public static void main(String[] args) throws IOException, ClassNotFoundException {
+    Socket clientSocket = new Socket("localhost", 4444);
+    BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+    PrintStream out = System.out;
 
-  private static Map createMap() {
-    Map my_map = new Map();
-    Territory t1 = new Territory("Territory_1");
-    Territory t2 = new Territory("Terrotory_2");
-    my_map.addTerritory(t1,null);
-    my_map.addTerritory(t2,null);
-    return my_map;
-  }
-
-  public static void main(String[] args) throws IOException {
-    Socket socket = new Socket("localhost", 4444);
-    Communicate communicate = new Communicate();
-    Map myMpp = App.createMap();
-    communicate.sendMap(socket, myMpp);
+    Client client = new Client(clientSocket, input, out);
+    client.init();
   }
 }

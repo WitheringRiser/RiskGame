@@ -50,7 +50,7 @@ public class TextPromotTest {
                       + "\n"
                       + "(0) Group 0:\n"
                       + "   - A (next to: B, C)\n"
-                      + "   - B (next to: A, D)\n"
+                      + "   - B (next to: A, D)\n\n"
                       + "(1) Group 1:\n"
                       + "   - C (next to: A, D)\n"
                       + "   - D (next to: B, C)\n";
@@ -61,12 +61,13 @@ public class TextPromotTest {
     Player p1 = new Player("A", 20);
     TextPromot promot = new TextPromot(p1);
     HashMap<Integer, ArrayList<Territory> > groups = formGroup();
-    String expected =
-        "A player: you are going to place the units in your territories.\n\n"
-        + "You have 20 available units to place.\n"
-        + "Please choose a territory to place units:\n"
-        + "   (0) A (next to: B, C) with 0 units\n"
-        + "   (1) B (next to: A, D) with 0 units\n";
-    assertEquals(expected, promot.setUnitPromot(groups.get(0), 20));
+    String expected = "You have 20 available units to place.\n"
+                      + "Please choose a territory to place units:\n"
+                      + "(0) A (next to: B, C) with 0 units\n"
+                      + "(1) B (next to: A, D) with 0 units\n";
+    assertEquals(expected, promot.setUnitPromot(groups.get(0), 20, false));
+    expected =
+        "A player: you are going to place the units in your territories.\n\n" + expected;
+    assertEquals(expected, promot.setUnitPromot(groups.get(0), 20, true));
   }
 }
