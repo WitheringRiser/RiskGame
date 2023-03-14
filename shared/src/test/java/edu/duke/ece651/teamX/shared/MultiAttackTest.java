@@ -9,6 +9,50 @@ import org.junit.jupiter.api.Test;
 
 public class MultiAttackTest {
   @Test
+  public void test_threeAttackFightTogether() {
+    Territory t1 = new Territory("duke", 100);
+    Territory t2 = new Territory("cary", 80);
+    Territory t3 = new Territory("rdu", 7);
+    Player p1 = new Player("zhou", 20);
+    Player p2 = new Player("andre", 15);
+    Player p3 = new Player("an", 15);
+
+    Map map = new Map();
+    map.addTerritory(t1, p1);
+    map.addTerritory(t2, p2);
+    map.addTerritory(t3, p3);
+
+    TextDisplayer displayer = new TextDisplayer(map);
+    System.out.println(displayer.display());
+
+    ArrayList<Attacker> enemies1 = new ArrayList<Attacker>();
+    enemies1.add(new Attacker(t1, 80, p1, 1));
+    ArrayList<Attacker> enemies2 = new ArrayList<Attacker>();
+    enemies2.add(new Attacker(t2, 78, p2, 1));
+    ArrayList<Attacker> enemies3 = new ArrayList<Attacker>();
+    enemies3.add(new Attacker(t3, 7, p3, 1));
+
+    MultiAttack ma1 = new MultiAttack(enemies1, t2, map);
+    MultiAttack ma2 = new MultiAttack(enemies2, t3, map);
+    MultiAttack ma3 = new MultiAttack(enemies3, t1, map);
+    ma1.prepare();
+    ma2.prepare();
+    ma3.prepare();
+
+    assertEquals(true, ma1.perform());
+    assertEquals(true, ma2.perform());
+    assertEquals(true, ma3.perform());
+    System.out.println(displayer.display());
+    assertEquals(12, t1.getUnitsNumber());
+    assertEquals(80, t2.getUnitsNumber());
+    assertEquals(78, t3.getUnitsNumber());
+    
+    assertEquals(p1, map.getOwner(t1));
+    assertEquals(p1, map.getOwner(t2));
+    assertEquals(p2, map.getOwner(t3));
+
+  }
+  @Test
   public void test_twoAttackFightTogether() {
     Territory t1 = new Territory("duke", 100);
     Territory t2 = new Territory("cary", 80);
@@ -68,8 +112,8 @@ public class MultiAttackTest {
     System.out.println(displayer.display());
 
     ArrayList<Attacker> enemies = new ArrayList<Attacker>();
-    enemies.add(new Attacker(t1, 100, p1, 1));
-    enemies.add(new Attacker(t2, 100, p1, 1));
+    enemies.add(new Attacker(t1, 95, p1, 1));
+    enemies.add(new Attacker(t2, 95, p1, 1));
     enemies.add(new Attacker(t3, 7, p3, 1));
     enemies.add(new Attacker(t4, 3, p4, 1));
 
@@ -77,7 +121,7 @@ public class MultiAttackTest {
     ma.prepare();
     assertEquals(true, ma.perform());
     System.out.println(displayer.display());
-    assertEquals(145, defender.getUnitsNumber());
+    assertEquals(135, defender.getUnitsNumber());
 
   }
 
