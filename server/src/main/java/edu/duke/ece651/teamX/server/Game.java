@@ -85,8 +85,14 @@ public class Game {
   }
 
   public void setUnits() {}
-
-  public void sendMap(Player player) {}
+  public void sendMapAll() throws IOException {
+    for (Player p : player_dict.keySet()) {
+      sendMap(p);
+    }
+  }
+  public void sendMap(Player player) throws IOException {
+    communicate.sendMap(player_dict.get(player), map);
+  }
 
   public void receiveActions() {}
 

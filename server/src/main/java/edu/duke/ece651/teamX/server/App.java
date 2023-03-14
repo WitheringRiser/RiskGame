@@ -3,9 +3,7 @@
  */
 package edu.duke.ece651.teamX.server;
 
-import edu.duke.ece651.teamX.shared.Communicate;
-import edu.duke.ece651.teamX.shared.Map;
-import edu.duke.ece651.teamX.shared.MyName;
+import edu.duke.ece651.teamX.shared.*;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -14,10 +12,16 @@ public class App {
   public static void main(String[] args) throws IOException, ClassNotFoundException {
     Communicate communicate = new Communicate();
     ServerSocket ss = new ServerSocket(4444);
-    Socket p1Socket = ss.accept();
-    Game game = new Game(3, 20);
-    game.createPlayer(p1Socket, "A");
+    int try_num = 3;
+    Game game = new Game(try_num, 20);
+    PlayerName namer = new ColorPlayerName();
+    //Connect to players (Might need to be done in Game)
+    for (int i = 0; i < try_num; i++) {
+      Socket pSocket = ss.accept();
+      game.createPlayer(pSocket, namer.getName());
+    }
     game.createMap();
+    game.sendMapAll();
     //System.out.println();
   }
 }

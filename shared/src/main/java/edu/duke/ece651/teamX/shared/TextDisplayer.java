@@ -6,9 +6,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 public class TextDisplayer extends Displayer<String> {
-  TextDisplayer(Map _toDisplay) {
-    super(_toDisplay);
-  }
+  public TextDisplayer(Map _toDisplay) { super(_toDisplay); }
 
   /**
    * display one territory
@@ -68,5 +66,4 @@ public class TextDisplayer extends Displayer<String> {
     ans.append("-----------\n");
     return ans.toString();
   }
-
 }

@@ -44,6 +44,10 @@ public class Client {
     this.inputReader = input;
   }
 
+  private HashMap<Integer, ArrayList<Territory> > receiveTerrGroup()
+      throws IOException, ClassNotFoundException {
+    return (HashMap<Integer, ArrayList<Territory> >)communicate.receiveObject(socket);
+  }
   /**
    *Initialze the game settings for client
    *Receive player to get player properties (name, num of units)
@@ -54,10 +58,9 @@ public class Client {
     player = communicate.receivePlayer(socket);
     promot = new TextPromot(player);
     out.print(promot.startPromot());
-    HashMap<Integer, ArrayList<Territory> > free_groups =
-        (HashMap<Integer, ArrayList<Territory> >)communicate.receiveObject(socket);
+    HashMap<Integer, ArrayList<Territory> > free_groups = receiveTerrGroup();
     int terr_ind = chooseTerrGroup(free_groups);
-    communicate.sendInt(socket, terr_ind);
+    communicate.sendInt(socket, terr_ind);  //notify server about the choice
   }
 
   /**
@@ -72,7 +75,7 @@ public class Client {
     while (true) {
       String user_in = inputReader.readLine();
       int choice = getUserInt(user_in);
-      if (choice > 0 && free_groups.containsKey(choice)) {
+      if (choice >= 0 && free_groups.containsKey(choice)) {
         return choice;
       }
       else {
@@ -83,7 +86,19 @@ public class Client {
 
   public boolean setUnits(ArrayList<Territory> territories) { return true; }
 
-  public void receiveMap() {}
+  /**
+   *Receive map from server
+   */
+  public void receiveMap() throws IOException, ClassNotFoundException {
+    map = communicate.receiveMap(socket);
+  }
+  /**
+   *Display Map
+   */
+  public void displayMap() throws IOException {
+    TextDisplayer dis = new TextDisplayer(map);
+    out.print(dis.display());
+  }
 
   // public Player receivePlayer() {}
 
