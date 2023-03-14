@@ -35,6 +35,10 @@ public class AttackProcessorTest {
     AttackProcessor ap = new AttackProcessor(allAttack, map);
     ap.resovleAllAttack();
     System.out.println(displayer.display());
+    assertEquals(49, t3.getUnitsNumber());
+    assertEquals(7, t2.getUnitsNumber());
+    assertEquals(62, t1.getUnitsNumber());
+    assertEquals(5, t4.getUnitsNumber());
     
 
   }

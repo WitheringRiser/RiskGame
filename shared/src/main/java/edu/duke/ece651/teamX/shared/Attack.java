@@ -70,10 +70,4 @@ public class Attack extends BasicAction {
     }
   }
 
-  @Override
-  public boolean checkValid() {
-    // TODO Auto-generated method stub
-    return false;
-  }
-
 }
