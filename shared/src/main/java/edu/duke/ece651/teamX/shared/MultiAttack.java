@@ -24,23 +24,39 @@ public class MultiAttack {
     }
   }
 
-  public Territory getFinalAttacker() {
+  public boolean onlyOneEnemy() {
+    for (int i = 1; i < enemies.size(); ++i) {
+      if (!map.getOwner(enemies.get(i)).equals(map.getOwner(enemies.get(0)))) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  public ArrayList<Territory> getFinalAttacker() {
     int index1 = 0;
     int index2 = 1;
-    while (enemies.size() > 1) {
+    while (!onlyOneEnemy()) {
       enemiesFight(enemies.get(index1), enemies.get(index2));
       index1 = (index1 + 1) % enemies.size();
       index2 = (index1 + 1) % enemies.size();
     }
-    return enemies.get(0);
+    return enemies;
   }
 
   public boolean perform() {
-    Territory enemy = getFinalAttacker();
-    Attack attack = new Attack(enemy, defender);
-    if (attack.perform()) {
-      Player p = map.getOwner(enemy);
-      return map.setOwner(defender, p);
+    ArrayList<Territory> enemy = getFinalAttacker();
+    for (int i = 0; i < enemy.size(); ++i) {
+      if (map.getOwner(defender).equals(map.getOwner(enemy.get(i)))) {
+        ArrayList<Unit> move = enemy.get(i).removeUnits(enemy.get(i).getUnitsNumber());
+        defender.addUnits(move);
+      } else {
+        Attack attack = new Attack(enemy.get(i), defender);
+        if (attack.perform()) {
+          Player p = map.getOwner(enemy.get(i));
+          map.setOwner(defender, p);
+        }
+      }
     }
     return true;
   }

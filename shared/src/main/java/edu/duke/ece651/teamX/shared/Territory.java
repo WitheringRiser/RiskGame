@@ -43,10 +43,11 @@ public class Territory implements Serializable {
   public Iterator<Territory> getNeighbours() {
     return neighbours.iterator();
   }
-
-  public Iterator<Unit> getUnits() {
-    return units.iterator();
-  }
+  /*
+   * public Iterator<Unit> getUnits() {
+   * return units.iterator();
+   * }
+   */
 
   public boolean hasNeighbor(Territory t) {
     return neighbours.contains(t);
@@ -55,6 +56,12 @@ public class Territory implements Serializable {
   public void addUnits(Unit unit, int number) {
     for (int i = 0; i < number; ++i) {
       units.add(unit);
+    }
+  }
+
+  public void addUnits(ArrayList<Unit> list) {
+    for (int i = 0; i < list.size(); ++i) {
+      units.add(list.get(i));
     }
   }
 
