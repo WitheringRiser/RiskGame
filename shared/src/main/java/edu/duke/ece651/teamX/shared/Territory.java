@@ -51,6 +51,10 @@ public class Territory implements Serializable {
     }
   }
 
+  public void setUnits(ArrayList<Unit> units) {
+    this.units = units;
+  }
+
   public boolean addNeighbors(Territory t) {
     if (!hasNeighbor(t)) {
       neighbours.add(t);
@@ -62,16 +66,15 @@ public class Territory implements Serializable {
     return false;
   }
 
-  public boolean removeUnits(int number) {
-    int removed = 0;
-    while (removed < number) {
+  public ArrayList<Unit> removeUnits(int number) {
+    ArrayList<Unit> unitList = new ArrayList<Unit>();
+    while (unitList.size() < number) {
       if (getUnitsNumber() < 1) {
-        return false;
+        throw new IllegalArgumentException("can not remove unit from empty units");
       }
-      units.remove(0);
-      removed += 1;
+      unitList.add(units.remove(0));
     }
-    return true;
+    return unitList;
   }
 
   /**

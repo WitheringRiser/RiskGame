@@ -1,45 +1,62 @@
 package edu.duke.ece651.teamX.shared;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Attack extends BasicAction {
   private static Random rand = null;
+  final private int attackNum;
 
   Attack(Territory _source, Territory _destination) {
-    this(_source,_destination,0);
+    this(_source, _destination, _source.getUnitsNumber(), 0);
   }
 
-  Attack(Territory _source, Territory _destination, int seed) {
+  Attack(Territory _source, Territory _destination, int num) {
+    this(_source, _destination, num, 0);
+  }
+
+  Attack(Territory _source, Territory _destination, int num, int seed) {
     super(_source, _destination);
     if (rand == null) {
       rand = new Random(seed);
     }
+    attackNum = num;
   }
 
-  public int rollDice() {
-    return rand.nextInt(20) + 1;
+  public int rollDice(int max) {
+    return rand.nextInt(max) + 1;
   }
 
   /**
-   * return true if attacker wins
+   * perform one unit attck
+   * 
+   * @return true if remove successfully
+   */
+  public void unitAttack(int max, ArrayList<Unit> attacker) {
+    int enemyDice = rollDice(max);
+    int defenderDice = rollDice(max);
+    if (enemyDice > defenderDice) {
+      destination.removeUnits(1);
+    } else {
+      attacker.remove(0);
+    }
+  }
+
+  /**
+   * @return true if attacker wins
    */
   @Override
   public boolean perform() {
-    while (source.getUnitsNumber() > 0 && destination.getUnitsNumber() > 0) {
-      int enemyDice = rollDice();
-      int defenderDice = rollDice();
-      if (enemyDice > defenderDice) {
-        destination.removeUnits(1);
-      } else {
-        source.removeUnits(1);
-      }
+    ArrayList<Unit> attacker = source.removeUnits(attackNum);
+    while (attacker.size() > 0 && destination.getUnitsNumber() > 0) {
+      unitAttack(20, attacker);
     }
-    if (source.getUnitsNumber() == 0) {
+    if (attacker.size() == 0) {
       return false;
     } else {
+      destination.setUnits(attacker);
       return true;
     }
-
   }
 
   @Override
