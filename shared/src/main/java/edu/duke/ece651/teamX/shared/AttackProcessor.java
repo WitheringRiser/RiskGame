@@ -6,11 +6,13 @@ import java.util.HashMap;
 public class AttackProcessor {
   private ArrayList<MultiAttack> allAttack;
   private Map map;
+  private AttackValidChecker checker;
 
   AttackProcessor(ArrayList<AttackSender> _allAttack, Map _map) {
     map = _map;
+    checker = new AttackValidChecker(_allAttack, _map);
     allAttack = getAttackList(_allAttack);
-    
+
   }
 
   public ArrayList<MultiAttack> getAttackList(ArrayList<AttackSender> _allAttack) {
