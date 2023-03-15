@@ -53,12 +53,23 @@ public class Game {
     }
   }
 
+  /**
+   *Send available territory groups to a client
+   *@param free_groups us current available territory groups
+   *@param player is the client to receive the groups
+   */
   public void sendTerrGroup(HashMap<Integer, ArrayList<Territory> > free_groups,
-                            Player player) {}
+                            Player player) throws IOException {
+    communicate.sendObject(player_dict.get(player), free_groups);
+  }
 
-  public void createPlayer(Socket player_socket, String name) {
+  /**
+   *Create a Player object for client and inform that client
+   */
+  public void createPlayer(Socket player_socket, String name) throws IOException {
     Player p = new Player(name, init_units);
     player_dict.put(p, player_socket);
+    communicate.sendPlayer(player_socket, p);
   }
   /**
    *Create the map by adding territories and their owners
@@ -74,8 +85,14 @@ public class Game {
   }
 
   public void setUnits() {}
-
-  public void sendMap(Player player) {}
+  public void sendMapAll() throws IOException {
+    for (Player p : player_dict.keySet()) {
+      sendMap(p);
+    }
+  }
+  public void sendMap(Player player) throws IOException {
+    communicate.sendMap(player_dict.get(player), map);
+  }
 
   public void receiveActions() {}
 

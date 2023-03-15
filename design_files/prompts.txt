@@ -1,6 +1,6 @@
 1. Begin: (Show to the user before they can choose the territory group)
 ---------------------------------------------------------------------------
-Welcome to the RISK game!
+Welcome to the RISK game, Player A!
 Please wait a few moments while we gather all players before we start...
 ---------------------------------------------------------------------------
 
@@ -13,17 +13,17 @@ Please wait a few moments while we gather all players before we start...
 Please choose one territory group as your initial territories:
 (type the corresponding number to indicate your choice, e.g. 1) 
 
-(1) Group 0:
+(0) Group 0:
 	- Narnia (next to: Elantris, Midkemia)
 	- Midkemia (next to: Narnia, Elantris, Scadrial, Oz)
 	- Oz (next to: Midkemia, Scadrial, Mordor, Gondor)
 	
-(2) Group 1:
+(1) Group 1:
 	- Elantris (next to: Roshar, Scadrial, Midkemia, Narnia)
 	- Roshar (next to: Hogwarts, Scadrial, Elantris)
 	- Scadrial (next to: Elantris, Roshar, Hogwats, Mordor)
 	
-(3) Group 2:
+(2) Group 2:
 	- Gondor (next to: Oz, Mordor)
 	- Mordor (next to: Hogwarts, Gondor, Oz, Scadrial)
 	- Hogwarts (next to: Mordor, Scadrial, Roshar)	
@@ -44,9 +44,9 @@ Red player: you are going to place the units in your territories.
 
 You have 24 available units to place.
 Please choose a territory to place units:
-	(1) Gondor (next to: Oz, Mordor) with 0  units
-	(2) Mordor (next to: Hogwarts, Gondor, Oz, Scadrial) with 0  units
-	(3) Hogwarts (next to: Mordor, Scadrial, Roshar) with 0  units
+   (0) Gondor (next to: Oz, Mordor) with 0 units
+   (1) Mordor (next to: Hogwarts, Gondor, Oz, Scadrial) with 0 units
+   (2) Hogwarts (next to: Mordor, Scadrial, Roshar) with 0 units
 ---------------------------------------------------------------------------
 
 3.1 after select a territory:
