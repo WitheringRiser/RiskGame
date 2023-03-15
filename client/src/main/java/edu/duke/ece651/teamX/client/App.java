@@ -19,7 +19,7 @@ public class App {
 
     Client client = new Client(clientSocket, input, out);
     client.init();
-    client.receiveMap();
-    client.displayMap();
+    // client.receiveMap();
+    //client.displayMap();
   }
 }

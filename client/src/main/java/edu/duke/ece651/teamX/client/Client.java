@@ -40,6 +40,8 @@ public class Client {
   public Client(Socket s, BufferedReader input, PrintStream out) {
     socket = s;
     communicate = new Communicate();
+    map = new Map();
+
     this.out = out;
     this.inputReader = input;
   }
@@ -61,6 +63,9 @@ public class Client {
     HashMap<Integer, ArrayList<Territory> > free_groups = receiveTerrGroup();
     int terr_ind = chooseTerrGroup(free_groups);
     communicate.sendInt(socket, terr_ind);  //notify server about the choice
+    ArrayList<Territory> territories = free_groups.get(terr_ind);
+    setAllUnits(territories);  //place units in territories
+    sendUnitPlacement(territories);
   }
 
   /**
@@ -79,12 +84,43 @@ public class Client {
         return choice;
       }
       else {
-        out.println("The input is not a valid option, please choose again.");
+        out.print(promot.enterAgainPromot());
       }
     }
   }
-
-  public boolean setUnits(ArrayList<Territory> territories) { return true; }
+  public void setUnits(Territory t, int num_units) { t.addUnits(null, num_units); }
+  public void setAllUnits(ArrayList<Territory> territories) throws IOException {
+    int remain_units = player.getUnitNum();
+    boolean is_start = true;
+    while (remain_units > 0) {
+      out.println(promot.setUnitPromot(territories, remain_units, is_start));
+      is_start = false;
+      String user_in = inputReader.readLine();
+      int choice = getUserInt(user_in);
+      if (choice >= 0 && choice < territories.size()) {
+        while (true) {
+          out.println(promot.enterNumPromot());
+          user_in = inputReader.readLine();
+          if (user_in.equals("b") || user_in.equals("B")) {
+            break;
+          }
+          int num_units = getUserInt(user_in);
+          if (num_units >= 0 && num_units <= remain_units) {
+            setUnits(territories.get(choice), num_units);
+            remain_units -= num_units;
+            break;
+          }
+          out.print(promot.enterAgainPromot());
+        }
+      }
+      else {
+        out.print(promot.enterAgainPromot());
+      }
+    }
+  }
+  public void sendUnitPlacement(ArrayList<Territory> territories) throws IOException {
+    communicate.sendObject(socket, territories);
+  }
 
   /**
    *Receive map from server
@@ -100,7 +136,7 @@ public class Client {
     out.print(dis.display());
   }
 
-  // public Player receivePlayer() {}
+  //public ArrayList<Territory> findAllTerr() {}
 
   public void addAction(Action action) {}
 

@@ -97,4 +97,13 @@ public class TextPromot {
     }
     return ans.toString();
   }
+  public String enterNumPromot() {
+    StringBuilder ans = new StringBuilder("");
+    ans.append("Please indicate how many units you want to use.\n");
+    ans.append("(type B to go back)\n");
+    return ans.toString();
+  }
+  public String enterAgainPromot() {
+    return "The input is not a valid option, please choose again.\n";
+  }
 }
