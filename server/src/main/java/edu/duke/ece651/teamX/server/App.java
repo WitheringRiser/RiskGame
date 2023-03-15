@@ -20,6 +20,7 @@ public class App {
       Socket pSocket = ss.accept();
       game.createPlayer(pSocket, namer.getName());
     }
+
     game.createMap();
     game.sendMapAll();
     //System.out.println();
