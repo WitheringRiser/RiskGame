@@ -88,7 +88,21 @@ public class Client {
       }
     }
   }
+  /**
+   *Place a number of units in a chosen territory
+   *@param t is the chosen territory
+   *@param num_units is the number of units to place  
+   */
   public void setUnits(Territory t, int num_units) { t.addUnits(null, num_units); }
+
+  /**
+   *Place all available units to the territories
+   *To minimize potential error for server, 
+   *this function will make sure client can only choose the 
+   *territories belongs to him/her and cannot place more than 
+   *the inital unit number in the Player object
+   *@param territories is a list of territories of the client
+   */
   public void setAllUnits(ArrayList<Territory> territories) throws IOException {
     int remain_units = player.getUnitNum();
     boolean is_start = true;
@@ -118,6 +132,10 @@ public class Client {
       }
     }
   }
+
+  /**
+   *Send unit placement information to the server
+   */
   public void sendUnitPlacement(ArrayList<Territory> territories) throws IOException {
     communicate.sendObject(socket, territories);
   }

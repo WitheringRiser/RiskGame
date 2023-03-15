@@ -54,4 +54,16 @@ public class ClientTest {
                       + "0 units in D (next to: B, C)\n\n";
     assertEquals(expected, bytes.toString());
   }
+  /**
+  @Test
+  public void test_init() {
+ArrayList<Territory> terr_list = new ArrayList<Territory>();
+Territory a = new Territory("A");
+    Territory b = new Territory("B");
+    Territory c = new Territory("C");
+    Territory d = new Territory("D");
+    
+
+  }
+  */
 }
