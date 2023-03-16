@@ -9,7 +9,10 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashMap;
 import org.junit.jupiter.api.Test;
+
 public class ClientTest {
   @Test
   public void test_DisplayMap() throws IOException, ClassNotFoundException {
@@ -54,16 +57,20 @@ public class ClientTest {
                       + "0 units in D (next to: B, C)\n\n";
     assertEquals(expected, bytes.toString());
   }
-  /**
+
   @Test
   public void test_init() {
-ArrayList<Territory> terr_list = new ArrayList<Territory>();
-Territory a = new Territory("A");
+    ArrayList<Territory> terr_list = new ArrayList<Territory>();
+    Territory a = new Territory("A");
     Territory b = new Territory("B");
     Territory c = new Territory("C");
-    Territory d = new Territory("D");
-    
-
+    a.addNeighbors(b);
+    a.addNeighbors(c);
+    terr_list.add(a);
+    terr_list.add(b);
+    terr_list.add(c);
+    HashMap<Integer, ArrayList<Territory> > res =
+        new HashMap<Integer, ArrayList<Territory> >();
+    res.put(0, terr_list);
   }
-  */
 }

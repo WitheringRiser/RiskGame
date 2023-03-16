@@ -69,5 +69,11 @@ public class TextPromotTest {
     expected =
         "A player: you are going to place the units in your territories.\n\n" + expected;
     assertEquals(expected, promot.setUnitPromot(groups.get(0), 20, true));
+
+    expected = "Please indicate how many units you want to use.\n"
+               + "(type B to go back)\n";
+    assertEquals(expected, promot.enterNumPromot());
+    expected = "The input is not a valid option, please choose again.\n";
+    assertEquals(expected, promot.enterAgainPromot());
   }
 }
