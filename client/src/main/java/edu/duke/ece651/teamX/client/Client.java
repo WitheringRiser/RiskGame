@@ -6,6 +6,7 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 public class Client {
   private Socket socket;
   private Communicate communicate;
@@ -154,13 +155,32 @@ public class Client {
     out.print(dis.display());
   }
 
-  //public ArrayList<Territory> findAllTerr() {}
+  /**
+   *Find all neighbors of a territory that are not belongs to this
+   *player
+   *@param source is the source territory to start attack
+   *@return is the list of direct neighbor territories of other players 
+   */
+  public ArrayList<Territory> findAttackTerr(Territory source) {
+    if (!map.getOwner(source).equals(this.player)) {
+      throw new IllegalArgumentException("The territory does not belong to this player");
+    }
+    Iterator<Territory> iter = source.getNeighbours();
+    ArrayList<Territory> dests = new ArrayList<Territory>();
+    while (iter.hasNext()) {
+      Territory curr = iter.next();
+      if (!map.getOwner(curr).equals(this.player)) {
+        dests.add(curr);
+      }
+    }
+    return dests;
+  }
 
-  public void addAction(Action action) {}
+  //public void addAction(Action action) {}
 
-  public boolean sendActions() { return true; }
+  //  public boolean sendActions() { return true; }
 
-  public PlayError receiveError() { return null; }
+  //  public PlayError receiveError() { return null; }
 
-  public void errorHandling(PlayError err) {}
+  //public void errorHandling(PlayError err) {}
 }
