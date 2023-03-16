@@ -1,9 +1,9 @@
 package edu.duke.ece651.teamX.shared;
 
 public class ActionSender {
-  Territory source;
-  Territory destination;
-  int unitsNum;
+  protected Territory source;
+  protected Territory destination;
+  protected int unitsNum;
 
   public ActionSender(Territory _source, Territory _destination, int _unitsNum) {
     source = _source;
