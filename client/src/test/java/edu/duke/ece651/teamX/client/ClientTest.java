@@ -26,11 +26,11 @@ public class ClientTest {
     client.displayMap();
     String expected = "Red player:\n"
                       + "-----------\n"
-                      + "0 units in A (next to: B, C)\n"
-                      + "0 units in B (next to: A, D)\n\n"
+                      + "2 units in A (next to: B, C)\n"
+                      + "3 units in B (next to: A, D)\n\n"
                       + "Blue player:\n"
                       + "-----------\n"
-                      + "0 units in C (next to: A, D)\n"
+                      + "1 units in C (next to: A, D)\n"
                       + "0 units in D (next to: B, C)\n\n";
     assertEquals(expected, bytes.toString());
   }
@@ -57,6 +57,8 @@ public class ClientTest {
   private void test_findTerr(Client client, Territory t1) {
     assertThrows(IllegalArgumentException.class,
                  () -> client.findAttackTerr(new Territory("C")));
+    assertThrows(IllegalArgumentException.class,
+                 () -> client.findMoveTerr(new Territory("C")));
     ArrayList<Territory> terrs = client.findOwnTerr();
     assertEquals(2, terrs.size());
     assertEquals(true, terrs.contains(new Territory("A")));
@@ -64,15 +66,21 @@ public class ClientTest {
     ArrayList<Territory> att_neigs = client.findAttackTerr(t1);
     assertEquals(1, att_neigs.size());
     assertEquals(new Territory("C"), att_neigs.get(0));
+    ArrayList<Territory> mv_neigs = client.findMoveTerr(t1);
+    assertEquals(1, mv_neigs.size());
+    assertEquals(new Territory("B"), mv_neigs.get(0));
   }
+  private void test_action(Client client) {}
   @Test
   public void test_Client() throws IOException, ClassNotFoundException {
     Communicate communicate = new Communicate();
     ServerSocket ss = new ServerSocket(4444);
     Socket clientSocket = new Socket("localhost", 4444);
     Socket serverSocket = ss.accept();
-    BufferedReader input =
-        new BufferedReader(new StringReader("a\n0\n1\nb\n3\n1\n30\n20\n"));
+    String input_data = "a\n0\n1\nb\n3\n1\n30\n20\n"  //for init
+                        + "0\n0\n2\n"                 //for move
+                        + "0\n0\n3\n";                //for attack
+    BufferedReader input = new BufferedReader(new StringReader(input_data));
     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
     PrintStream output = new PrintStream(bytes, true);
 
@@ -104,9 +112,9 @@ public class ClientTest {
     my_map.addTerritory(t2, p1);
     my_map.addTerritory(t3, p2);
     my_map.addTerritory(t4, p2);
-    // t1.addUnits(null, 2);
-    //t2.addUnits(null, 3);
-    //t3.addUnits(null, 1);
+    t1.addUnits(null, 2);
+    t2.addUnits(null, 3);
+    t3.addUnits(null, 1);
 
     test_displayMap(client, communicate, serverSocket, my_map, bytes);
     test_findTerr(client, t1);

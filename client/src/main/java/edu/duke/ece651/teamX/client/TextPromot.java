@@ -125,7 +125,7 @@ public class TextPromot {
     ans.append("(type B to go back)\n\n");
 
     if (terrs == null || terrs.size() < 1) {
-      ans.append("No option available, please go back (B) and choose again");
+      ans.append("No option available, please go back (B) and choose again\n");
     }
 
     else {
