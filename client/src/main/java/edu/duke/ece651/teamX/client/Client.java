@@ -10,10 +10,11 @@ import java.util.Iterator;
 public class Client {
   private Socket socket;
   private Communicate communicate;
-  private Player player;
-  private TextPromot promot;
+  private Player player;      //init
+  private TextPromot promot;  //init
   private Map map;
-  private ArrayList<Action> actions;
+  private ArrayList<AttackSender> attacks;
+  private ArrayList<MoveSender> moves;
   private PrintStream out;
   private BufferedReader inputReader;
 
@@ -35,6 +36,15 @@ public class Client {
   }
 
   /**
+   *Receive territory groups from server
+   *@return is a hashmap representing available territory groups
+   */
+  private HashMap<Integer, ArrayList<Territory> > receiveTerrGroup()
+      throws IOException, ClassNotFoundException {
+    return (HashMap<Integer, ArrayList<Territory> >)communicate.receiveObject(socket);
+  }
+
+  /**
    *Construct a Client object
    *@param s is socket to communicate with server
    */
@@ -42,15 +52,12 @@ public class Client {
     socket = s;
     communicate = new Communicate();
     map = new Map();
-
+    attacks = new ArrayList<AttackSender>();
+    moves = new ArrayList<MoveSender>();
     this.out = out;
     this.inputReader = input;
   }
 
-  private HashMap<Integer, ArrayList<Territory> > receiveTerrGroup()
-      throws IOException, ClassNotFoundException {
-    return (HashMap<Integer, ArrayList<Territory> >)communicate.receiveObject(socket);
-  }
   /**
    *Initialze the game settings for client
    *Receive player to get player properties (name, num of units)
@@ -154,6 +161,8 @@ public class Client {
     TextDisplayer dis = new TextDisplayer(map);
     out.print(dis.display());
   }
+
+  //public ArrayList<Territory> findOwnTerr() {}
 
   /**
    *Find all neighbors of a territory that are not belongs to this
