@@ -13,5 +13,11 @@ public class MoveSenderTest {
     assertEquals(new Territory("A"), ms.getSource());
     assertEquals(new Territory("B"), ms.getDestination());
     assertEquals(5, ms.getUnitsNum());
+
+    assertEquals(ms, ms);
+    assertNotEquals(ms, null);
+    MoveSender ms2 = new MoveSender(new Territory("A"), new Territory("B"), 5);
+    assertEquals(ms, ms2);
+    assertEquals(ms.hashCode(), ms2.hashCode());
   }
 }
