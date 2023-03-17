@@ -116,4 +116,15 @@ public class TextPromotTest {
                       + "-------------------------------------------------------\n";
     assertEquals(expected, promot.commitMessage());
   }
+
+  @Test
+  public void test_oneTurnPromot() {
+    Player p = new Player("A", 0);
+    TextPromot promot = new TextPromot(p);
+    String expected = "You are the A player, what would you like to do?\n"
+                      + "   (M)ove\n"
+                      + "   (A)ttack\n"
+                      + "   (D)one\n";
+    assertEquals(expected, promot.oneTurnPromot());
+  }
 }
