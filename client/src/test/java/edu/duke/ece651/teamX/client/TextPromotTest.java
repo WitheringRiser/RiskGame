@@ -99,5 +99,21 @@ public class TextPromotTest {
         "Please choose one of the below options as your destination:\n" + expected_;
     assertEquals(expected1, promot.chooseTerrPromot(options, true));
     assertEquals(expected2, promot.chooseTerrPromot(options, false));
+    String expected3 = "Please choose one of your territories to start the action:\n"
+                       + "(type B to go back)\n\n"
+                       + "No option available, please go back (B) and choose again\n";
+    assertEquals(expected3, promot.chooseTerrPromot(null, true));
+    options.clear();
+    assertEquals(expected3, promot.chooseTerrPromot(options, true));
+  }
+  @Test
+  public void test_commitMessage() {
+    Player p = new Player("A", 20);
+    TextPromot promot = new TextPromot(p);
+    String expected = "-------------------------------------------------------\n"
+                      + "Actions received!\n"
+                      + "Waiting for the server to process the actions...\n"
+                      + "-------------------------------------------------------\n";
+    assertEquals(expected, promot.commitMessage());
   }
 }

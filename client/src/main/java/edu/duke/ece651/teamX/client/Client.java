@@ -68,6 +68,14 @@ public class Client {
     }
   }
 
+  private void sendMove() throws IOException {
+    communicate.sendObject(socket, this.moves);
+    this.moves.clear();
+  }
+  private void sendAttact() throws IOException {
+    communicate.sendObject(socket, this.attacks);
+  }
+
   /**
    * Construct a Client object
    * 
@@ -239,7 +247,6 @@ public class Client {
         visited.add(curr);
       }
     }
-
     return dests;
   }
 
@@ -292,12 +299,33 @@ public class Client {
       res.getDestination().addUnits(null, res.getUnitsNum());
     }
   }
+  public void performCommit() throws IOException {
+    sendMove();
+    sendAttact();
+    out.print(promot.commitMessage());
+  }
 
-  /*
-  public void sendMove() throws IOException {
-    communicate.sendObject(socket, this.moves);
-    this.moves
-    }*/
+  public void playeOneTurn() throws IOException {
+    while (true) {
+      displayMap();
+      out.print(promot.oneTurnPromot());
+      String user_in = inputReader.readLine();
+      user_in = user_in.toUpperCase();
+      if (user_in.equals("M")) {
+        performMove();
+      }
+      else if (user_in.equals("A")) {
+        performAttack();
+      }
+      else if (user_in.equals("D")) {
+        performCommit();
+        return;
+      }
+      else {
+        out.print(promot.enterNumPromot());
+      }
+    }
+  }
   // public void addAction(Action action) {}
 
   // public boolean sendActions() { return true; }

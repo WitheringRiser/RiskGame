@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 public class TextPromot {
   private final Player player;
+  private final String split_line;
   /**
    *Display territory information
    *@param t is the territory to display
@@ -50,7 +51,10 @@ public class TextPromot {
    *Construct a text-based promot wrtiter
    *@param p is the player to provide infromation
    */
-  public TextPromot(Player p) { player = p; }
+  public TextPromot(Player p) {
+    player = p;
+    split_line = "-------------------------------------------------------\n";
+  }
 
   /**
    *Showing the welcome promot at the beginning
@@ -131,6 +135,21 @@ public class TextPromot {
     else {
       ans.append(this.displayTerrOptions(terrs));
     }
+    return ans.toString();
+  }
+
+  public String commitMessage() {
+    String ans = split_line + "Actions received!\n"
+                 + "Waiting for the server to process the actions...\n" + split_line;
+    return ans;
+  }
+  public String oneTurnPromot() {
+    StringBuilder ans = new StringBuilder("");
+    ans.append("You are the " + player.getName() +
+               " player, what would you like to do?\n");
+    ans.append("   (M)ove\n");
+    ans.append("   (A)ttack\n");
+    ans.append("   (D)one\n");
     return ans.toString();
   }
 }
