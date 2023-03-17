@@ -32,15 +32,14 @@ public class MyFormatter {
       JSONArray PlayerTemp = new JSONArray();
       PlayerTemp = InputMap.optJSONArray("player_" + Integer.toString(i));
       // System.out.println(PlayerTemp);
-      if (PlayerTemp != null) {
-        ArrayList<Territory> InnerTerr = new ArrayList<Territory>();
-        for (int j = 0; j < PlayerTemp.length(); j++) {
-          JSONObject TerrTemp = PlayerTemp.optJSONObject(j);
-          Territory Inner = JsonToTerritory(TerrTemp);
-          InnerTerr.add(Inner);
-        }
-        Input.put(i, InnerTerr);
+
+      ArrayList<Territory> InnerTerr = new ArrayList<Territory>();
+      for (int j = 0; j < PlayerTemp.length(); j++) {
+        JSONObject TerrTemp = PlayerTemp.optJSONObject(j);
+        Territory Inner = JsonToTerritory(TerrTemp);
+        InnerTerr.add(Inner);
       }
+      Input.put(i, InnerTerr);
     }
     formRelations();
   }
