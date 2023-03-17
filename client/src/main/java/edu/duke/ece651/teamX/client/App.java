@@ -13,13 +13,14 @@ import org.checkerframework.checker.units.qual.C;
 
 public class App {
   public static void main(String[] args) throws IOException, ClassNotFoundException {
-    Socket clientSocket = new Socket("localhost", 4444);
+    Socket clientSocket = new Socket("localhost", 4477);
     BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
     PrintStream out = System.out;
 
     Client client = new Client(clientSocket, input, out);
     client.init();
-    //client.receiveMap();
+    client.receiveMap();
+    client.playeOneTurn();
     //client.displayMap();
   }
 }

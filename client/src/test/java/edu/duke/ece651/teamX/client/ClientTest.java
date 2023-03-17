@@ -74,8 +74,8 @@ public class ClientTest {
   @Test
   public void test_Client() throws IOException, ClassNotFoundException {
     Communicate communicate = new Communicate();
-    ServerSocket ss = new ServerSocket(4444);
-    Socket clientSocket = new Socket("localhost", 4444);
+    ServerSocket ss = new ServerSocket(4433);
+    Socket clientSocket = new Socket("localhost", 4433);
     Socket serverSocket = ss.accept();
     String input_data = "a\n0\n1\nb\n3\n1\n30\n20\n"  //for init
                         + "0\n0\n2\n"                 //for move

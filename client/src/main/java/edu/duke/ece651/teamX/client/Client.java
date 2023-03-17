@@ -56,6 +56,7 @@ public class Client {
    */
   private int enterUnitNum(int max_num) throws IOException {
     while (true) {
+      out.print(promot.enterNumPromot());
       String user_in = inputReader.readLine();
       if (user_in.equals("B") || user_in.equals("b")) {
         return -1;
