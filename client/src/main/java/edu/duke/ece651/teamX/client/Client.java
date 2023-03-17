@@ -55,8 +55,7 @@ public class Client {
    *@return a valid number of unit to use in later action
    */
   private int enterUnitNum(int max_num) throws IOException {
-    while (true) {
-      out.print(promot.enterNumPromot());
+    while (true) {      
       String user_in = inputReader.readLine();
       if (user_in.equals("B") || user_in.equals("b")) {
         return -1;
@@ -158,6 +157,7 @@ public class Client {
       String user_in = inputReader.readLine();
       int choice = getUserInt(user_in);
       if (choice >= 0 && choice < territories.size()) {
+        out.print(promot.enterNumPromot());
         int num_units = enterUnitNum(remain_units);
         if (num_units >= 0) {
           setUnits(territories.get(choice), num_units);
@@ -175,6 +175,7 @@ public class Client {
    */
   public void sendUnitPlacement(ArrayList<Territory> territories) throws IOException {
     communicate.sendObject(socket, territories);
+    out.print(promot.commitMessage());
   }
 
   /**
@@ -271,6 +272,7 @@ public class Client {
     if (dest == null) {
       return null;
     }
+    out.print(promot.enterNumPromot());
     int unit_num = enterUnitNum(source.getUnitsNumber());
     if (unit_num < 0) {
       return null;

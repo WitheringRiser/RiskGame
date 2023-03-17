@@ -42,10 +42,11 @@ public class App {
     }
     game.sendMapAll();
     for (int i = 0; i < try_num; i++) {
-      ArrayList<AttackSender> attacks =
-          (ArrayList<AttackSender>)communicate.receiveObject(socket_list.get(i));
       ArrayList<MoveSender> moves =
           (ArrayList<MoveSender>)communicate.receiveObject(socket_list.get(i));
+      ArrayList<AttackSender> attacks =
+          (ArrayList<AttackSender>)communicate.receiveObject(socket_list.get(i));
+      
       System.out.println("Attack:");
       for (AttackSender a : attacks) {
         System.out.println("From " + a.getSource().getName() + " to " +
