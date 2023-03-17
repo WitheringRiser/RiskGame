@@ -76,4 +76,28 @@ public class TextPromotTest {
     expected = "The input is not a valid option, please choose again.\n";
     assertEquals(expected, promot.enterAgainPromot());
   }
+  @Test
+  public void test_choose_Promot() {
+    Player p1 = new Player("A", 100);
+    TextPromot promot = new TextPromot(p1);
+    ArrayList<Territory> options = new ArrayList<Territory>();
+    Territory t1 = new Territory("A", 20);
+    Territory t2 = new Territory("B", 10);
+    Territory t3 = new Territory("C", 5);
+    t1.addNeighbors(t2);
+    t2.addNeighbors(t3);
+    options.add(t1);
+    options.add(t2);
+    options.add(t3);
+    String expected_ = "(type B to go back)\n\n"
+                       + "(0) A (next to: B) with 20 units\n"
+                       + "(1) B (next to: A, C) with 10 units\n"
+                       + "(2) C (next to: B) with 5 units\n";
+    String expected1 =
+        "Please choose one of your territories to start the action:\n" + expected_;
+    String expected2 =
+        "Please choose one of the below options as your destination:\n" + expected_;
+    assertEquals(expected1, promot.chooseTerrPromot(options, true));
+    assertEquals(expected2, promot.chooseTerrPromot(options, false));
+  }
 }

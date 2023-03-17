@@ -155,14 +155,20 @@ public class Client {
     map = communicate.receiveMap(socket);
   }
   /**
-   *Display Map
+   *Display Map received from server
    */
   public void displayMap() throws IOException {
     TextDisplayer dis = new TextDisplayer(map);
     out.print(dis.display());
   }
 
-  //public ArrayList<Territory> findOwnTerr() {}
+  /**
+   *Get all territories belong to this player
+   *@return a list of territories that belongs to this player
+   */
+  public ArrayList<Territory> findOwnTerr() {
+    return this.map.getTerritories(this.player);
+  }
 
   /**
    *Find all neighbors of a territory that are not belongs to this
@@ -185,6 +191,7 @@ public class Client {
     return dests;
   }
 
+  // public Territory chooseSource() { ArrayList<Territory> own_terrs = findOwnTerr(); }
   //public void addAction(Action action) {}
 
   //  public boolean sendActions() { return true; }

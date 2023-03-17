@@ -36,6 +36,16 @@ public class TextPromot {
     return ans.toString();
   }
 
+  private String displayTerrOptions(ArrayList<Territory> territories) {
+    StringBuilder ans = new StringBuilder("");
+    for (int i = 0; i < territories.size(); i++) {
+      ans.append("(" + i + ") ");
+      ans.append(displayTerrWithUnit(territories.get(i)));
+      ans.append("\n");
+    }
+    return ans.toString();
+  }
+
   /**
    *Construct a text-based promot wrtiter
    *@param p is the player to provide infromation
@@ -69,11 +79,7 @@ public class TextPromot {
     }
     ans.append("You have " + num_units + " available units to place.\n");
     ans.append("Please choose a territory to place units:\n");
-    for (int i = 0; i < territories.size(); i++) {
-      ans.append("(" + i + ") ");
-      ans.append(displayTerrWithUnit(territories.get(i)));
-      ans.append("\n");
-    }
+    ans.append(displayTerrOptions(territories));
     return ans.toString();
   }
   /**
@@ -105,5 +111,26 @@ public class TextPromot {
   }
   public String enterAgainPromot() {
     return "The input is not a valid option, please choose again.\n";
+  }
+
+  public String chooseTerrPromot(ArrayList<Territory> terrs, boolean is_source) {
+    StringBuilder ans = new StringBuilder("");
+    if (is_source) {
+      ans.append("Please choose one of your territories to start the action:\n");
+    }
+    else {
+      ans.append("Please choose one of the below options as your destination:\n");
+    }
+
+    ans.append("(type B to go back)\n\n");
+
+    if (terrs == null || terrs.size() < 1) {
+      ans.append("No option available, please go back (B) and choose again");
+    }
+
+    else {
+      ans.append(this.displayTerrOptions(terrs));
+    }
+    return ans.toString();
   }
 }
