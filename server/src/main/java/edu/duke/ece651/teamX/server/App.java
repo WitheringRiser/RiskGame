@@ -7,12 +7,13 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class App {
   //!!!! Just for testing!!!!
   public static void main(String[] args) throws IOException, ClassNotFoundException {
     Communicate communicate = new Communicate();
-    ServerSocket ss = new ServerSocket(4444);
+    ServerSocket ss = new ServerSocket(4477);
     int try_num = 3;
     Game game = new Game(try_num, 20);
     PlayerName namer = new ColorPlayerName();
@@ -29,11 +30,37 @@ public class App {
     for (int i = 0; i < try_num; i++) {
       ArrayList<Territory> res =
           (ArrayList<Territory>)communicate.receiveObject(socket_list.get(i));
+
       for (Territory t : res) {
         System.out.println(t.getName() + ": " + t.getUnitsNumber() + " units");
       }
+      System.out.println("------------------------\n");
     }
-    //game.sendMapAll();
+    HashMap<Territory, Player> my_map = game.getMap().getMap();
+    for (Territory t : my_map.keySet()) {
+      t.addUnits(null, 20);
+    }
+    game.sendMapAll();
+    for (int i = 0; i < try_num; i++) {
+      ArrayList<MoveSender> moves =
+          (ArrayList<MoveSender>)communicate.receiveObject(socket_list.get(i));
+      ArrayList<AttackSender> attacks =
+          (ArrayList<AttackSender>)communicate.receiveObject(socket_list.get(i));
+      
+      System.out.println("Attack:");
+      for (AttackSender a : attacks) {
+        System.out.println("From " + a.getSource().getName() + " to " +
+                           a.getDestination().getName() +
+                           " units: " + Integer.toString(a.getUnitsNum()));
+      }
+      System.out.println("Move:");
+      for (MoveSender a : moves) {
+        System.out.println("From " + a.getSource().getName() + " to " +
+                           a.getDestination().getName() +
+                           " units: " + Integer.toString(a.getUnitsNum()));
+      }
+      System.out.println("---------------------\n");
+    }
     //System.out.println();
   }
 }

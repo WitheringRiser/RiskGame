@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 public class TextPromot {
   private final Player player;
+  private final String split_line;
   /**
    *Display territory information
    *@param t is the territory to display
@@ -36,11 +37,24 @@ public class TextPromot {
     return ans.toString();
   }
 
+  private String displayTerrOptions(ArrayList<Territory> territories) {
+    StringBuilder ans = new StringBuilder("");
+    for (int i = 0; i < territories.size(); i++) {
+      ans.append("(" + i + ") ");
+      ans.append(displayTerrWithUnit(territories.get(i)));
+      ans.append("\n");
+    }
+    return ans.toString();
+  }
+
   /**
    *Construct a text-based promot wrtiter
    *@param p is the player to provide infromation
    */
-  public TextPromot(Player p) { player = p; }
+  public TextPromot(Player p) {
+    player = p;
+    split_line = "-------------------------------------------------------\n";
+  }
 
   /**
    *Showing the welcome promot at the beginning
@@ -69,11 +83,7 @@ public class TextPromot {
     }
     ans.append("You have " + num_units + " available units to place.\n");
     ans.append("Please choose a territory to place units:\n");
-    for (int i = 0; i < territories.size(); i++) {
-      ans.append("(" + i + ") ");
-      ans.append(displayTerrWithUnit(territories.get(i)));
-      ans.append("\n");
-    }
+    ans.append(displayTerrOptions(territories));
     return ans.toString();
   }
   /**
@@ -105,5 +115,41 @@ public class TextPromot {
   }
   public String enterAgainPromot() {
     return "The input is not a valid option, please choose again.\n";
+  }
+
+  public String chooseTerrPromot(ArrayList<Territory> terrs, boolean is_source) {
+    StringBuilder ans = new StringBuilder("");
+    if (is_source) {
+      ans.append("Please choose one of your territories to start the action:\n");
+    }
+    else {
+      ans.append("Please choose one of the below options as your destination:\n");
+    }
+
+    ans.append("(type B to go back)\n\n");
+
+    if (terrs == null || terrs.size() < 1) {
+      ans.append("No option available, please go back (B) and choose again\n");
+    }
+
+    else {
+      ans.append(this.displayTerrOptions(terrs));
+    }
+    return ans.toString();
+  }
+
+  public String commitMessage() {
+    String ans = split_line + "Actions received!\n"
+                 + "Waiting for the server to process the actions...\n" + split_line;
+    return ans;
+  }
+  public String oneTurnPromot() {
+    StringBuilder ans = new StringBuilder("");
+    ans.append("You are the " + player.getName() +
+               " player, what would you like to do?\n");
+    ans.append("   (M)ove\n");
+    ans.append("   (A)ttack\n");
+    ans.append("   (D)one\n");
+    return ans.toString();
   }
 }

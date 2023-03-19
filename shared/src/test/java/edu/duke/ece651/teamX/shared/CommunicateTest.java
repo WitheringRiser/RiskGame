@@ -22,8 +22,8 @@ class CommunicateTest {
     Map myMap = createMap();
 
     Communicate communicate = new Communicate();
-    ServerSocket ss = new ServerSocket(4444);
-    Socket clientSocket = new Socket("localhost", 4444);
+    ServerSocket ss = new ServerSocket(4484);
+    Socket clientSocket = new Socket("localhost", 4484);
     Socket serverSocket = ss.accept();
 
     communicate.sendMap(clientSocket, myMap);

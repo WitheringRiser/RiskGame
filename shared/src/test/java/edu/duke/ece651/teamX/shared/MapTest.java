@@ -2,6 +2,7 @@ package edu.duke.ece651.teamX.shared;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import org.junit.jupiter.api.Test;
 public class MapTest {
@@ -71,5 +72,13 @@ public class MapTest {
     //Set null or non-exist territory
     assertEquals(false, my_map.setOwner(null, p2));
     assertEquals(false, my_map.setOwner(new Territory("dTerritory"), p2));
+
+    assertEquals(true, my_map.setOwner(t3, p1));
+    assertEquals(true, my_map.setOwner(t4, p1));
+    ArrayList<Territory> terrs = my_map.getTerritories(p1);
+    assertEquals(2, terrs.size());
+    assertEquals(true, terrs.contains(new Territory("bTerritory")));
+    assertEquals(true, terrs.contains(new Territory("cTerritory")));
+    assertEquals(false, terrs.contains(new Territory("aTerritory")));
   }
 }

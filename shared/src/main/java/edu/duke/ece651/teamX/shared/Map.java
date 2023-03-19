@@ -1,9 +1,9 @@
 package edu.duke.ece651.teamX.shared;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
-
 public class Map implements Serializable {
   private HashMap<Territory, Player> map_dict;
 
@@ -88,6 +88,21 @@ public class Map implements Serializable {
   public Player getOwner(Territory terr) {
     checkAndThrow(terr);
     return map_dict.get(terr);
+  }
+
+  /**
+   *Get a territories of one player
+   *@param player is the target player
+   *@return a list of Territory belongs to that player
+   */
+  public ArrayList<Territory> getTerritories(Player player) {
+    ArrayList<Territory> territories = new ArrayList<Territory>();
+    for (Territory t : map_dict.keySet()) {
+      if (map_dict.get(t).equals(player)) {
+        territories.add(t);
+      }
+    }
+    return territories;
   }
 
   @Override
