@@ -54,22 +54,22 @@ public class ClientTest {
     assertEquals(0, territories.get(0).getUnitsNumber());
     assertEquals(20, territories.get(1).getUnitsNumber());
   }
-  private void test_findTerr(Client client, Territory t1) {
-    assertThrows(IllegalArgumentException.class,
-                 () -> client.findAttackTerr(new Territory("C")));
-    assertThrows(IllegalArgumentException.class,
-                 () -> client.findMoveTerr(new Territory("C")));
-    ArrayList<Territory> terrs = client.findOwnTerr();
-    assertEquals(2, terrs.size());
-    assertEquals(true, terrs.contains(new Territory("A")));
-    assertEquals(true, terrs.contains(new Territory("B")));
-    ArrayList<Territory> att_neigs = client.findAttackTerr(t1);
-    assertEquals(1, att_neigs.size());
-    assertEquals(new Territory("C"), att_neigs.get(0));
-    ArrayList<Territory> mv_neigs = client.findMoveTerr(t1);
-    assertEquals(1, mv_neigs.size());
-    assertEquals(new Territory("B"), mv_neigs.get(0));
-  }
+  // private void test_findTerr(Client client, Territory t1) {
+  //   assertThrows(IllegalArgumentException.class,
+  //                () -> client.findAttackTerr(new Territory("C")));
+  //   assertThrows(IllegalArgumentException.class,
+  //                () -> client.findMoveTerr(new Territory("C")));
+  //   ArrayList<Territory> terrs = client.findOwnTerr();
+  //   assertEquals(2, terrs.size());
+  //   assertEquals(true, terrs.contains(new Territory("A")));
+  //   assertEquals(true, terrs.contains(new Territory("B")));
+  //   ArrayList<Territory> att_neigs = client.findAttackTerr(t1);
+  //   assertEquals(1, att_neigs.size());
+  //   assertEquals(new Territory("C"), att_neigs.get(0));
+  //   ArrayList<Territory> mv_neigs = client.findMoveTerr(t1);
+  //   assertEquals(1, mv_neigs.size());
+  //   assertEquals(new Territory("B"), mv_neigs.get(0));
+  // }
   private void test_action(Client client) {}
   @Test
   public void test_Client() throws IOException, ClassNotFoundException {
@@ -117,6 +117,6 @@ public class ClientTest {
     t3.addUnits(null, 1);
 
     test_displayMap(client, communicate, serverSocket, my_map, bytes);
-    test_findTerr(client, t1);
+    // test_findTerr(client, t1);
   }
 }

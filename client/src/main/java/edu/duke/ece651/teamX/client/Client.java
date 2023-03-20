@@ -15,19 +15,12 @@ public class Client {
   private Player player;      // init
   private TextPromot promot;  // init
   private Map map;
-  private ArrayList<AttackSender> attacks;
-  private ArrayList<MoveSender> moves;
+  // private ClientAttack attacks;
+  // private ClientMove move;
+  // private ArrayList<AttackSender> attacks;
+  // private ArrayList<MoveSender> moves;
   private PrintStream out;
   private UserInReader inputReader;
-  // private BufferedReader inputReader;
-
-  private void sendMove() throws IOException {
-    communicate.sendObject(socket, this.moves);
-    this.moves.clear();
-  }
-  private void sendAttact() throws IOException {
-    communicate.sendObject(socket, this.attacks);
-  }
 
   /**
    * Construct a Client object
@@ -38,8 +31,6 @@ public class Client {
     socket = s;
     communicate = new Communicate();
     map = new Map();
-    attacks = new ArrayList<AttackSender>();
-    moves = new ArrayList<MoveSender>();
     this.out = out;
     this.inputReader = new UserInReader(input,out);
   }
@@ -55,8 +46,9 @@ public class Client {
     promot = new TextPromot(player);
     out.print(promot.startPromot());
     ArrayList<Territory> territories = chooseTerrGroup();
-
     setAllUnits(territories);  // place units in territories
+    // attacks = new ArrayList<AttackSender>();
+    // moves = new ArrayList<MoveSender>();
   }
 
   /**
@@ -98,137 +90,41 @@ public class Client {
     out.print(dis.display());
   }
 
-  /**
-   * Get all territories belong to this player
-   * 
-   * @return a list of territories that belongs to this player
-   */
-  public ArrayList<Territory> findOwnTerr() {
-    return this.map.getTerritories(this.player);
-  }
+ 
 
-  /**
-   * Find all neighbors of a territory that are not belongs to this
-   * player
-   * 
-   * @param source is the source territory to start attack
-   * @return is the list of direct neighbor territories of other players
-   */
-  public ArrayList<Territory> findAttackTerr(Territory source) {
-    if (!map.getOwner(source).equals(this.player)) {
-      throw new IllegalArgumentException("The territory does not belong to this player");
-    }
-    Iterator<Territory> iter = source.getNeighbours();
-    ArrayList<Territory> dests = new ArrayList<Territory>();
-    while (iter.hasNext()) {
-      Territory curr = iter.next();
-      if (!map.getOwner(curr).equals(this.player)) {
-        dests.add(curr);
-      }
-    }
-    return dests;
-  }
+ 
 
-  public ArrayList<Territory> findMoveTerr(Territory source) {
-    if (!map.getOwner(source).equals(this.player)) {
-      throw new IllegalArgumentException("The territory does not belong to this player");
-    }
-    ArrayList<Territory> dests = new ArrayList<Territory>();
-    ArrayList<Territory> visited = new ArrayList<Territory>();
-    ArrayList<Territory> todo = new ArrayList<Territory>();
-    todo.add(source);
-    while (!todo.isEmpty()) {
-      Territory curr = todo.get(0);
-      todo.remove(0);
-      if (!visited.contains(curr)) {
-        Iterator<Territory> iter = curr.getNeighbours();
-        while (iter.hasNext()) {
-          Territory t = iter.next();
-          if (map.getOwner(t).equals(this.player)) {
-            if (!dests.contains(t) && (!t.equals(source))) {
-              dests.add(t);
-            }
-            todo.add(t);
-          }
-        }
-        visited.add(curr);
-      }
-    }
-    return dests;
-  }
-
-  public Territory chooseOneTerritory(ArrayList<Territory> terrs, boolean is_source)
-      throws IOException {
-    out.print(promot.chooseTerrPromot(terrs, is_source));
-    // int choice = enterUnitNum(terrs.size() - 1);
-    int choice=  inputReader.enterNum(terrs.size() - 1, promot.enterAgainPromot());
-    if (choice < 0) {
-      return null;
-    }
-    return terrs.get(choice);
-  }
-
-  public ActionSender generateAction(Function<Territory, ArrayList<Territory> > findFunc)
-      throws IOException {
-    Territory source = chooseOneTerritory(findOwnTerr(), true);
-    if (source == null) {
-      return null;
-    }
-    Territory dest = chooseOneTerritory(findFunc.apply(source), false);
-    if (dest == null) {
-      return null;
-    }
+  // public void performAttack() throws IOException {
   
-    int unit_num = inputReader.enterNum(source.getUnitsNumber(), promot.enterNumPromot(), promot.enterAgainPromot());
+  // }
 
-    if (unit_num < 0) {
-      return null;
-    }
-    return new ActionSender(source, dest, unit_num);
-  }
-
-  public void performAttack() throws IOException {
-    Function<Territory, ArrayList<Territory> > findfunc = (t) -> findAttackTerr(t);
-    ActionSender res = generateAction(findfunc);
-    if (res != null) {
-      AttackSender atts =
-          new AttackSender(res.getSource(), res.getDestination(), res.getUnitsNum());
-      this.attacks.add(atts);
-      res.getSource().removeUnits(res.getUnitsNum());
-    }
-  }
-
-  public void performMove() throws IOException {
-    Function<Territory, ArrayList<Territory> > findfunc = (t) -> findMoveTerr(t);
-    ActionSender res = generateAction(findfunc);
-    if (res != null) {
-      MoveSender mvs =
-          new MoveSender(res.getSource(), res.getDestination(), res.getUnitsNum());
-      this.moves.add(mvs);
-      res.getSource().removeUnits(res.getUnitsNum());
-      res.getDestination().addUnits(null, res.getUnitsNum());
-    }
-  }
-  public void performCommit() throws IOException {
-    sendMove();
-    sendAttact();
-    out.print(promot.commitMessage());
+  // public void performMove(ClientAttack attack) throws IOException {
+  
+  // }
+  public void performCommit(ClientAction ... actions) throws IOException {
+   for(ClientAction act : actions){
+    act.commit();
+   }
+    
   }
 
   public void playeOneTurn() throws IOException {
+    ClientAttack attack = new ClientAttack(socket, out, inputReader, promot,map,player);
+    ClientMove move = new ClientMove(socket, out, inputReader, promot,map,player);
     while (true) {
       displayMap();
       out.print(promot.oneTurnPromot());
       String user_in = inputReader.readString();
       user_in = user_in.toUpperCase();
       if (user_in.equals("M")) {
-        performMove();
+        move.perform();
       }
       else if (user_in.equals("A")) {
-        performAttack();
+        attack.perform();        
       }
       else if (user_in.equals("D")) {
-        performCommit();
+        performCommit(move,attack);
+        out.print(promot.commitMessage());
         return;
       }
       else {
