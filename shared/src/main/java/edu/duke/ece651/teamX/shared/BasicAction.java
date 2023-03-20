@@ -6,6 +6,9 @@ public abstract class BasicAction implements Action {
   protected Territory source;
   protected Territory destination;
 
+  BasicAction() {
+  }
+
   BasicAction(Territory _source, Territory _destination) {
     source = _source;
     destination = _destination;

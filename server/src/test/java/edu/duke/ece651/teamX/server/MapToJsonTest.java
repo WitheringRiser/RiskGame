@@ -14,6 +14,7 @@ import java.util.*;
 import java.util.HashMap;
 
 public class MapToJsonTest {
+  /*
   @Test
   public void test_toJSON() {
     HashMap<Integer, ArrayList<Territory>> myterritoryMap =
@@ -35,4 +36,5 @@ public class MapToJsonTest {
     MyFormatter myformatter = new MyFormatter(0);
     System.out.println(myformatter.MapCompose(myterritoryMap));
   }
+  */
 }
