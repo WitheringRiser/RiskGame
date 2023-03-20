@@ -6,9 +6,9 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.function.Function;
+
 public class Client {
   private Socket socket;
   private Communicate communicate;
@@ -54,13 +54,9 @@ public class Client {
     player = communicate.receivePlayer(socket);
     promot = new TextPromot(player);
     out.print(promot.startPromot());
-   
-    // HashMap<Integer, ArrayList<Territory> > free_groups = receiveTerrGroup();
-    // int terr_ind = chooseTerrGroup(free_groups);
-    // communicate.sendInt(socket, terr_ind);  
     ArrayList<Territory> territories = chooseTerrGroup();
+
     setAllUnits(territories);  // place units in territories
-    sendUnitPlacement(territories);
   }
 
   /**
@@ -77,51 +73,14 @@ public class Client {
   }
 
   /**
-   * Place a number of units in a chosen territory
-   * 
-   * @param t         is the chosen territory
-   * @param num_units is the number of units to place
-   */
-  public void setUnits(Territory t, int num_units) { t.addUnits(null, num_units); }
-
-  /**
    * Place all available units to the territories
-   * To minimize potential error for server,
-   * this function will make sure client can only choose the
-   * territories belongs to him/her and cannot place more than
-   * the inital unit number in the Player object
-   * 
-   * @param territories is a list of territories of the client
+   * @param territories is the group from chooseTerrGroup function
+   * @throws IOException
    */
-  public void setAllUnits(ArrayList<Territory> territories) throws IOException {
-    int remain_units = player.getUnitNum();
-    boolean is_start = true;
-    while (remain_units > 0) {
-      out.println(promot.setUnitPromot(territories, remain_units, is_start));
-      is_start = false;
-      
-      int choice = inputReader.getUserInt();
-      if (choice >= 0 && choice < territories.size()) {
-        // out.print(promot.enterNumPromot());
-        // int num_units = enterUnitNum(remain_units);
-        int num_units= inputReader.enterNum(remain_units, promot.enterNumPromot(), promot.enterAgainPromot());
-        if (num_units >= 0) {
-          setUnits(territories.get(choice), num_units);
-          remain_units -= num_units;
-        }
-      }
-      else {
-        out.print(promot.enterAgainPromot());
-      }
-    }
-  }
-
-  /**
-   * Send unit placement information to the server
-   */
-  public void sendUnitPlacement(ArrayList<Territory> territories) throws IOException {
-    communicate.sendObject(socket, territories);
-    out.print(promot.commitMessage());
+  public void setAllUnits(ArrayList<Territory> territories) throws IOException{
+    ClientUnitSetting unitSetting = new ClientUnitSetting(socket, out, inputReader, promot,territories,player.getUnitNum());
+    unitSetting.perform();
+    unitSetting.commit();
   }
 
   /**
