@@ -18,25 +18,10 @@ public class Client {
   private ArrayList<AttackSender> attacks;
   private ArrayList<MoveSender> moves;
   private PrintStream out;
-  private BufferedReader inputReader;
+  private UserInReader inputReader;
+  // private BufferedReader inputReader;
 
-  /**
-   * Convert user input to an integer
-   * 
-   * @param user_in is user input string
-   * @return -1 if the number is not valid
-   * @return int >= 0 if user input a valid number
-   */
-  private int getUserInt(String user_in) {
-    try {
-      int choice = Integer.parseInt(user_in);
-      return choice;
-    }
-    catch (NumberFormatException ex) {
-      out.println("Expect a valid number, but got \"" + user_in + "\"");
-    }
-    return -1;
-  }
+  
 
   /**
    * Receive territory groups from server
@@ -48,25 +33,7 @@ public class Client {
     return (HashMap<Integer, ArrayList<Territory> >)communicate.receiveObject(socket);
   }
 
-  /**
-   *Get a valid unit number input by client
-   *@param max_num is the maximum number of available units
-   *@return -1 if user press B or b
-   *@return a valid number of unit to use in later action
-   */
-  private int enterUnitNum(int max_num) throws IOException {
-    while (true) {      
-      String user_in = inputReader.readLine();
-      if (user_in.equals("B") || user_in.equals("b")) {
-        return -1;
-      }
-      int num_units = getUserInt(user_in);
-      if (num_units >= 0 && num_units <= max_num) {
-        return num_units;
-      }
-      out.print(promot.enterAgainPromot());
-    }
-  }
+  
 
   private void sendMove() throws IOException {
     communicate.sendObject(socket, this.moves);
@@ -88,7 +55,7 @@ public class Client {
     attacks = new ArrayList<AttackSender>();
     moves = new ArrayList<MoveSender>();
     this.out = out;
-    this.inputReader = input;
+    this.inputReader = new UserInReader(input,out);
   }
 
   /**
@@ -120,8 +87,8 @@ public class Client {
       throws IOException {
     out.print(promot.displayTerrGroup(free_groups));
     while (true) {
-      String user_in = inputReader.readLine();
-      int choice = getUserInt(user_in);
+     
+      int choice = inputReader.getUserInt();
       if (choice >= 0 && free_groups.containsKey(choice)) {
         return choice;
       }
@@ -154,11 +121,12 @@ public class Client {
     while (remain_units > 0) {
       out.println(promot.setUnitPromot(territories, remain_units, is_start));
       is_start = false;
-      String user_in = inputReader.readLine();
-      int choice = getUserInt(user_in);
+      
+      int choice = inputReader.getUserInt();
       if (choice >= 0 && choice < territories.size()) {
-        out.print(promot.enterNumPromot());
-        int num_units = enterUnitNum(remain_units);
+        // out.print(promot.enterNumPromot());
+        // int num_units = enterUnitNum(remain_units);
+        int num_units= inputReader.enterNum(remain_units, promot.enterNumPromot(), promot.enterAgainPromot());
         if (num_units >= 0) {
           setUnits(territories.get(choice), num_units);
           remain_units -= num_units;
@@ -255,7 +223,8 @@ public class Client {
   public Territory chooseOneTerritory(ArrayList<Territory> terrs, boolean is_source)
       throws IOException {
     out.print(promot.chooseTerrPromot(terrs, is_source));
-    int choice = enterUnitNum(terrs.size() - 1);
+    // int choice = enterUnitNum(terrs.size() - 1);
+    int choice=  inputReader.enterNum(terrs.size() - 1, promot.enterAgainPromot());
     if (choice < 0) {
       return null;
     }
@@ -272,8 +241,9 @@ public class Client {
     if (dest == null) {
       return null;
     }
-    out.print(promot.enterNumPromot());
-    int unit_num = enterUnitNum(source.getUnitsNumber());
+  
+    int unit_num = inputReader.enterNum(source.getUnitsNumber(), promot.enterNumPromot(), promot.enterAgainPromot());
+
     if (unit_num < 0) {
       return null;
     }
@@ -312,7 +282,7 @@ public class Client {
     while (true) {
       displayMap();
       out.print(promot.oneTurnPromot());
-      String user_in = inputReader.readLine();
+      String user_in = inputReader.readString();
       user_in = user_in.toUpperCase();
       if (user_in.equals("M")) {
         performMove();
