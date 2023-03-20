@@ -11,6 +11,10 @@ public class ActionSender implements Serializable {
     unitsNum = _unitsNum;
   }
 
+  public ActionSender(){
+    
+  }
+
   public Territory getSource() { return source; }
 
   public Territory getDestination() { return destination; }

@@ -87,6 +87,13 @@ public class MyFormatter {
     }
   }
 
+  public JSONObject AllActionCompose(HashMap<Integer, ArrayList<ActionSender>> AllAction) {
+    // compose the jsonstring based on the hashMap AllAction
+    ActionToJson myAllAction = new ActionToJson(AllAction);
+    myAllAction.ComposeAllAction();
+    return myAllAction.getAllAction();
+  }
+
   /*
    * input: map object
    * output: JSONObject
