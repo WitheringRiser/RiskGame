@@ -54,23 +54,23 @@ public class ClientTest {
     assertEquals(0, territories.get(0).getUnitsNumber());
     assertEquals(20, territories.get(1).getUnitsNumber());
   }
-  private void test_findTerr(Client client, Territory t1) {
-    assertThrows(IllegalArgumentException.class,
-                 () -> client.findAttackTerr(new Territory("C")));
-    assertThrows(IllegalArgumentException.class,
-                 () -> client.findMoveTerr(new Territory("C")));
-    ArrayList<Territory> terrs = client.findOwnTerr();
-    assertEquals(2, terrs.size());
-    assertEquals(true, terrs.contains(new Territory("A")));
-    assertEquals(true, terrs.contains(new Territory("B")));
-    ArrayList<Territory> att_neigs = client.findAttackTerr(t1);
-    assertEquals(1, att_neigs.size());
-    assertEquals(new Territory("C"), att_neigs.get(0));
-    ArrayList<Territory> mv_neigs = client.findMoveTerr(t1);
-    assertEquals(1, mv_neigs.size());
-    assertEquals(new Territory("B"), mv_neigs.get(0));
-  }
-  private void test_action(Client client) {}
+  // private void test_findTerr(Client client, Territory t1) {
+  //   assertThrows(IllegalArgumentException.class,
+  //                () -> client.findAttackTerr(new Territory("C")));
+  //   assertThrows(IllegalArgumentException.class,
+  //                () -> client.findMoveTerr(new Territory("C")));
+  //   ArrayList<Territory> terrs = client.findOwnTerr();
+  //   assertEquals(2, terrs.size());
+  //   assertEquals(true, terrs.contains(new Territory("A")));
+  //   assertEquals(true, terrs.contains(new Territory("B")));
+  //   ArrayList<Territory> att_neigs = client.findAttackTerr(t1);
+  //   assertEquals(1, att_neigs.size());
+  //   assertEquals(new Territory("C"), att_neigs.get(0));
+  //   ArrayList<Territory> mv_neigs = client.findMoveTerr(t1);
+  //   assertEquals(1, mv_neigs.size());
+  //   assertEquals(new Territory("B"), mv_neigs.get(0));
+  // }
+  // private void test_action(Client client) {}
   @Test
   public void test_Client() throws IOException, ClassNotFoundException {
     Communicate communicate = new Communicate();
@@ -78,8 +78,10 @@ public class ClientTest {
     Socket clientSocket = new Socket("localhost", 4433);
     Socket serverSocket = ss.accept();
     String input_data = "a\n0\n1\nb\n3\n1\n30\n20\n"  //for init
-                        + "0\n0\n2\n"                 //for move
-                        + "0\n0\n3\n";                //for attack
+                        + "m\n0\n0\n3\n2\n"           //for move
+                        + "a\n1\n0\n6\na\nm\n5\nb\n"  //for attack
+                        + "c\n1\n"                    //for invalid choice
+                        + "D\n";
     BufferedReader input = new BufferedReader(new StringReader(input_data));
     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
     PrintStream output = new PrintStream(bytes, true);
@@ -117,6 +119,21 @@ public class ClientTest {
     t3.addUnits(null, 1);
 
     test_displayMap(client, communicate, serverSocket, my_map, bytes);
-    test_findTerr(client, t1);
+    // test_findTerr(client, t1);
+    client.playeOneTurn();
+    ArrayList<MoveSender> moves =
+        (ArrayList<MoveSender>)communicate.receiveObject(serverSocket);
+    ArrayList<AttackSender> attacks =
+        (ArrayList<AttackSender>)communicate.receiveObject(serverSocket);
+    assertEquals(1, moves.size());
+    MoveSender m = moves.get(0);
+    assertEquals(t1, m.getSource());
+    assertEquals(t2, m.getDestination());
+    assertEquals(2, m.getUnitsNum());
+    assertEquals(1, attacks.size());
+    AttackSender a = attacks.get(0);
+    assertEquals(t2, a.getSource());
+    assertEquals(t4, a.getDestination());
+    assertEquals(5, a.getUnitsNum());
   }
 }
