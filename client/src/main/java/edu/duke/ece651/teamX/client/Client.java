@@ -6,19 +6,13 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.function.Function;
 
 public class Client {
   private Socket socket;
   private Communicate communicate;
-  private Player player;      // init
-  private TextPromot promot;  // init
+  private Player player; // init
+  private TextPromot promot; // init
   private Map map;
-  // private ClientAttack attacks;
-  // private ClientMove move;
-  // private ArrayList<AttackSender> attacks;
-  // private ArrayList<MoveSender> moves;
   private PrintStream out;
   private UserInReader inputReader;
 
@@ -32,7 +26,7 @@ public class Client {
     communicate = new Communicate();
     map = new Map();
     this.out = out;
-    this.inputReader = new UserInReader(input,out);
+    this.inputReader = new UserInReader(input, out);
   }
 
   /**
@@ -46,18 +40,19 @@ public class Client {
     promot = new TextPromot(player);
     out.print(promot.startPromot());
     ArrayList<Territory> territories = chooseTerrGroup();
-    setAllUnits(territories);  // place units in territories
+    setAllUnits(territories); // place units in territories
     // attacks = new ArrayList<AttackSender>();
     // moves = new ArrayList<MoveSender>();
   }
 
   /**
    * Select a group to start
+   * 
    * @return ArrayList<Territory> of the chosen territoy group
    * @throws IOException
    * @throws ClassNotFoundException
    */
-  public ArrayList<Territory> chooseTerrGroup() throws IOException, ClassNotFoundException{
+  public ArrayList<Territory> chooseTerrGroup() throws IOException, ClassNotFoundException {
     ClientGroupSetting grouSetting = new ClientGroupSetting(socket, out, inputReader, promot);
     grouSetting.perform();
     grouSetting.commit();
@@ -66,11 +61,13 @@ public class Client {
 
   /**
    * Place all available units to the territories
+   * 
    * @param territories is the group from chooseTerrGroup function
    * @throws IOException
    */
-  public void setAllUnits(ArrayList<Territory> territories) throws IOException{
-    ClientUnitSetting unitSetting = new ClientUnitSetting(socket, out, inputReader, promot,territories,player.getUnitNum());
+  public void setAllUnits(ArrayList<Territory> territories) throws IOException {
+    ClientUnitSetting unitSetting = new ClientUnitSetting(socket, out, inputReader, promot, territories,
+        player.getUnitNum());
     unitSetting.perform();
     unitSetting.commit();
   }
@@ -90,27 +87,24 @@ public class Client {
     out.print(dis.display());
   }
 
- 
-
- 
-
-  // public void performAttack() throws IOException {
-  
-  // }
-
-  // public void performMove(ClientAttack attack) throws IOException {
-  
-  // }
-  public void performCommit(ClientAction ... actions) throws IOException {
-   for(ClientAction act : actions){
-    act.commit();
-   }
-    
+  /**
+   * Perform the commit action for all ClientTurnActions
+   * @param actions
+   * @throws IOException
+   */
+  public void performCommit(ClientAction... actions) throws IOException {
+    for (ClientAction act : actions) {
+      act.commit();
+    }
   }
 
+  /**
+   * Let cleint to player one turn
+   * @throws IOException
+   */
   public void playeOneTurn() throws IOException {
-    ClientAttack attack = new ClientAttack(socket, out, inputReader, promot,map,player);
-    ClientMove move = new ClientMove(socket, out, inputReader, promot,map,player);
+    ClientAttack attack = new ClientAttack(socket, out, inputReader, promot, map, player);
+    ClientMove move = new ClientMove(socket, out, inputReader, promot, map, player);
     while (true) {
       displayMap();
       out.print(promot.oneTurnPromot());
@@ -118,25 +112,15 @@ public class Client {
       user_in = user_in.toUpperCase();
       if (user_in.equals("M")) {
         move.perform();
-      }
-      else if (user_in.equals("A")) {
-        attack.perform();        
-      }
-      else if (user_in.equals("D")) {
-        performCommit(move,attack);
+      } else if (user_in.equals("A")) {
+        attack.perform();
+      } else if (user_in.equals("D")) {
+        performCommit(move, attack);
         out.print(promot.commitMessage());
         return;
-      }
-      else {
+      } else {
         out.print(promot.enterNumPromot());
       }
     }
   }
-  // public void addAction(Action action) {}
-
-  // public boolean sendActions() { return true; }
-
-  // public PlayError receiveError() { return null; }
-
-  // public void errorHandling(PlayError err) {}
 }
