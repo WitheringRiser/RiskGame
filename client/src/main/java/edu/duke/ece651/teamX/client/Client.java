@@ -21,20 +21,6 @@ public class Client {
   private UserInReader inputReader;
   // private BufferedReader inputReader;
 
-  
-
-  /**
-   * Receive territory groups from server
-   * 
-   * @return is a hashmap representing available territory groups
-   */
-  private HashMap<Integer, ArrayList<Territory> > receiveTerrGroup()
-      throws IOException, ClassNotFoundException {
-    return (HashMap<Integer, ArrayList<Territory> >)communicate.receiveObject(socket);
-  }
-
-  
-
   private void sendMove() throws IOException {
     communicate.sendObject(socket, this.moves);
     this.moves.clear();
@@ -68,34 +54,26 @@ public class Client {
     player = communicate.receivePlayer(socket);
     promot = new TextPromot(player);
     out.print(promot.startPromot());
-    HashMap<Integer, ArrayList<Territory> > free_groups = receiveTerrGroup();
-    int terr_ind = chooseTerrGroup(free_groups);
-    communicate.sendInt(socket, terr_ind);  // notify server about the choice
-    ArrayList<Territory> territories = free_groups.get(terr_ind);
+   
+    // HashMap<Integer, ArrayList<Territory> > free_groups = receiveTerrGroup();
+    // int terr_ind = chooseTerrGroup(free_groups);
+    // communicate.sendInt(socket, terr_ind);  
+    ArrayList<Territory> territories = chooseTerrGroup();
     setAllUnits(territories);  // place units in territories
     sendUnitPlacement(territories);
   }
 
   /**
-   * Choose a territory group as initial territories
-   * 
-   * @param free_groups is the available group options
-   * @return int the choice of user
-   * @print invalid option to promot user to choose again
+   * Select a group to start
+   * @return ArrayList<Territory> of the chosen territoy group
+   * @throws IOException
+   * @throws ClassNotFoundException
    */
-  public int chooseTerrGroup(HashMap<Integer, ArrayList<Territory> > free_groups)
-      throws IOException {
-    out.print(promot.displayTerrGroup(free_groups));
-    while (true) {
-     
-      int choice = inputReader.getUserInt();
-      if (choice >= 0 && free_groups.containsKey(choice)) {
-        return choice;
-      }
-      else {
-        out.print(promot.enterAgainPromot());
-      }
-    }
+  public ArrayList<Territory> chooseTerrGroup() throws IOException, ClassNotFoundException{
+    ClientGroupSetting grouSetting = new ClientGroupSetting(socket, out, inputReader, promot);
+    grouSetting.perform();
+    grouSetting.commit();
+    return grouSetting.getGroup();
   }
 
   /**
