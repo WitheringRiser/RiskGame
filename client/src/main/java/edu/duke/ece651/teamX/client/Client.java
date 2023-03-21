@@ -119,7 +119,7 @@ public class Client {
         out.print(promot.commitMessage());
         return;
       } else {
-        out.print(promot.enterNumPromot());
+        out.print(promot.enterAgainPromot());
       }
     }
   }
