@@ -9,6 +9,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Communicate {
+
   /**
    * Send object through socket
    *
@@ -34,10 +35,11 @@ public class Communicate {
   }
 
   /**
-   *Send integer (representing choice or decision)
-   *@param socket
-   *@param num is the choice or decision to send
-   *@throws IOException
+   * Send integer (representing choice or decision)
+   *
+   * @param socket
+   * @param num    is the choice or decision to send
+   * @throws IOException
    */
   public void sendInt(Socket socket, Integer num) throws IOException {
     sendObject(socket, num);
@@ -46,6 +48,7 @@ public class Communicate {
   public void sendPlayer(Socket socket, Player player) throws IOException {
     sendObject(socket, player);
   }
+
   /**
    * Receive object through socket
    *
@@ -69,13 +72,14 @@ public class Communicate {
    * @throws ClassNotFoundException
    */
   public Map receiveMap(Socket socket) throws IOException, ClassNotFoundException {
-    return (Map)receiveObject(socket);
+    return (Map) receiveObject(socket);
   }
+
   public Integer receiveInt(Socket socket) throws IOException, ClassNotFoundException {
-    return (Integer)receiveObject(socket);
+    return (Integer) receiveObject(socket);
   }
 
   public Player receivePlayer(Socket socket) throws IOException, ClassNotFoundException {
-    return (Player)receiveObject(socket);
+    return (Player) receiveObject(socket);
   }
 }

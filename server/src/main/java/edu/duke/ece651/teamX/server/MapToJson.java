@@ -1,4 +1,5 @@
 package edu.duke.ece651.teamX.server;
+
 import edu.duke.ece651.teamX.shared.*;
 import java.util.*;
 import org.json.JSONObject;
@@ -6,10 +7,12 @@ import org.json.JSONArray;
 
 // Converts a map object into a JSONObject
 public class MapToJson {
+
   private JSONObject ans;
   private HashMap<Integer, ArrayList<Territory>> myTerrMap;
 
-  public MapToJson() {}
+  public MapToJson() {
+  }
 
   public MapToJson(HashMap<Integer, ArrayList<Territory>> rhsTerrMap) {
     this.ans = new JSONObject();
@@ -18,12 +21,12 @@ public class MapToJson {
     getPlayerObj();
   }
 
-  
+
   public JSONObject getJSON() {
     return this.ans;
   }
 
-  /* modifies JSONObject ans to have player IDs 
+  /* modifies JSONObject ans to have player IDs
    */
   public void getPlayerObj() {
     for (HashMap.Entry<Integer, ArrayList<Territory>> entry : myTerrMap.entrySet()) {
@@ -37,7 +40,7 @@ public class MapToJson {
     }
   }
 
-   /* input: JSONArray of Territory objects, ArrayList of Territory objects 
+  /* input: JSONArray of Territory objects, ArrayList of Territory objects
    *  takes a JSONObject representing the Territory and putting it into a JSONArray representing Territory's
    */
   public void getTerritoryArray(JSONArray territoryArray, ArrayList<Territory> TerritoryList) {
@@ -48,15 +51,16 @@ public class MapToJson {
       territoryArray.put(terrObj);
     }
   }
-/* input: JSONObject representing a Territory, and a Territory
- * reads from the fields of a Territory object to build a JSONObject representing the Territory
- */
+
+  /* input: JSONObject representing a Territory, and a Territory
+   * reads from the fields of a Territory object to build a JSONObject representing the Territory
+   */
   public void getTerritoryObj(JSONObject terrObj, Territory myTerr) {
 
     int numSoldiers = myTerr.getUnitsNumber();
     terrObj.put("soldiers", numSoldiers);
 
-    Iterator<Territory> neighborList = myTerr.getNeighbours(); 
+    Iterator<Territory> neighborList = myTerr.getNeighbours();
     JSONArray neighborArray = new JSONArray();
 
     // Iterator converted to ArrayList to match parameter type of function call to getNeighborArray

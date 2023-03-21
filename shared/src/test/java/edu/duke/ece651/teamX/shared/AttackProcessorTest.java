@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 
 public class AttackProcessorTest {
+
   @Test
   public void test_invalid_totalSum() {
     ArrayList<AttackSender> allAttack = new ArrayList<AttackSender>();

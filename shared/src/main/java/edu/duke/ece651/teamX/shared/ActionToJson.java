@@ -1,14 +1,17 @@
 package edu.duke.ece651.teamX.shared;
+
 import java.util.*;
 import org.json.JSONObject;
 import org.json.JSONArray;
 
 public class ActionToJson {
+
   private JSONObject ans;
   private JSONObject ansAllAction;
   private ArrayList<ActionSender> actionList;
   private HashMap<Integer, ArrayList<ActionSender>> AllAction;
   private String ActionType;
+
   public ActionToJson(ArrayList<ActionSender> myactionList, String Type) {
     this.ans = new JSONObject();
     this.actionList = new ArrayList<>();
@@ -16,12 +19,12 @@ public class ActionToJson {
     ActionType = Type;
     getActionListObj();
   }
+
   public ActionToJson(HashMap<Integer, ArrayList<ActionSender>> Actions) {
     this.ansAllAction = new JSONObject();
     this.AllAction = new HashMap<>();
     this.AllAction = Actions;
   }
-
 
 
   public void ComposeAllAction() {
@@ -37,6 +40,7 @@ public class ActionToJson {
       ansAllAction.put(insertKey, currActionArray);
     }
   }
+
   public JSONObject getAllAction() {
     return this.ansAllAction;
   }
@@ -44,7 +48,7 @@ public class ActionToJson {
   public JSONObject getJSON() {
     return this.ans;
   }
-  
+
   private void getActionListObj() {
     JSONArray actionArray = new JSONArray();
     getActionArray(actionArray);

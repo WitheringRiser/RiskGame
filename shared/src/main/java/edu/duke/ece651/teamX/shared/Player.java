@@ -3,6 +3,7 @@ package edu.duke.ece651.teamX.shared;
 import java.io.Serializable;
 
 public class Player implements Serializable {
+
   private final String name;
   private final int unit_num;  // The initial number of units
 
@@ -24,9 +25,13 @@ public class Player implements Serializable {
     this.unit_num = u;
   }
 
-  public String getName() { return this.name; }
+  public String getName() {
+    return this.name;
+  }
 
-  public int getUnitNum() { return this.unit_num; }
+  public int getUnitNum() {
+    return this.unit_num;
+  }
 
   /**
    * Check if two Player equals Compare name, number of units, and number of territories
@@ -37,7 +42,7 @@ public class Player implements Serializable {
       return true;
     }
     if (o != null && o.getClass().equals(getClass())) {
-      Player otherPlayer = (Player)o;
+      Player otherPlayer = (Player) o;
       return name.equals(otherPlayer.getName()) && unit_num == otherPlayer.getUnitNum();
     }
     return false;

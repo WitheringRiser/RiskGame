@@ -5,7 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.junit.jupiter.api.Test;
+
 public class MapTest {
+
   @Test
   public void test_MapBasics() {
     //Set up the map
@@ -41,7 +43,7 @@ public class MapTest {
     assertThrows(IllegalArgumentException.class, () -> my_map.getOwner(null));
     //Should not get non-exist territory's owner
     assertThrows(IllegalArgumentException.class,
-                 () -> my_map.getOwner(new Territory("bTerritory")));
+        () -> my_map.getOwner(new Territory("bTerritory")));
     //Test add more territories
     assertEquals(true, my_map.addTerritory(new Territory("bTerritory"), null));
     assertEquals(2, my_map.getTerritoryNum());

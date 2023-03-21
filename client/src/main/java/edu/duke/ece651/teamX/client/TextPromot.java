@@ -1,15 +1,20 @@
 package edu.duke.ece651.teamX.client;
+
 import edu.duke.ece651.teamX.shared.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+
 public class TextPromot {
+
   private final Player player;
   private final String split_line;
+
   /**
-   *Display territory information
-   *@param t is the territory to display
+   * Display territory information
+   *
+   * @param t is the territory to display
    */
   private String displayTerrtory(Territory t) {
     StringBuilder ans = new StringBuilder("");
@@ -26,7 +31,7 @@ public class TextPromot {
   }
 
   /**
-   *Display territory with its units
+   * Display territory with its units
    */
   private String displayTerrWithUnit(Territory t) {
     StringBuilder ans = new StringBuilder("");
@@ -48,8 +53,9 @@ public class TextPromot {
   }
 
   /**
-   *Construct a text-based promot wrtiter
-   *@param p is the player to provide infromation
+   * Construct a text-based promot wrtiter
+   *
+   * @param p is the player to provide infromation
    */
   public TextPromot(Player p) {
     player = p;
@@ -57,7 +63,7 @@ public class TextPromot {
   }
 
   /**
-   *Showing the welcome promot at the beginning
+   * Showing the welcome promot at the beginning
    */
   public String startPromot() {
     StringBuilder ans = new StringBuilder("");
@@ -68,29 +74,32 @@ public class TextPromot {
   }
 
   /**
-   *Display the promot and options for client to set units
-   *@param territories is the list of territories of client
-   *@param num_units is the number of units waiting to be placed
-   *@param is_start is whether to show the head message of promot
+   * Display the promot and options for client to set units
+   *
+   * @param territories is the list of territories of client
+   * @param num_units   is the number of units waiting to be placed
+   * @param is_start    is whether to show the head message of promot
    */
   public String setUnitPromot(ArrayList<Territory> territories,
-                              int num_units,
-                              boolean is_start) {
+      int num_units,
+      boolean is_start) {
     StringBuilder ans = new StringBuilder("");
     if (is_start) {
       ans.append(player.getName() +
-                 " player: you are going to place the units in your territories.\n\n");
+          " player: you are going to place the units in your territories.\n\n");
     }
     ans.append("You have " + num_units + " available units to place.\n");
     ans.append("Please choose a territory to place units:\n");
     ans.append(displayTerrOptions(territories));
     return ans.toString();
   }
+
   /**
-   *Display the territory group for client to choose
-   *@param free_groups is the available groups get from user
+   * Display the territory group for client to choose
+   *
+   * @param free_groups is the available groups get from user
    */
-  public String displayTerrGroup(HashMap<Integer, ArrayList<Territory> > free_groups) {
+  public String displayTerrGroup(HashMap<Integer, ArrayList<Territory>> free_groups) {
     StringBuilder ans = new StringBuilder("");
     ans.append("Please choose one territory group as your initial territories:\n");
     ans.append("(type the corresponding number to indicate your choice, e.g. 1)\n");
@@ -107,12 +116,14 @@ public class TextPromot {
     }
     return ans.toString();
   }
+
   public String enterNumPromot() {
     StringBuilder ans = new StringBuilder("");
     ans.append("Please indicate how many units you want to use.\n");
     ans.append("(type B to go back)\n");
     return ans.toString();
   }
+
   public String enterAgainPromot() {
     return "The input is not a valid option, please choose again.\n";
   }
@@ -121,8 +132,7 @@ public class TextPromot {
     StringBuilder ans = new StringBuilder("");
     if (is_source) {
       ans.append("Please choose one of your territories to start the action:\n");
-    }
-    else {
+    } else {
       ans.append("Please choose one of the below options as your destination:\n");
     }
 
@@ -130,9 +140,7 @@ public class TextPromot {
 
     if (terrs == null || terrs.size() < 1) {
       ans.append("No option available, please go back (B) and choose again\n");
-    }
-
-    else {
+    } else {
       ans.append(this.displayTerrOptions(terrs));
     }
     return ans.toString();
@@ -140,13 +148,14 @@ public class TextPromot {
 
   public String commitMessage() {
     String ans = split_line + "Actions received!\n"
-                 + "Waiting for the server to process the actions...\n" + split_line;
+        + "Waiting for the server to process the actions...\n" + split_line;
     return ans;
   }
+
   public String oneTurnPromot() {
     StringBuilder ans = new StringBuilder("");
     ans.append("You are the " + player.getName() +
-               " player, what would you like to do?\n");
+        " player, what would you like to do?\n");
     ans.append("   (M)ove\n");
     ans.append("   (A)ttack\n");
     ans.append("   (D)one\n");

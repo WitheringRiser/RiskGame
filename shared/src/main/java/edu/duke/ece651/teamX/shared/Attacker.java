@@ -3,6 +3,7 @@ package edu.duke.ece651.teamX.shared;
 import java.util.Random;
 
 public class Attacker {
+
   private Territory attacker;
   final private Player player;
   private int num;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Attack extends BasicAction {
+
   private static Random rand = null;
   private ArrayList<Unit> attacker;
   private Player enemyPlayer;

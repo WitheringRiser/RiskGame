@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class AttackValidChecker {
+
   private ArrayList<AttackSender> allAttack;
   private Map map;
 
@@ -20,7 +21,8 @@ public class AttackValidChecker {
       Territory destination = attack.getDestination();
       int num = attack.getUnitsNum();
       if (num > source.getUnitsNumber()) {
-        throw new IllegalArgumentException("attack units number is bigger than the territory actually has!");
+        throw new IllegalArgumentException(
+            "attack units number is bigger than the territory actually has!");
       }
       if (source.equals(destination)) {
         throw new IllegalArgumentException("can not attack self");

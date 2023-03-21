@@ -6,11 +6,14 @@ import java.util.Iterator;
 import java.util.Set;
 
 public class TextDisplayer extends Displayer<String> {
-  public TextDisplayer(Map _toDisplay) { super(_toDisplay); }
+
+  public TextDisplayer(Map _toDisplay) {
+    super(_toDisplay);
+  }
 
   /**
    * display one territory
-   * 
+   *
    * @param t: territory needs to be displayed
    * @return: e.g. x units in xx (next to: xx, xx, xx)
    */

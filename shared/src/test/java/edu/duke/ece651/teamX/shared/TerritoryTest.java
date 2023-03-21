@@ -6,6 +6,7 @@ import java.util.HashMap;
 import org.junit.jupiter.api.Test;
 
 public class TerritoryTest {
+
   @Test
   public void test_remove() {
     Territory t1 = new Territory("t1");

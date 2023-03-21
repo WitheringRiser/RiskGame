@@ -1,4 +1,5 @@
 package edu.duke.ece651.teamX.client;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import edu.duke.ece651.teamX.shared.*;
@@ -13,33 +14,36 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.junit.jupiter.api.Test;
+
 public class ClientTest {
+
   private void test_displayMap(Client client,
-                               Communicate communicate,
-                               Socket serverSocket,
-                               Map my_map,
-                               ByteArrayOutputStream bytes)
+      Communicate communicate,
+      Socket serverSocket,
+      Map my_map,
+      ByteArrayOutputStream bytes)
       throws IOException, ClassNotFoundException {
     communicate.sendMap(serverSocket, my_map);
     bytes.reset();
     client.receiveMap();
     client.displayMap();
     String expected = "Red player:\n"
-                      + "-----------\n"
-                      + "2 units in A (next to: B, C)\n"
-                      + "3 units in B (next to: A, D)\n\n"
-                      + "Blue player:\n"
-                      + "-----------\n"
-                      + "1 units in C (next to: A, D)\n"
-                      + "0 units in D (next to: B, C)\n\n";
+        + "-----------\n"
+        + "2 units in A (next to: B, C)\n"
+        + "3 units in B (next to: A, D)\n\n"
+        + "Blue player:\n"
+        + "-----------\n"
+        + "1 units in C (next to: A, D)\n"
+        + "0 units in D (next to: B, C)\n\n";
     assertEquals(expected, bytes.toString());
   }
+
   private void test_init(Client client,
-                         Communicate communicate,
-                         Socket serverSocket,
-                         Player player,
-                         HashMap<Integer, ArrayList<Territory> > free_groups,
-                         ByteArrayOutputStream bytes)
+      Communicate communicate,
+      Socket serverSocket,
+      Player player,
+      HashMap<Integer, ArrayList<Territory>> free_groups,
+      ByteArrayOutputStream bytes)
       throws IOException, ClassNotFoundException {
     communicate.sendObject(serverSocket, player);
     communicate.sendObject(serverSocket, free_groups);
@@ -48,12 +52,13 @@ public class ClientTest {
     int res = communicate.receiveInt(serverSocket);
     assertEquals(0, res);
     ArrayList<Territory> territories =
-        (ArrayList<Territory>)communicate.receiveObject(serverSocket);
+        (ArrayList<Territory>) communicate.receiveObject(serverSocket);
     assertEquals(new Territory("A"), territories.get(0));
     assertEquals(new Territory("B"), territories.get(1));
     assertEquals(0, territories.get(0).getUnitsNumber());
     assertEquals(20, territories.get(1).getUnitsNumber());
   }
+
   // private void test_findTerr(Client client, Territory t1) {
   //   assertThrows(IllegalArgumentException.class,
   //                () -> client.findAttackTerr(new Territory("C")));
@@ -78,10 +83,10 @@ public class ClientTest {
     Socket clientSocket = new Socket("localhost", 4433);
     Socket serverSocket = ss.accept();
     String input_data = "a\n0\n1\nb\n3\n1\n30\n20\n"  //for init
-                        + "m\n0\n0\n3\n2\n"           //for move
-                        + "a\n1\n0\n6\na\nm\n5\nb\n"  //for attack
-                        + "c\n1\n"                    //for invalid choice
-                        + "D\n";
+        + "m\n0\n0\n3\n2\n"           //for move
+        + "a\n1\n0\n6\na\nm\n5\nb\n"  //for attack
+        + "c\n1\n"                    //for invalid choice
+        + "D\n";
     BufferedReader input = new BufferedReader(new StringReader(input_data));
     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
     PrintStream output = new PrintStream(bytes, true);
@@ -103,8 +108,8 @@ public class ClientTest {
     terr_list1.add(t2);
     terr_list2.add(t3);
     terr_list2.add(t4);
-    HashMap<Integer, ArrayList<Territory> > my_groups =
-        new HashMap<Integer, ArrayList<Territory> >();
+    HashMap<Integer, ArrayList<Territory>> my_groups =
+        new HashMap<Integer, ArrayList<Territory>>();
     my_groups.put(0, terr_list1);
     my_groups.put(1, terr_list2);
     Player p1 = new Player("Red", 20);
@@ -122,9 +127,9 @@ public class ClientTest {
     // test_findTerr(client, t1);
     client.playeOneTurn();
     ArrayList<MoveSender> moves =
-        (ArrayList<MoveSender>)communicate.receiveObject(serverSocket);
+        (ArrayList<MoveSender>) communicate.receiveObject(serverSocket);
     ArrayList<AttackSender> attacks =
-        (ArrayList<AttackSender>)communicate.receiveObject(serverSocket);
+        (ArrayList<AttackSender>) communicate.receiveObject(serverSocket);
     assertEquals(1, moves.size());
     MoveSender m = moves.get(0);
     assertEquals(t1, m.getSource());

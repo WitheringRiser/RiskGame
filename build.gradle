@@ -10,7 +10,7 @@ plugins {
     id "org.sonarqube" version "3.5.0.2730"
 }
 
-subprojects{
+subprojects {
     apply plugin: "java"
     apply plugin: "com.bmuschko.clover"
     repositories {
@@ -31,13 +31,13 @@ subprojects{
         implementation 'org.json:json:20180813'
 
     }
-    clover{
-        compiler{
+    clover {
+        compiler {
             additionalArgs = "-g:lines,source,vars"
         }
     }
-    test{
-        testLogging{
+    test {
+        testLogging {
             showStandardStreams = true
             exceptionFormat = 'full'
         }
@@ -55,35 +55,35 @@ subprojects{
 }
 
 // Project specific stuff
-project (':shared'){
+project(':shared') {
 }
-project (':server'){
+project(':server') {
     dependencies {
         implementation project(':shared')
 //        testImplementation project(path: ':shared', configuration: "testPkg")
     }
 }
-project (':client'){
+project(':client') {
     dependencies {
         implementation project(':shared')
 //        testImplementation project(path: ':shared', configuration: "testPkg")
     }
 }
 clover {
-    report{
-        xml=true
-        html=true
+    report {
+        xml = true
+        html = true
     }
 }
 
 tasks.register("run-server") {
-    dependsOn project('server').getTasksByName('run',false)
+    dependsOn project('server').getTasksByName('run', false)
     group = 'Run Client/Server'
     description = 'Run the Server'
 }
 
 tasks.register("run-client") {
-    dependsOn project('client').getTasksByName('run',false)
+    dependsOn project('client').getTasksByName('run', false)
     group = 'Run Client/Server'
     description = 'Run the Client'
 }
@@ -91,13 +91,13 @@ tasks.register("run-client") {
 task resolveDependencies {
     doLast {
         project.rootProject.allprojects.each { subProject ->
-            subProject.buildscript.configurations.each { configuration->
-                if(configuration.canBeResolved) {
+            subProject.buildscript.configurations.each { configuration ->
+                if (configuration.canBeResolved) {
                     configuration.resolve()
                 }
             }
             subProject.configurations.each { configuration ->
-                if(configuration.canBeResolved) {
+                if (configuration.canBeResolved) {
                     configuration.resolve()
                 }
             }

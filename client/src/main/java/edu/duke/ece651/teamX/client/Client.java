@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class Client {
+
   private Socket socket;
   private Communicate communicate;
   private Player player; // init
@@ -18,7 +19,7 @@ public class Client {
 
   /**
    * Construct a Client object
-   * 
+   *
    * @param s is socket to communicate with server
    */
   public Client(Socket s, BufferedReader input, PrintStream out) {
@@ -30,10 +31,8 @@ public class Client {
   }
 
   /**
-   * Initialze the game settings for client
-   * Receive player to get player properties (name, num of units)
-   * Choose a territory group to sart
-   * Set Units
+   * Initialze the game settings for client Receive player to get player properties (name, num of
+   * units) Choose a territory group to sart Set Units
    */
   public void init() throws IOException, ClassNotFoundException {
     player = communicate.receivePlayer(socket);
@@ -47,7 +46,7 @@ public class Client {
 
   /**
    * Select a group to start
-   * 
+   *
    * @return ArrayList<Territory> of the chosen territoy group
    * @throws IOException
    * @throws ClassNotFoundException
@@ -61,12 +60,13 @@ public class Client {
 
   /**
    * Place all available units to the territories
-   * 
+   *
    * @param territories is the group from chooseTerrGroup function
    * @throws IOException
    */
   public void setAllUnits(ArrayList<Territory> territories) throws IOException {
-    ClientUnitSetting unitSetting = new ClientUnitSetting(socket, out, inputReader, promot, territories,
+    ClientUnitSetting unitSetting = new ClientUnitSetting(socket, out, inputReader, promot,
+        territories,
         player.getUnitNum());
     unitSetting.perform();
     unitSetting.commit();
@@ -89,6 +89,7 @@ public class Client {
 
   /**
    * Perform the commit action for all ClientTurnActions
+   *
    * @param actions
    * @throws IOException
    */
@@ -100,6 +101,7 @@ public class Client {
 
   /**
    * Let cleint to player one turn
+   *
    * @throws IOException
    */
   public void playeOneTurn() throws IOException {
@@ -119,7 +121,7 @@ public class Client {
         out.print(promot.commitMessage());
         return;
       } else {
-        out.print(promot.enterNumPromot());
+        out.print(promot.enterAgainPromot());
       }
     }
   }
