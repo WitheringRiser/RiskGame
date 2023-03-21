@@ -1,11 +1,14 @@
 package edu.duke.ece651.teamX.server;
+
 import edu.duke.ece651.teamX.shared.*;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 public class Game {
+
   private int num_player;
   private int init_units;
   private HashMap<Player, Socket> player_dict;
@@ -13,9 +16,10 @@ public class Game {
   private Communicate communicate;
 
   /**
-   *Create the Game object 
-   *@param p_num is the number of players in this game
-   *@param u_num is the number of initial units for each player
+   * Create the Game object
+   *
+   * @param p_num is the number of players in this game
+   * @param u_num is the number of initial units for each player
    */
   public Game(int p_num, int u_num) {
     num_player = p_num;
@@ -26,24 +30,31 @@ public class Game {
   }
 
   //Getter mainly for testing
-  public int getNumPlayer() { return num_player; }
-  public Map getMap() { return map; }
+  public int getNumPlayer() {
+    return num_player;
+  }
+
+  public Map getMap() {
+    return map;
+  }
 
   /**
-   *Get all territory groups from parser
-   *@return a hashmap of territory groups
+   * Get all territory groups from parser
+   *
+   * @return a hashmap of territory groups
    */
-  public HashMap<Integer, ArrayList<Territory> > setupGroup() {
+  public HashMap<Integer, ArrayList<Territory>> setupGroup() {
     WorldParser parser = new WorldParser(num_player);
-    HashMap<Integer, ArrayList<Territory> > res = parser.getWorld();
+    HashMap<Integer, ArrayList<Territory>> res = parser.getWorld();
     return res;
   }
 
   /**
-   *Assign a player to a territory group
-   *@param terrGroup is the territory group chose by player
-   *@param p is the player to assign
-   *@throws IllegalArgumentException if there is any invlaid territory
+   * Assign a player to a territory group
+   *
+   * @param terrGroup is the territory group chose by player
+   * @param p         is the player to assign
+   * @throws IllegalArgumentException if there is any invlaid territory
    */
   public void setGroupOwner(ArrayList<Territory> terrGroup, Player p) {
     for (Territory t : terrGroup) {
@@ -54,28 +65,30 @@ public class Game {
   }
 
   /**
-   *Send available territory groups to a client
-   *@param free_groups us current available territory groups
-   *@param player is the client to receive the groups
+   * Send available territory groups to a client
+   *
+   * @param free_groups us current available territory groups
+   * @param player      is the client to receive the groups
    */
-  public void sendTerrGroup(HashMap<Integer, ArrayList<Territory> > free_groups,
-                            Player player) throws IOException {
+  public void sendTerrGroup(HashMap<Integer, ArrayList<Territory>> free_groups,
+      Player player) throws IOException {
     communicate.sendObject(player_dict.get(player), free_groups);
   }
 
   /**
-   *Create a Player object for client and inform that client
+   * Create a Player object for client and inform that client
    */
   public void createPlayer(Socket player_socket, String name) throws IOException {
     Player p = new Player(name, init_units);
     player_dict.put(p, player_socket);
     communicate.sendPlayer(player_socket, p);
   }
+
   /**
-   *Create the map by adding territories and their owners
+   * Create the map by adding territories and their owners
    */
   public void createMap() throws IOException, ClassNotFoundException {
-    HashMap<Integer, ArrayList<Territory> > terr_groups = setupGroup();
+    HashMap<Integer, ArrayList<Territory>> terr_groups = setupGroup();
     for (Player p : player_dict.keySet()) {
       sendTerrGroup(terr_groups, p);  //Let client make decision
       int choice = communicate.receiveInt(player_dict.get(p));
@@ -84,19 +97,25 @@ public class Game {
     }
   }
 
-  public void setUnits() {}
+  public void setUnits() {
+  }
+
   public void sendMapAll() throws IOException {
     for (Player p : player_dict.keySet()) {
       sendMap(p);
     }
   }
+
   public void sendMap(Player player) throws IOException {
     communicate.sendMap(player_dict.get(player), map);
   }
 
-  public void receiveActions() {}
+  public void receiveActions() {
+  }
 
-  public void checkAction() {}
+  public void checkAction() {
+  }
 
-  public void handleActions(Iterable<Action> actions) {}
+  public void handleActions(Iterable<Action> actions) {
+  }
 }

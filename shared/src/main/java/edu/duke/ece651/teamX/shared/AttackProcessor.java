@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class AttackProcessor {
+
   private ArrayList<MultiAttack> allAttack;
   private Map map;
   private AttackValidChecker checker;

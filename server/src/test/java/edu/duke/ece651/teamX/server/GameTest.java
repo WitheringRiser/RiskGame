@@ -1,4 +1,5 @@
 package edu.duke.ece651.teamX.server;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import edu.duke.ece651.teamX.shared.*;
@@ -7,7 +8,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
 import org.junit.jupiter.api.Test;
+
 public class GameTest {
+
   @Test
   public void test_GameBasic() {
     Game myGame = new Game(3, 20);
@@ -21,7 +24,7 @@ public class GameTest {
     assertEquals(3, myGame.getMap().getTerritoryNum());
     assertEquals(p1, myGame.getMap().getOwner(new Territory("aTerritory")));
     assertThrows(IllegalArgumentException.class,
-                 () -> myGame.setGroupOwner(terr_list1, p1));
+        () -> myGame.setGroupOwner(terr_list1, p1));
   }
 
   @Test
@@ -29,13 +32,14 @@ public class GameTest {
     //Test parser for all number of players work corrctly
     for (int p_num = 2; p_num <= 4; p_num++) {
       Game myGame = new Game(p_num, 20);
-      HashMap<Integer, ArrayList<Territory> > groups = myGame.setupGroup();
+      HashMap<Integer, ArrayList<Territory>> groups = myGame.setupGroup();
       assertEquals(p_num, groups.size());
       for (int i = 0; i < p_num; i++) {
         assertEquals(24 / p_num, groups.get(i).size());
       }
     }
   }
+
   @Test
   public void test_Create() throws IOException, ClassNotFoundException {
     Communicate communicate = new Communicate();

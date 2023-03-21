@@ -3,6 +3,7 @@ package edu.duke.ece651.teamX.shared;
 import java.util.ArrayList;
 
 public class MultiAttack {
+
   private ArrayList<Attacker> enemies;
   private Territory defender;
   private Map map;
@@ -26,7 +27,8 @@ public class MultiAttack {
 
   public boolean onlyOneEnemy() {
     for (int i = 1; i < enemies.size(); ++i) {
-      if (!map.getOwner(enemies.get(i).getTerritory()).equals(map.getOwner(enemies.get(0).getTerritory()))) {
+      if (!map.getOwner(enemies.get(i).getTerritory())
+          .equals(map.getOwner(enemies.get(0).getTerritory()))) {
         return false;
       }
     }
@@ -50,7 +52,8 @@ public class MultiAttack {
     for (int i = 0; i < enemy.size(); ++i) {
       Territory attackerTerritory = enemy.get(i).getTerritory();
       Player enemyPlayer = enemy.get(i).getOwner();
-      Attack attack = new Attack(attackerTerritory, defender, enemy.get(i).getAttackNumber(), 0, enemyPlayer);
+      Attack attack = new Attack(attackerTerritory, defender, enemy.get(i).getAttackNumber(), 0,
+          enemyPlayer);
       attackList.add(attack);
     }
   }

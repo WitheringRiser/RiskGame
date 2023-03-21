@@ -3,6 +3,7 @@ package edu.duke.ece651.teamX.shared;
 import java.util.ArrayList;
 
 public abstract class BasicAction implements Action {
+
   protected Territory source;
   protected Territory destination;
 

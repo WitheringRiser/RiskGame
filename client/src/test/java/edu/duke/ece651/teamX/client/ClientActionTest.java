@@ -12,17 +12,19 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.junit.jupiter.api.Test;
+
 public class ClientActionTest {
+
   @Test
   public void test_FindTerr() throws IOException, ClassNotFoundException {
     String input_data = "0\n0\n30\n20\n"     //for move1 normal
-                        + "0\n0\n1\nb\n"     //for move1 quit when input number
-                        + "0\n0\n0\nb\n"     //for move2
-                        + "0\nb\n0\n0\nb\n"  //for move2
-                        + "0\n0\nb\n"        //for move3
-                        + "0\n0\n10\nb\n"    //for att1
-                        + "0\n0\n10\nb\n"    //for att2
-                        + "";
+        + "0\n0\n1\nb\n"     //for move1 quit when input number
+        + "0\n0\n0\nb\n"     //for move2
+        + "0\nb\n0\n0\nb\n"  //for move2
+        + "0\n0\nb\n"        //for move3
+        + "0\n0\n10\nb\n"    //for att1
+        + "0\n0\n10\nb\n"    //for att2
+        + "";
     BufferedReader input = new BufferedReader(new StringReader(input_data));
     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
     PrintStream output = new PrintStream(bytes, true);

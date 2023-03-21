@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 public class PlayerTest {
+
   @Test
   public void test_PlayerBasic() {
     Player p1 = new Player("A", 20);

@@ -1,10 +1,12 @@
 package edu.duke.ece651.teamX.server;
+
 import edu.duke.ece651.teamX.shared.*;
 import java.util.*;
 import java.io.*;
 
 // Reads the json file and sends String representing file to the MyFormatter class
 public class WorldParser {
+
   private HashMap<Integer, ArrayList<Territory>> myworld;
   //private ArrayList<ArrayList<Territory>> territoryGroups;
 
@@ -39,7 +41,7 @@ public class WorldParser {
 
     StringBuilder worldInfo = new StringBuilder();
     Scanner scanner = new Scanner(input);
-    
+
     while (scanner.hasNext()) {
       worldInfo.append(scanner.next());
     }

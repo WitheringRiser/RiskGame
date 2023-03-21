@@ -8,6 +8,7 @@ import java.net.Socket;
 import org.junit.jupiter.api.Test;
 
 class CommunicateTest {
+
   private Map createMap() {
     Map my_map = new Map();
     Territory t1 = new Territory("Territory_1");
@@ -31,7 +32,7 @@ class CommunicateTest {
     assertEquals(myMap, recv_map);
 
     communicate.sendObject(clientSocket, myMap);
-    Map recv_map_obj = (Map)communicate.receiveObject(serverSocket);
+    Map recv_map_obj = (Map) communicate.receiveObject(serverSocket);
     assertEquals(myMap, recv_map_obj);
 
     int num = 0;

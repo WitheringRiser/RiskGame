@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 public class MoveSenderTest {
+
   @Test
   public void test_moveSender() {
     Territory source = new Territory("A", 10);

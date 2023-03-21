@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class MultiAttackTest {
+
   @Test
   public void test_threeAttackFightTogether() {
     Territory t1 = new Territory("duke", 100);
@@ -46,12 +47,13 @@ public class MultiAttackTest {
     assertEquals(11, t1.getUnitsNumber());
     assertEquals(79, t2.getUnitsNumber());
     assertEquals(78, t3.getUnitsNumber());
-    
+
     assertEquals(p1, map.getOwner(t1));
     assertEquals(p1, map.getOwner(t2));
     assertEquals(p2, map.getOwner(t3));
 
   }
+
   @Test
   public void test_twoAttackFightTogether() {
     Territory t1 = new Territory("duke", 100);

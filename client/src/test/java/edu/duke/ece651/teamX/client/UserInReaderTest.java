@@ -11,6 +11,7 @@ import java.io.StringReader;
 import org.junit.jupiter.api.Test;
 
 public class UserInReaderTest {
+
   @Test
   public void test_readString() throws IOException {
     String input_data = "a\n";
