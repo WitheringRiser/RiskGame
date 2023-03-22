@@ -6,7 +6,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
 public class Game {
 
@@ -28,29 +27,6 @@ public class Game {
     player_dict = new HashMap<Player, Socket>();
     map = new Map();
     communicate = new Communicate();
-  }
-
-  /**
-   * Get the socket of a player
-   *
-   * @param p Player
-   * @return the socket of the player
-   */
-  private Socket getPlayerSocket(Player p) {
-    return player_dict.get(p);
-  }
-
-  private Iterable<Player> getAllPlayers() {
-    return player_dict.keySet();
-  }
-
-  public Player getPlayerFromSocket(Socket s) {
-    for (Player p : player_dict.keySet()) {
-      if (player_dict.get(p) == s) {
-        return p;
-      }
-    }
-    return null;
   }
 
   //Getter mainly for testing
@@ -88,7 +64,6 @@ public class Game {
     }
   }
 
-
   /**
    * Send available territory groups to a client
    *
@@ -97,7 +72,7 @@ public class Game {
    */
   public void sendTerrGroup(HashMap<Integer, ArrayList<Territory>> free_groups,
       Player player) throws IOException {
-    communicate.sendObject(getPlayerSocket(player), free_groups);
+    communicate.sendObject(player_dict.get(player), free_groups);
   }
 
   /**
@@ -114,37 +89,25 @@ public class Game {
    */
   public void createMap() throws IOException, ClassNotFoundException {
     HashMap<Integer, ArrayList<Territory>> terr_groups = setupGroup();
-    for (Player p : getAllPlayers()) {
+    for (Player p : player_dict.keySet()) {
       sendTerrGroup(terr_groups, p);  //Let client make decision
-      int choice = communicate.receiveInt(getPlayerSocket(p));
+      int choice = communicate.receiveInt(player_dict.get(p));
       setGroupOwner(terr_groups.get(choice), p);  //Set owner of the group
       terr_groups.remove(choice);                 //remove this option
     }
   }
 
-  /**
-   * Using the received results to set units on the map
-   *
-   * @param res is the results received from client
-   * @return true if all units are set successfully, false otherwise
-   */
-  public boolean setUnits(ArrayList<Territory> res) {
-    for (Territory terr : res) {
-      if (!getMap().setTerritoryUnits(terr, terr.getUnits())) {
-        return false;
-      }
-    }
-    return true;
+  public void setUnits() {
   }
 
   public void sendMapAll() throws IOException {
-    for (Player p : getAllPlayers()) {
+    for (Player p : player_dict.keySet()) {
       sendMap(p);
     }
   }
 
   public void sendMap(Player player) throws IOException {
-    communicate.sendMap(getPlayerSocket(player), map);
+    communicate.sendMap(player_dict.get(player), map);
   }
 
   public void receiveActions() {

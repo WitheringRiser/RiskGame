@@ -10,10 +10,10 @@ public class Map implements Serializable {
   private HashMap<Territory, Player> map_dict;
 
   /**
-   * Construct a map by initializing an empty hashmap
+   * Construct a map by initialzing an empty hashmap
    */
   public Map() {
-    this.map_dict = new HashMap<>();
+    this.map_dict = new HashMap<Territory, Player>();
   }
 
   public int getTerritoryNum() {
@@ -114,28 +114,6 @@ public class Map implements Serializable {
       }
     }
     return territories;
-  }
-
-  /**
-   * Set the units of a territory
-   *
-   * @param terr  is the territory to set units
-   * @param units is the units to set
-   * @return
-   */
-  public boolean setTerritoryUnits(Territory terr, ArrayList<Unit> units) {
-    if (terr == null) {
-      return false;
-    }
-    if (!alreadyExist(terr)) {
-      return false;
-    }
-    for (Territory t : map_dict.keySet()) {
-      if (t.equals(terr)) {
-        t.setUnits(units);
-      }
-    }
-    return true;
   }
 
   @Override
