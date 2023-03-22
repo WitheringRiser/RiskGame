@@ -100,7 +100,7 @@ public class Client {
   }
 
   /**
-   * Let cleint to player one turn
+   * Let client to player one turn
    *
    * @throws IOException
    */

@@ -3,7 +3,6 @@
  */
 package edu.duke.ece651.teamX.client;
 
-import com.sun.org.apache.xerces.internal.impl.io.UCSReader;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

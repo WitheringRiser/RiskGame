@@ -30,46 +30,56 @@ public class App {
     game.createMap();
 
     for (int i = 0; i < try_num; i++) {
+      // receive results from client and let game setUnits using this result
       ArrayList<Territory> res =
           (ArrayList<Territory>) communicate.receiveObject(socket_list.get(i));
 
       game.setUnits(res);
-
-      for (Territory t : game.getMap()
-          .getTerritories(game.getPlayerFromSocket(socket_list.get(i)))) {
-        System.out.println(t.getName() + ": " + t.getUnitsNumber() + " units");
-      }
-
-//      for (Territory t : res) {
-//        System.out.println(t.getName() + ": " + t.getUnitsNumber() + " units");
-//      }
-      System.out.println("------------------------\n");
     }
-    HashMap<Territory, Player> my_map = game.getMap().getMap();
-    for (Territory t : my_map.keySet()) {
-      t.addUnits(null, 20);
-    }
+    // print out the master map
+    game.printMasterMap();
+
     game.sendMapAll();
+
+    // collect all the moves and attacks from players
+    ArrayList<ActionSender> allActions = new ArrayList<ActionSender>();
     for (int i = 0; i < try_num; i++) {
       ArrayList<MoveSender> moves =
           (ArrayList<MoveSender>) communicate.receiveObject(socket_list.get(i));
       ArrayList<AttackSender> attacks =
           (ArrayList<AttackSender>) communicate.receiveObject(socket_list.get(i));
-
-      System.out.println("Attack:");
-      for (AttackSender a : attacks) {
-        System.out.println("From " + a.getSource().getName() + " to " +
-            a.getDestination().getName() +
-            " units: " + Integer.toString(a.getUnitsNum()));
-      }
-      System.out.println("Move:");
-      for (MoveSender a : moves) {
-        System.out.println("From " + a.getSource().getName() + " to " +
-            a.getDestination().getName() +
-            " units: " + Integer.toString(a.getUnitsNum()));
-      }
-      System.out.println("---------------------\n");
+      allActions.addAll(moves);
+      allActions.addAll(attacks);
     }
+    game.printActions(allActions);
+    try {
+      game.handleActionSenders(allActions);
+    } catch (IllegalArgumentException e) {
+//      TODO: send back to client
+    }
+
+    game.printMasterMap();
+
+//    for (int i = 0; i < try_num; i++) {
+//      ArrayList<MoveSender> moves =
+//          (ArrayList<MoveSender>) communicate.receiveObject(socket_list.get(i));
+//      ArrayList<AttackSender> attacks =
+//          (ArrayList<AttackSender>) communicate.receiveObject(socket_list.get(i));
+//
+//      System.out.println("Attack:");
+//      for (AttackSender a : attacks) {
+//        System.out.println("From " + a.getSource().getName() + " to " +
+//            a.getDestination().getName() +
+//            " units: " + Integer.toString(a.getUnitsNum()));
+//      }
+//      System.out.println("Move:");
+//      for (MoveSender a : moves) {
+//        System.out.println("From " + a.getSource().getName() + " to " +
+//            a.getDestination().getName() +
+//            " units: " + Integer.toString(a.getUnitsNum()));
+//      }
+//      System.out.println("---------------------\n");
+//    }
     //System.out.println();
   }
 }
