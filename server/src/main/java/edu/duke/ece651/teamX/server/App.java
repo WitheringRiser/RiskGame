@@ -33,6 +33,8 @@ public class App {
       ArrayList<Territory> res =
           (ArrayList<Territory>) communicate.receiveObject(socket_list.get(i));
 
+      game.setUnits(res);
+
       for (Territory t : game.getMap()
           .getTerritories(game.getPlayerFromSocket(socket_list.get(i)))) {
         System.out.println(t.getName() + ": " + t.getUnitsNumber() + " units");
