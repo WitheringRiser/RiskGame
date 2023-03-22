@@ -199,7 +199,7 @@ public class Game {
     map.printMap();
   }
 
-  //  print all actionsenders content
+  //  print all actionsenders content, only for testing and debugging
   public void printActions(Iterable<ActionSender> allActions) {
     System.out.println("Attack:");
     for (AttackSender a : getAttackSenders(allActions)) {
