@@ -41,6 +41,21 @@ public class App {
 
     while (true) {
       playOneTurn(game, try_num, communicate, socket_list);
+      sendHasWonSig(game, communicate, socket_list);
+      System.out.println("Game over");
+      break;
+    }
+  }
+
+  private static void sendHasWonSig(Game game, Communicate communicate,
+      ArrayList<Socket> socket_list) throws IOException {
+    for (Socket s : socket_list) {
+      communicate.sendObject(s, game.hasWon());
+    }
+    if (game.hasWon()) {
+      for (Socket s : socket_list) {
+        communicate.sendObject(s, game.whoWons());
+      }
     }
   }
 
