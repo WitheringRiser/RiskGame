@@ -11,12 +11,8 @@ public class AttackValidChecker {
   AttackValidChecker(ArrayList<AttackSender> _allAttack, Map _map) throws IllegalArgumentException {
     map = _map;
     allAttack = _allAttack;
-    try {
-      checkUnitAndAdjacent();
-      checkTotalAttackNum();
-    } catch (IllegalArgumentException e) {
-      throw e;
-    }
+    checkUnitAndAdjacent();
+    checkTotalAttackNum();
   }
 
   public void checkUnitAndAdjacent() {

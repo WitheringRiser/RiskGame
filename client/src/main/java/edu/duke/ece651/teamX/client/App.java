@@ -19,8 +19,8 @@ public class App {
 
     Client client = new Client(clientSocket, input, out);
     client.init();
-    client.receiveMap();
-    client.playeOneTurn();
+
+    client.playTurns();
     //client.displayMap();
   }
 }

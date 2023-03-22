@@ -39,6 +39,14 @@ public class App {
     // print out the master map
     game.printMasterMap();
 
+    while (true) {
+      playOneTurn(game, try_num, communicate, socket_list);
+    }
+  }
+
+  private static void playOneTurn(Game game, int try_num, Communicate communicate,
+      ArrayList<Socket> socket_list)
+      throws IOException, ClassNotFoundException {
     game.sendMapAll();
 
     // collect all the moves and attacks from players
@@ -59,27 +67,6 @@ public class App {
     }
 
     game.printMasterMap();
-
-//    for (int i = 0; i < try_num; i++) {
-//      ArrayList<MoveSender> moves =
-//          (ArrayList<MoveSender>) communicate.receiveObject(socket_list.get(i));
-//      ArrayList<AttackSender> attacks =
-//          (ArrayList<AttackSender>) communicate.receiveObject(socket_list.get(i));
-//
-//      System.out.println("Attack:");
-//      for (AttackSender a : attacks) {
-//        System.out.println("From " + a.getSource().getName() + " to " +
-//            a.getDestination().getName() +
-//            " units: " + Integer.toString(a.getUnitsNum()));
-//      }
-//      System.out.println("Move:");
-//      for (MoveSender a : moves) {
-//        System.out.println("From " + a.getSource().getName() + " to " +
-//            a.getDestination().getName() +
-//            " units: " + Integer.toString(a.getUnitsNum()));
-//      }
-//      System.out.println("---------------------\n");
-//    }
-    //System.out.println();
   }
+
 }

@@ -158,7 +158,7 @@ public class Map implements Serializable {
   }
 
   /**
-   * Print out the map grouped by players
+   * Print out the map grouped by players, only for testing and debugging
    */
   public void printMap() {
     // get the set of players

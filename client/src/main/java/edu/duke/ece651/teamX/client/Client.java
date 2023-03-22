@@ -125,4 +125,12 @@ public class Client {
       }
     }
   }
+
+  //  TODO: need detect win or lose
+  public void playTurns() throws IOException, ClassNotFoundException {
+    while (true) {
+      receiveMap();
+      playeOneTurn();
+    }
+  }
 }
