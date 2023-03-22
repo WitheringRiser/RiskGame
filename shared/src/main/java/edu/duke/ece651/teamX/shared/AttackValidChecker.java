@@ -12,17 +12,18 @@ public class AttackValidChecker {
     map = _map;
     allAttack = _allAttack;
     try {
-      checkUnitAndAdajent();
+      checkUnitAndAdjacent();
       checkTotalAttackNum();
     } catch (IllegalArgumentException e) {
       throw e;
     }
   }
 
-  public void checkUnitAndAdajent() {
+  public void checkUnitAndAdjacent() {
     for (AttackSender attack : allAttack) {
-      Territory source = attack.getSource();
-      Territory destination = attack.getDestination();
+      Territory source = map.getTerritoryByName(attack.getSource().getName());
+      Territory destination = map.getTerritoryByName(attack.getDestination().getName());
+
       int num = attack.getUnitsNum();
       if (num > source.getUnitsNumber()) {
         throw new IllegalArgumentException(
@@ -44,7 +45,7 @@ public class AttackValidChecker {
     HashMap<Territory, Integer> ans = new HashMap<Territory, Integer>();
     for (int i = 0; i < allAttack.size(); ++i) {
       AttackSender attack = allAttack.get(i);
-      Territory enemy = attack.getSource();
+      Territory enemy = map.getTerritoryByName(attack.getSource().getName());
       int num = attack.getUnitsNum();
       if (ans.containsKey(enemy)) {
         int sum = ans.get(enemy);
