@@ -44,6 +44,15 @@ public class Game {
     return player_dict.keySet();
   }
 
+  public Player getPlayerFromSocket(Socket s) {
+    for (Player p : player_dict.keySet()) {
+      if (player_dict.get(p) == s) {
+        return p;
+      }
+    }
+    return null;
+  }
+
   //Getter mainly for testing
   public int getNumPlayer() {
     return num_player;
@@ -113,7 +122,19 @@ public class Game {
     }
   }
 
-  public void setUnits() {
+  /**
+   * Using the received results to set units on the map
+   *
+   * @param res is the results received from client
+   * @return true if all units are set successfully, false otherwise
+   */
+  public boolean setUnits(ArrayList<Territory> res) {
+    for (Territory terr : res) {
+      if (!getMap().setTerritoryUnits(terr, terr.getUnits())) {
+        return false;
+      }
+    }
+    return true;
   }
 
   public void sendMapAll() throws IOException {
