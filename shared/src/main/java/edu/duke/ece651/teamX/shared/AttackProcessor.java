@@ -34,8 +34,10 @@ public class AttackProcessor {
     HashMap<Territory, ArrayList<Attacker>> ans = new HashMap<Territory, ArrayList<Attacker>>();
     for (int i = 0; i < allAttack.size(); ++i) {
       AttackSender attack = allAttack.get(i);
-      Territory defender = attack.getDestination();
-      Territory enemy = attack.getSource();
+
+      Territory defender = map.getTerritoryByName(attack.getDestination().getName());
+      Territory enemy = map.getTerritoryByName(attack.getSource().getName());
+
       int num = attack.getUnitsNum();
 
       if (ans.containsKey(defender)) {

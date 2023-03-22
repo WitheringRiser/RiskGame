@@ -175,4 +175,13 @@ public class Map implements Serializable {
     }
   }
 
+  public Territory getTerritoryByName(String name) {
+    for (Territory t : map_dict.keySet()) {
+      if (t.getName().equals(name)) {
+        return t;
+      }
+    }
+    return null;
+  }
+
 }
