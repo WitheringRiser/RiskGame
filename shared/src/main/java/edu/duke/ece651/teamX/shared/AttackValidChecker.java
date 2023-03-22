@@ -8,11 +8,15 @@ public class AttackValidChecker {
   private ArrayList<AttackSender> allAttack;
   private Map map;
 
-  AttackValidChecker(ArrayList<AttackSender> _allAttack, Map _map) {
+  AttackValidChecker(ArrayList<AttackSender> _allAttack, Map _map) throws IllegalArgumentException {
     map = _map;
     allAttack = _allAttack;
-    checkUnitAndAdajent();
-    checkTotalAttackNum();
+    try {
+      checkUnitAndAdajent();
+      checkTotalAttackNum();
+    } catch (IllegalArgumentException e) {
+      throw e;
+    }
   }
 
   public void checkUnitAndAdajent() {

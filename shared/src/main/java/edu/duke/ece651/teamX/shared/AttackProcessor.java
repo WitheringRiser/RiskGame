@@ -9,11 +9,16 @@ public class AttackProcessor {
   private Map map;
   private AttackValidChecker checker;
 
-  AttackProcessor(ArrayList<AttackSender> _allAttack, Map _map) {
+  public AttackProcessor(ArrayList<AttackSender> _allAttack, Map _map)
+      throws IllegalArgumentException {
     map = _map;
-    checker = new AttackValidChecker(_allAttack, _map);
+    try {
+      checker = new AttackValidChecker(_allAttack, _map);
+    } catch (IllegalArgumentException e) {
+      throw e;
+    }
+//    checker = new AttackValidChecker(_allAttack, _map);
     allAttack = getAttackList(_allAttack);
-
   }
 
   public ArrayList<MultiAttack> getAttackList(ArrayList<AttackSender> _allAttack) {
