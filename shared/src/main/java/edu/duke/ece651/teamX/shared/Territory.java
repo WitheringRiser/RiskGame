@@ -60,9 +60,7 @@ public class Territory implements Serializable {
   }
 
   public void addUnits(ArrayList<Unit> list) {
-    for (int i = 0; i < list.size(); ++i) {
-      units.add(list.get(i));
-    }
+    units.addAll(list);
   }
 
   public void setUnits(ArrayList<Unit> units) {
@@ -89,6 +87,10 @@ public class Territory implements Serializable {
       unitList.add(units.remove(0));
     }
     return unitList;
+  }
+
+  public ArrayList<Unit> getUnits() {
+    return units;
   }
 
   /**

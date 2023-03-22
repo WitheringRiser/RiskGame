@@ -33,9 +33,16 @@ public class App {
       ArrayList<Territory> res =
           (ArrayList<Territory>) communicate.receiveObject(socket_list.get(i));
 
-      for (Territory t : res) {
+      game.setUnits(res);
+
+      for (Territory t : game.getMap()
+          .getTerritories(game.getPlayerFromSocket(socket_list.get(i)))) {
         System.out.println(t.getName() + ": " + t.getUnitsNumber() + " units");
       }
+
+//      for (Territory t : res) {
+//        System.out.println(t.getName() + ": " + t.getUnitsNumber() + " units");
+//      }
       System.out.println("------------------------\n");
     }
     HashMap<Territory, Player> my_map = game.getMap().getMap();
