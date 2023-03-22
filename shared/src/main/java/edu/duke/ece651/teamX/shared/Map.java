@@ -3,7 +3,9 @@ package edu.duke.ece651.teamX.shared;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 public class Map implements Serializable {
 
@@ -154,4 +156,23 @@ public class Map implements Serializable {
   public int hashCode() {
     return Objects.hash(map_dict);
   }
+
+  /**
+   * Print out the map grouped by players
+   */
+  public void printMap() {
+    // get the set of players
+    Set<Player> players = new HashSet<>();
+    for (Territory t : map_dict.keySet()) {
+      players.add(map_dict.get(t));
+    }
+    for (Player p : players) {
+      System.out.println("Player " + p.getName() + " has territories: ");
+      for (Territory t : getTerritories(p)) {
+        System.out.println(t.getName() + ": " + t.getUnitsNumber() + " units");
+      }
+      System.out.println("------------------------\n");
+    }
+  }
+
 }
