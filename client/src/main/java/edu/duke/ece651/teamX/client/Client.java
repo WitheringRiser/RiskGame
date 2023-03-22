@@ -126,11 +126,24 @@ public class Client {
     }
   }
 
+  private boolean receiveHasWon() throws IOException, ClassNotFoundException {
+    boolean hasWon = (boolean) communicate.receiveObject(socket);
+    if (hasWon) {
+      Player winner = (Player) communicate.receiveObject(socket);
+      out.println("winner is " + winner.getName());
+    }
+    return hasWon;
+  }
+
   //  TODO: need detect win or lose
   public void playTurns() throws IOException, ClassNotFoundException {
     while (true) {
       receiveMap();
       playeOneTurn();
+      if (receiveHasWon()) {
+        System.out.println("Game finished!");
+        return;
+      }
     }
   }
 }

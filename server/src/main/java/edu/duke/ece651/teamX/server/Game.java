@@ -2,11 +2,9 @@ package edu.duke.ece651.teamX.server;
 
 import edu.duke.ece651.teamX.shared.*;
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
 public class Game {
 
@@ -214,6 +212,22 @@ public class Game {
           " units: " + Integer.toString(a.getUnitsNum()));
     }
     System.out.println("---------------------\n");
+  }
+
+  public Player whoWons() {
+    for (Player player : getAllPlayers()) {
+      if (map.getTerritories(player).size() == map.getTerritoryNum()) {
+        return player;
+      }
+    }
+    return null;
+  }
+
+  public Boolean hasWon() {
+    if (whoWons() != null) {
+      return true;
+    }
+    return false;
   }
 
 }
