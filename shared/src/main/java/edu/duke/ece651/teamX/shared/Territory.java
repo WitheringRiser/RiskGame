@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class Territory implements Serializable {
 
-  public ArrayList<Unit> units;
+  private ArrayList<Unit> units;
   private ArrayList<Territory> neighbours;
   private final String name; // a territory is uniquely defined by name
 
