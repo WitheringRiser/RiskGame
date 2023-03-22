@@ -147,12 +147,73 @@ public class Game {
     communicate.sendMap(getPlayerSocket(player), map);
   }
 
-  public void receiveActions() {
+  public void handleActionSenders(Iterable<ActionSender> actionSenders)
+      throws IllegalArgumentException {
+
+    Iterable<MoveSender> moveSenders = getMoveSenders(actionSenders);
+    Iterable<AttackSender> attackSenders = getAttackSenders(actionSenders);
+
+    // TODO: no move processor right now so cannot handle move senders
+    handleAttackSenders(attackSenders);
   }
 
+  private void handleAttackSenders(Iterable<AttackSender> attackSenders)
+      throws IllegalArgumentException {
+    AttackProcessor attackProcessor = new AttackProcessor((ArrayList<AttackSender>) attackSenders,
+        map);
+    attackProcessor.resovleAllAttack();
+  }
+
+  private Iterable<MoveSender> getMoveSenders(Iterable<ActionSender> actionSenders) {
+    ArrayList<MoveSender> moveSenders = new ArrayList<>();
+    for (ActionSender actionSender : actionSenders) {
+      if (actionSender instanceof MoveSender) {
+        moveSenders.add((MoveSender) actionSender);
+      }
+    }
+    return moveSenders;
+  }
+
+  private Iterable<AttackSender> getAttackSenders(Iterable<ActionSender> actionSenders) {
+    ArrayList<AttackSender> attackSenders = new ArrayList<>();
+    for (ActionSender actionSender : actionSenders) {
+      if (actionSender instanceof AttackSender) {
+        attackSenders.add((AttackSender) actionSender);
+      }
+    }
+    return attackSenders;
+  }
+
+  // TODO: don't make checker constructor directly check and throw exception
+  //  otherwise it's hard to call the check function from outside
   public void checkAction() {
   }
 
   public void handleActions(Iterable<Action> actions) {
   }
+
+  /**
+   * Print out the master map
+   */
+  public void printMasterMap() {
+    map.printMap();
+  }
+
+  //  print all actionsenders content
+  public void printActions(Iterable<ActionSender> allActions) {
+    System.out.println("Attack:");
+    for (AttackSender a : getAttackSenders(allActions)) {
+      System.out.println("From " + a.getSource().getName() + " to " +
+          a.getDestination().getName() +
+          " units: " + Integer.toString(a.getUnitsNum()));
+    }
+    System.out.println("Move:");
+    for (MoveSender a : getMoveSenders(allActions)) {
+      System.out.println("From " + a.getSource().getName() + " to " +
+          a.getDestination().getName() +
+          " units: " + Integer.toString(a.getUnitsNum()));
+    }
+    System.out.println("---------------------\n");
+  }
+
 }
