@@ -152,6 +152,7 @@ public class Game {
     Iterable<AttackSender> attackSenders = getAttackSenders(actionSenders);
 
     // TODO: no move processor right now so cannot handle move senders
+    handleMoveSenders(moveSenders);
     handleAttackSenders(attackSenders);
   }
 
@@ -160,6 +161,12 @@ public class Game {
     AttackProcessor attackProcessor = new AttackProcessor((ArrayList<AttackSender>) attackSenders,
         map);
     attackProcessor.resovleAllAttack();
+  }
+
+  private void handleMoveSenders(Iterable<MoveSender> moveSenders)
+      throws IllegalArgumentException {
+    MoveProcessor moveProcessor = new MoveProcessor((ArrayList<MoveSender>) moveSenders, map);
+    moveProcessor.resolveAllMove();
   }
 
   private Iterable<MoveSender> getMoveSenders(Iterable<ActionSender> actionSenders) {
