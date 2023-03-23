@@ -230,4 +230,25 @@ public class Game {
     return false;
   }
 
+  public ArrayList<Player> whoLost() {
+    ArrayList<Player> result = new ArrayList<Player>();
+    for (Player player : getAllPlayers()) {
+      if (map.getTerritories(player).size() == 0) {
+        result.add(player);
+      }
+    }
+    if (result.size() == 0){
+      return null;
+    }
+    else{
+      return result;
+    }
+  }
+
+  public Boolean hasLost() {
+    if (whoLost() != null) {
+      return true;
+    }
+    return false;
+  }
 }
