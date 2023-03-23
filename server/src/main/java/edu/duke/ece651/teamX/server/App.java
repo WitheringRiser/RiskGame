@@ -59,6 +59,18 @@ public class App {
     }
   }
 
+  private static void sendHasLostSig(Game game, Communicate communicate,
+      ArrayList<Socket> socket_list) throws IOException {
+    for (Socket s : socket_list) {
+      communicate.sendObject(s, game.hasLost());
+    }
+    if (game.hasLost()) {
+      for (Socket s : socket_list) {
+        communicate.sendObject(s, game.whoLost());
+      }
+    }
+  }
+
   private static void playOneTurn(Game game, int try_num, Communicate communicate,
       ArrayList<Socket> socket_list)
       throws IOException, ClassNotFoundException {
