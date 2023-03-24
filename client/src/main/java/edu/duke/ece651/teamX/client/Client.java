@@ -53,10 +53,10 @@ public class Client {
    * @throws ClassNotFoundException
    */
   public ArrayList<Territory> chooseTerrGroup() throws IOException, ClassNotFoundException {
-    ClientGroupSetting grouSetting = new ClientGroupSetting(socket, out, inputReader, prompt);
-    grouSetting.perform();
-    grouSetting.commit();
-    return grouSetting.getGroup();
+    ClientGroupSetting groupSetting = new ClientGroupSetting(socket, out, inputReader, prompt);
+    groupSetting.perform();
+    groupSetting.commit();
+    return groupSetting.getGroup();
   }
 
   /**
@@ -119,16 +119,20 @@ public class Client {
       out.print(prompt.oneTurnPrompt());
       String user_in = inputReader.readString();
       user_in = user_in.toUpperCase();
-      if (user_in.equals("M")) {
-        move.perform();
-      } else if (user_in.equals("A")) {
-        attack.perform();
-      } else if (user_in.equals("D")) {
-        performCommit(move, attack);
-        out.print(prompt.commitMessage());
-        return;
-      } else {
-        out.print(prompt.enterAgainPrompt());
+      switch (user_in) {
+        case "M":
+          move.perform();
+          break;
+        case "A":
+          attack.perform();
+          break;
+        case "D":
+          performCommit(move, attack);
+          out.print(prompt.commitMessage());
+          return;
+        default:
+          out.print(prompt.enterAgainPrompt());
+          break;
       }
     }
   }
