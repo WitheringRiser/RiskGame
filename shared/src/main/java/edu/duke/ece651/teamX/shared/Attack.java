@@ -66,7 +66,8 @@ public class Attack extends BasicAction {
     while (attacker.size() > 0 && destination.getUnitsNumber() > 0) {
       unitAttack(20);
     }
-    TextDisplayer.displayAttack(attackerSize, destinationOriginalSize, attacker.size(), destination.getUnitsNumber(),
+    TextDisplayer.displayAttack(attackerSize, destinationOriginalSize, attacker.size(),
+        destination.getUnitsNumber(),
         enemyPlayer);
     if (attacker.size() == 0) {
       return false;

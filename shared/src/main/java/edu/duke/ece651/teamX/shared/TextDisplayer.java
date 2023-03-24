@@ -70,7 +70,8 @@ public class TextDisplayer extends Displayer<String> {
     return ans.toString();
   }
 
-  static public void displayAttack(int attackerSize, int defenderSize, int attackerAfter, int defenderAfter,
+  static public void displayAttack(int attackerSize, int defenderSize, int attackerAfter,
+      int defenderAfter,
       Player enemyPlayer) {
     System.out.println("----------------AttackLog----------------");
     if (enemyPlayer != null) {

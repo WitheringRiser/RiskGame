@@ -49,6 +49,10 @@ public class Communicate {
     sendObject(socket, player);
   }
 
+  public void sendGameResult(Socket socket, GameResult gameResult) throws IOException {
+    sendObject(socket, gameResult);
+  }
+
   /**
    * Receive object through socket
    *
@@ -81,5 +85,9 @@ public class Communicate {
 
   public Player receivePlayer(Socket socket) throws IOException, ClassNotFoundException {
     return (Player) receiveObject(socket);
+  }
+
+  public GameResult receiveGameResult(Socket socket) throws IOException, ClassNotFoundException {
+    return (GameResult) receiveObject(socket);
   }
 }

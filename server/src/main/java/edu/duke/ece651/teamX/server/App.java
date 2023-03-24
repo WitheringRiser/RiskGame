@@ -40,47 +40,41 @@ public class App {
     game.printMasterMap();
 
     while (true) {
-      playOneTurn(game, try_num, communicate, socket_list);
-      if (sendHasWonSig(game, communicate, socket_list)) {
+      game.sendMapAll();
+      GameResult gameResult = getGameResult(game);
+      sendGameResult(gameResult, communicate, socket_list);
+      if (gameResult.isWin()) {
         System.out.println("Game over");
         break;
       }
+      playOneTurn(game, try_num, communicate, socket_list);
     }
   }
 
-  private static boolean sendHasWonSig(Game game, Communicate communicate,
-      ArrayList<Socket> socket_list) throws IOException {
-    for (Socket s : socket_list) {
-      communicate.sendObject(s, game.hasWon());
-    }
-    if (game.hasWon()) {
-      for (Socket s : socket_list) {
-        communicate.sendObject(s, game.whoWons());
-      }
-    }
-    return game.hasWon();
+  private static GameResult getGameResult(Game game) {
+    return new GameResult(game.hasWon(), game.whoWons(), game.whoLost());
   }
 
-  private static void sendHasLostSig(Game game, Communicate communicate,
+  private static void sendGameResult(GameResult gameResult, Communicate communicate,
       ArrayList<Socket> socket_list) throws IOException {
     for (Socket s : socket_list) {
-      communicate.sendObject(s, game.hasLost());
-    }
-    if (game.hasLost()) {
-      for (Socket s : socket_list) {
-        communicate.sendObject(s, game.whoLost());
-      }
+      communicate.sendGameResult(s, gameResult);
     }
   }
+
 
   private static void playOneTurn(Game game, int try_num, Communicate communicate,
       ArrayList<Socket> socket_list)
       throws IOException, ClassNotFoundException {
-    game.sendMapAll();
 
+    GameResult gameResult = getGameResult(game);
     // collect all the moves and attacks from players
-    ArrayList<ActionSender> allActions = new ArrayList<ActionSender>();
+    ArrayList<ActionSender> allActions = new ArrayList<>();
     for (int i = 0; i < try_num; i++) {
+//      if this player has lost, skip
+      if (gameResult.loserContains(game.getPlayerFromSocket(socket_list.get(i)))) {
+        continue;
+      }
       ArrayList<MoveSender> moves =
           (ArrayList<MoveSender>) communicate.receiveObject(socket_list.get(i));
       ArrayList<AttackSender> attacks =
