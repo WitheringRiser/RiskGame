@@ -52,10 +52,7 @@ public class App {
   }
 
   private static GameResult getGameResult(Game game) {
-//    return new GameResult(game.hasWon(), game.whoWons(), game.whoLost());
-    ArrayList<Player> losers = new ArrayList<>();
-    losers.add(new Player("Green", 20));
-    return new GameResult(game.hasWon(), game.whoWons(), losers);
+    return new GameResult(game.hasWon(), game.whoWons(), game.whoLost());
   }
 
   private static void sendGameResult(GameResult gameResult, Communicate communicate,
