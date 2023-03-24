@@ -13,7 +13,7 @@ import org.checkerframework.checker.units.qual.C;
 public class App {
 
   public static void main(String[] args) throws IOException, ClassNotFoundException {
-    Socket clientSocket = new Socket("localhost", 4477);
+    Socket clientSocket = new Socket("localhost", Integer.parseInt(args[0]));
     BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
     PrintStream out = System.out;
 
@@ -21,6 +21,5 @@ public class App {
     client.init();
 
     client.playTurns();
-    //client.displayMap();
   }
 }
