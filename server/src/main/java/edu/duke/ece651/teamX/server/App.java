@@ -3,93 +3,42 @@
  */
 package edu.duke.ece651.teamX.server;
 
-import edu.duke.ece651.teamX.shared.*;
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Scanner;
 
 public class App {
 
+  private static int getPlayerNum(Scanner input) {
+    int playerNum;
+    // Prompt for first integer input for player number
+    System.out.print("Enter the player number(between 2 and 4): ");
+    while (!input.hasNextInt() || (playerNum = input.nextInt()) < 2 || playerNum > 4) {
+      input.nextLine(); // clear input buffer
+      System.out.print("Invalid input. Please enter a positive integer between 2 and 4: ");
+    }
+    return playerNum;
+  }
+
+  private static int getPort(Scanner input) {
+    int port;
+    // Prompt for second integer input for port number
+    System.out.print("Enter the port number(between 1 and 65535): ");
+    while (!input.hasNextInt() || (port = input.nextInt()) < 1 || port > 65535) {
+      input.nextLine(); // clear input buffer
+      System.out.print("Invalid input. Please enter a positive integer between 1 and 65535: ");
+    }
+    return port;
+  }
+
+
   //!!!! Just for testing!!!!
   public static void main(String[] args) throws IOException, ClassNotFoundException {
-    Communicate communicate = new Communicate();
-    ServerSocket ss = new ServerSocket(4477);
-    int try_num = 3;
-    Game game = new Game(try_num, 20);
-    PlayerName namer = new ColorPlayerName();
-    //Connect to players (Might need to be done in Game)
-    ArrayList<Socket> socket_list = new ArrayList<Socket>();
-    for (int i = 0; i < try_num; i++) {
-      Socket pSocket = ss.accept();
-      socket_list.add(pSocket);
-      game.createPlayer(pSocket, namer.getName());
-    }
-
-    game.createMap();
-
-    for (int i = 0; i < try_num; i++) {
-      // receive results from client and let game setUnits using this result
-      ArrayList<Territory> res =
-          (ArrayList<Territory>) communicate.receiveObject(socket_list.get(i));
-
-      game.setUnits(res);
-    }
-    // print out the master map
-    game.printMasterMap();
-
-    while (true) {
-      game.sendMapAll();
-      GameResult gameResult = getGameResult(game);
-      sendGameResult(gameResult, communicate, socket_list);
-      if (gameResult.isWin()) {
-        System.out.println("Game over");
-        break;
-      }
-      playOneTurn(game, try_num, communicate, socket_list);
-    }
-  }
-
-  private static GameResult getGameResult(Game game) {
-    return new GameResult(game.hasWon(), game.whoWons(), game.whoLost());
-  }
-
-  private static void sendGameResult(GameResult gameResult, Communicate communicate,
-      ArrayList<Socket> socket_list) throws IOException {
-    for (Socket s : socket_list) {
-      communicate.sendGameResult(s, gameResult);
-    }
-  }
-
-
-  private static void playOneTurn(Game game, int try_num, Communicate communicate,
-      ArrayList<Socket> socket_list)
-      throws IOException, ClassNotFoundException {
-
-    GameResult gameResult = getGameResult(game);
-    // collect all the moves and attacks from players
-    ArrayList<ActionSender> allActions = new ArrayList<>();
-    for (int i = 0; i < try_num; i++) {
-//      if this player has lost, skip
-      if (gameResult.loserContains(game.getPlayerFromSocket(socket_list.get(i)))) {
-        continue;
-      }
-      ArrayList<MoveSender> moves =
-          (ArrayList<MoveSender>) communicate.receiveObject(socket_list.get(i));
-      ArrayList<AttackSender> attacks =
-          (ArrayList<AttackSender>) communicate.receiveObject(socket_list.get(i));
-      allActions.addAll(moves);
-      allActions.addAll(attacks);
-    }
-    game.printActions(allActions);
-    try {
-      game.handleActionSenders(allActions);
-    } catch (IllegalArgumentException e) {
-//      TODO: send back to client
-    }
-
-    game.printMasterMap();
+    Scanner input = new Scanner(System.in);
+    int playerNum = getPlayerNum(input);
+    int port = getPort(input);
+    input.close();
+    Game game = new Game(playerNum, 20);
+    game.play(port);
   }
 
 }

@@ -2,6 +2,7 @@ package edu.duke.ece651.teamX.server;
 
 import edu.duke.ece651.teamX.shared.*;
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -244,10 +245,81 @@ public class Game {
     return result;
   }
 
-//  public Boolean hasLost() {
-//    if (whoLost() != null) {
-//      return true;
-//    }
-//    return false;
-//  }
+  private GameResult getGameResult() {
+    return new GameResult(hasWon(), whoWons(), whoLost());
+  }
+
+  private static void sendGameResult(GameResult gameResult, Communicate communicate,
+      ArrayList<Socket> socket_list) throws IOException {
+    for (Socket s : socket_list) {
+      communicate.sendGameResult(s, gameResult);
+    }
+  }
+
+
+  private void playOneTurn(int try_num, Communicate communicate,
+      ArrayList<Socket> socket_list)
+      throws IOException, ClassNotFoundException {
+
+    GameResult gameResult = getGameResult();
+    // collect all the moves and attacks from players
+    ArrayList<ActionSender> allActions = new ArrayList<>();
+    for (int i = 0; i < try_num; i++) {
+//      if this player has lost, skip
+      if (gameResult.loserContains(getPlayerFromSocket(socket_list.get(i)))) {
+        continue;
+      }
+      ArrayList<MoveSender> moves =
+          (ArrayList<MoveSender>) communicate.receiveObject(socket_list.get(i));
+      ArrayList<AttackSender> attacks =
+          (ArrayList<AttackSender>) communicate.receiveObject(socket_list.get(i));
+      allActions.addAll(moves);
+      allActions.addAll(attacks);
+    }
+    printActions(allActions);
+    try {
+      handleActionSenders(allActions);
+    } catch (IllegalArgumentException e) {
+//      TODO: send back to client
+    }
+
+    printMasterMap();
+  }
+
+  public void play(int port) throws IOException, ClassNotFoundException {
+    Communicate communicate = new Communicate();
+    ServerSocket ss = new ServerSocket(port);
+    PlayerName namer = new ColorPlayerName();
+    //Connect to players (Might need to be done in Game)
+    ArrayList<Socket> socket_list = new ArrayList<Socket>();
+    for (int i = 0; i < num_player; i++) {
+      Socket pSocket = ss.accept();
+      socket_list.add(pSocket);
+      createPlayer(pSocket, namer.getName());
+    }
+
+    createMap();
+
+    for (int i = 0; i < num_player; i++) {
+      // receive results from client and let game setUnits using this result
+      ArrayList<Territory> res =
+          (ArrayList<Territory>) communicate.receiveObject(socket_list.get(i));
+
+      setUnits(res);
+    }
+    // print out the master map
+    printMasterMap();
+
+    while (true) {
+      sendMapAll();
+      GameResult gameResult = getGameResult();
+      sendGameResult(gameResult, communicate, socket_list);
+      if (gameResult.isWin()) {
+        System.out.println("Game over");
+        break;
+      }
+      playOneTurn(num_player, communicate, socket_list);
+    }
+  }
+
 }
