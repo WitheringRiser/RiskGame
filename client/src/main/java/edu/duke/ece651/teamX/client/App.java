@@ -12,7 +12,19 @@ import java.net.Socket;
 public class App {
 
   public static void main(String[] args) throws IOException, ClassNotFoundException {
-    Socket clientSocket = new Socket("localhost", Integer.parseInt(args[0]));
+    int port;
+    if (args.length != 1) {
+      System.out.println("Please provide port(integer) as a command-line argument.");
+      return;
+    } else {
+      try {
+        port = Integer.parseInt(args[0]);
+      } catch (NumberFormatException e) {
+        System.out.println("Invalid integer provided. Please provide a valid integer.");
+        return;
+      }
+    }
+    Socket clientSocket = new Socket("localhost", port);
     BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
     PrintStream out = System.out;
 
