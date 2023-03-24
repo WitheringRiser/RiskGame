@@ -11,18 +11,18 @@ public abstract class ClientTurnAction<T extends ActionSender> implements Client
   private Socket socket;
   private PrintStream out;
   private UserInReader inputReader;
-  private TextPromot promot;
+  private TextPrompt prompt;
   private Communicate communicate;
   protected Map map;
   protected Player player;
   protected ArrayList<T> actions;
 
-  public ClientTurnAction(Socket s, PrintStream o, UserInReader uir, TextPromot tp, Map m,
+  public ClientTurnAction(Socket s, PrintStream o, UserInReader uir, TextPrompt tp, Map m,
       Player ply) {
     this.socket = s;
     this.out = o;
     this.inputReader = uir;
-    this.promot = tp;
+    this.prompt = tp;
     this.communicate = new Communicate();
     this.map = m;
     this.player = ply;
@@ -46,8 +46,8 @@ public abstract class ClientTurnAction<T extends ActionSender> implements Client
    */
   public Territory chooseOneTerritory(ArrayList<Territory> terrs, boolean is_source)
       throws IOException {
-    out.print(promot.chooseTerrPromot(terrs, is_source));
-    int choice = inputReader.enterNum(terrs.size() - 1, promot.enterAgainPromot());
+    out.print(prompt.chooseTerrPrompt(terrs, is_source));
+    int choice = inputReader.enterNum(terrs.size() - 1, prompt.enterAgainPrompt());
     if (choice < 0) {
       return null;
     }
@@ -76,8 +76,8 @@ public abstract class ClientTurnAction<T extends ActionSender> implements Client
     if (dest == null) {
       return null;
     }
-    int unit_num = inputReader.enterNum(source.getUnitsNumber(), promot.enterNumPromot(),
-        promot.enterAgainPromot());
+    int unit_num = inputReader.enterNum(source.getUnitsNumber(), prompt.enterNumPrompt(),
+        prompt.enterAgainPrompt());
 
     if (unit_num < 0) {
       return null;

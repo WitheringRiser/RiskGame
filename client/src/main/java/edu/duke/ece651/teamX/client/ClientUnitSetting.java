@@ -11,17 +11,17 @@ public class ClientUnitSetting implements ClientAction {
   private Socket socket;
   private PrintStream out;
   private UserInReader inputReader;
-  private TextPromot promot;
+  private TextPrompt prompt;
   private Communicate communicate;
   private ArrayList<Territory> territories;
   private int remain_units;
 
-  public ClientUnitSetting(Socket s, PrintStream o, UserInReader uir, TextPromot p,
+  public ClientUnitSetting(Socket s, PrintStream o, UserInReader uir, TextPrompt p,
       ArrayList<Territory> ts, int r) {
     this.socket = s;
     this.out = o;
     this.inputReader = uir;
-    this.promot = p;
+    this.prompt = p;
     this.communicate = new Communicate();
     this.territories = ts;
     this.remain_units = r;
@@ -49,19 +49,19 @@ public class ClientUnitSetting implements ClientAction {
     // int remain_units = player.getUnitNum();
     boolean is_start = true;
     while (remain_units > 0) {
-      out.println(promot.setUnitPromot(territories, remain_units, is_start));
+      out.println(prompt.setUnitPrompt(territories, remain_units, is_start));
       is_start = false;
 
       int choice = inputReader.getUserInt();
       if (choice >= 0 && choice < territories.size()) {
-        int num_units = inputReader.enterNum(remain_units, promot.enterNumPromot(),
-            promot.enterAgainPromot());
+        int num_units = inputReader.enterNum(remain_units, prompt.enterNumPrompt(),
+            prompt.enterAgainPrompt());
         if (num_units >= 0) {
           setUnits(territories.get(choice), num_units);
           remain_units -= num_units;
         }
       } else {
-        out.print(promot.enterAgainPromot());
+        out.print(prompt.enterAgainPrompt());
       }
     }
   }
@@ -72,6 +72,6 @@ public class ClientUnitSetting implements ClientAction {
    */
   public void commit() throws IOException {
     communicate.sendObject(socket, territories);
-    out.print(promot.commitMessage());
+    out.print(prompt.commitMessage());
   }
 }

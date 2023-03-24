@@ -67,7 +67,7 @@ public class UserInReader {
    * @return -1 if user press B or b
    * @return a valid number of unit to use in later action
    */
-  public int enterNum(int max_num, String enterAgainPromot) throws IOException {
+  public int enterNum(int max_num, String enterAgainPrompt) throws IOException {
     while (true) {
       String user_in = inputReader.readLine();
       if (user_in.equals("B") || user_in.equals("b")) {
@@ -77,19 +77,19 @@ public class UserInReader {
       if (num_units >= 0 && num_units <= max_num) {
         return num_units;
       }
-      out.print(enterAgainPromot);
+      out.print(enterAgainPrompt);
     }
   }
 
   /**
    * @param max_num          is the maximum number of available units
-   * @param startPromot      is the start input promot
-   * @param enterAgainPromot is the message that asks user enter again
+   * @param startPrompt      is the start input prompt
+   * @param enterAgainPrompt is the message that asks user enter again
    * @return a valid number of unit to use in later action
    * @throws IOException
    */
-  public int enterNum(int max_num, String startPromot, String enterAgainPromot) throws IOException {
-    out.print(startPromot);
-    return enterNum(max_num, enterAgainPromot);
+  public int enterNum(int max_num, String startPrompt, String enterAgainPrompt) throws IOException {
+    out.print(startPrompt);
+    return enterNum(max_num, enterAgainPrompt);
   }
 }

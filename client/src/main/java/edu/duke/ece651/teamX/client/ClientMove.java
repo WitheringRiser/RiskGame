@@ -10,7 +10,7 @@ import java.util.Iterator;
 
 public class ClientMove extends ClientTurnAction<MoveSender> {
 
-  public ClientMove(Socket s, PrintStream o, UserInReader uir, TextPromot tp, Map m, Player ply) {
+  public ClientMove(Socket s, PrintStream o, UserInReader uir, TextPrompt tp, Map m, Player ply) {
     super(s, o, uir, tp, m, ply);
   }
 

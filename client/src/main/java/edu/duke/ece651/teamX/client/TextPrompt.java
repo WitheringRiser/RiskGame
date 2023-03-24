@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class TextPromot {
+public class TextPrompt {
 
   private final Player player;
   private final String split_line;
@@ -53,19 +53,19 @@ public class TextPromot {
   }
 
   /**
-   * Construct a text-based promot wrtiter
+   * Construct a text-based prompt wrtiter
    *
    * @param p is the player to provide infromation
    */
-  public TextPromot(Player p) {
+  public TextPrompt(Player p) {
     player = p;
     split_line = "-------------------------------------------------------\n";
   }
 
   /**
-   * Showing the welcome promot at the beginning
+   * Showing the welcome prompt at the beginning
    */
-  public String startPromot() {
+  public String startPrompt() {
     StringBuilder ans = new StringBuilder("");
     ans.append("Welcome to the RISK game, Player " + player.getName() + "!\n");
     ans.append(
@@ -74,13 +74,13 @@ public class TextPromot {
   }
 
   /**
-   * Display the promot and options for client to set units
+   * Display the prompt and options for client to set units
    *
    * @param territories is the list of territories of client
    * @param num_units   is the number of units waiting to be placed
-   * @param is_start    is whether to show the head message of promot
+   * @param is_start    is whether to show the head message of prompt
    */
-  public String setUnitPromot(ArrayList<Territory> territories,
+  public String setUnitPrompt(ArrayList<Territory> territories,
       int num_units,
       boolean is_start) {
     StringBuilder ans = new StringBuilder("");
@@ -117,18 +117,18 @@ public class TextPromot {
     return ans.toString();
   }
 
-  public String enterNumPromot() {
+  public String enterNumPrompt() {
     StringBuilder ans = new StringBuilder("");
     ans.append("Please indicate how many units you want to use.\n");
     ans.append("(type B to go back)\n");
     return ans.toString();
   }
 
-  public String enterAgainPromot() {
+  public String enterAgainPrompt() {
     return "The input is not a valid option, please choose again.\n";
   }
 
-  public String chooseTerrPromot(ArrayList<Territory> terrs, boolean is_source) {
+  public String chooseTerrPrompt(ArrayList<Territory> terrs, boolean is_source) {
     StringBuilder ans = new StringBuilder("");
     if (is_source) {
       ans.append("Please choose one of your territories to start the action:\n");
@@ -152,7 +152,7 @@ public class TextPromot {
     return ans;
   }
 
-  public String oneTurnPromot() {
+  public String oneTurnPrompt() {
     StringBuilder ans = new StringBuilder("");
     ans.append("You are the " + player.getName() +
         " player, what would you like to do?\n");
