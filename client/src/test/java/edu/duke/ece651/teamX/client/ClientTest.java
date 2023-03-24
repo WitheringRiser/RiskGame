@@ -125,6 +125,7 @@ public class ClientTest {
 
     test_displayMap(client, communicate, serverSocket, my_map, bytes);
     // test_findTerr(client, t1);
+    communicate.sendObject(serverSocket, false);
     client.playeOneTurn();
     ArrayList<MoveSender> moves =
         (ArrayList<MoveSender>) communicate.receiveObject(serverSocket);
