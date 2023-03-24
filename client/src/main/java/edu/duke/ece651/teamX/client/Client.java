@@ -16,6 +16,7 @@ public class Client {
   private Map map;
   private PrintStream out;
   private UserInReader inputReader;
+  private ArrayList<Player> losers;
 
   /**
    * Construct a Client object
@@ -99,15 +100,43 @@ public class Client {
     }
   }
 
+  private boolean receiveHasWon() throws IOException, ClassNotFoundException {
+    boolean hasWon = (boolean) communicate.receiveObject(socket);
+    if (hasWon) {
+      Player winner = (Player) communicate.receiveObject(socket);
+      out.println("winner is " + winner.getName());
+    }
+    return hasWon;
+  }
+
+  private boolean receiveHasLost() throws IOException, ClassNotFoundException {
+    boolean hasLost = (boolean) communicate.receiveObject(socket);
+    if (hasLost) {
+      losers = (ArrayList<Player>) communicate.receiveObject(socket);
+      for (Player player : losers){
+        out.println("player who has lost: " + player.getName());
+      }
+    }
+    return hasLost;
+  }
+
   /**
    * Let client to player one turn
    *
    * @throws IOException
    */
-  public void playeOneTurn() throws IOException {
+  public void playeOneTurn() throws IOException, ClassNotFoundException {
+    boolean playerLost = false;
     ClientAttack attack = new ClientAttack(socket, out, inputReader, promot, map, player);
     ClientMove move = new ClientMove(socket, out, inputReader, promot, map, player);
-    while (true) {
+    if (receiveHasLost()){
+      for (Player p : losers){
+        if (p == player){
+          playerLost = true;
+        }
+      }
+    }
+    while (true && !playerLost) {
       displayMap();
       out.print(promot.oneTurnPromot());
       String user_in = inputReader.readString();
@@ -126,14 +155,8 @@ public class Client {
     }
   }
 
-  private boolean receiveHasWon() throws IOException, ClassNotFoundException {
-    boolean hasWon = (boolean) communicate.receiveObject(socket);
-    if (hasWon) {
-      Player winner = (Player) communicate.receiveObject(socket);
-      out.println("winner is " + winner.getName());
-    }
-    return hasWon;
-  }
+  
+
 
   //  TODO: need detect win or lose
   public void playTurns() throws IOException, ClassNotFoundException {
