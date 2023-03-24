@@ -66,19 +66,12 @@ public class Attack extends BasicAction {
     while (attacker.size() > 0 && destination.getUnitsNumber() > 0) {
       unitAttack(20);
     }
-
-    System.out.println("Original destination" + destinationOriginalSize);
-    System.out.println("Original attacker" + attackerSize);
-
-    System.out.println("After destination" + destination.getUnitsNumber());
-    System.out.println("After attacker" + attacker.size());
-
+    TextDisplayer.displayAttack(attackerSize, destinationOriginalSize, attacker.size(), destination.getUnitsNumber(),
+        enemyPlayer);
     if (attacker.size() == 0) {
-      System.out.println("Attacker " + enemyPlayer.getName() + " loses all units");
       return false;
     } else {
       destination.setUnits(attacker);
-      System.out.println("Attacker " + enemyPlayer.getName() + " wins");
       return true;
     }
   }
