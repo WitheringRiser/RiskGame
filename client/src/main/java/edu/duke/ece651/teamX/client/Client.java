@@ -100,43 +100,21 @@ public class Client {
     }
   }
 
-  private boolean receiveHasWon() throws IOException, ClassNotFoundException {
-    boolean hasWon = (boolean) communicate.receiveObject(socket);
-    if (hasWon) {
-      Player winner = (Player) communicate.receiveObject(socket);
-      out.println("winner is " + winner.getName());
-    }
-    return hasWon;
+
+  private GameResult receiveGameResult() throws IOException, ClassNotFoundException {
+    return communicate.receiveGameResult(socket);
   }
 
-  private boolean receiveHasLost() throws IOException, ClassNotFoundException {
-    boolean hasLost = (boolean) communicate.receiveObject(socket);
-    if (hasLost) {
-      losers = (ArrayList<Player>) communicate.receiveObject(socket);
-      for (Player player : losers) {
-        out.println("player who has lost: " + player.getName());
-      }
-    }
-    return hasLost;
-  }
 
   /**
    * Let client to player one turn
    *
    * @throws IOException
    */
-  public void playeOneTurn() throws IOException, ClassNotFoundException {
-    boolean playerLost = false;
+  public void playOneTurn() throws IOException {
     ClientAttack attack = new ClientAttack(socket, out, inputReader, prompt, map, player);
     ClientMove move = new ClientMove(socket, out, inputReader, prompt, map, player);
-    if (receiveHasLost()) {
-      for (Player p : losers) {
-        if (p == player) {
-          playerLost = true;
-        }
-      }
-    }
-    while (true && !playerLost) {
+    while (true) {
       displayMap();
       out.print(prompt.oneTurnPrompt());
       String user_in = inputReader.readString();
@@ -156,13 +134,18 @@ public class Client {
   }
 
 
-  //  TODO: need detect win or lose
   public void playTurns() throws IOException, ClassNotFoundException {
     while (true) {
       receiveMap();
-      playeOneTurn();
-      if (receiveHasWon()) {
-        System.out.println("Game finished!");
+      GameResult gameResult = receiveGameResult();
+      if (!gameResult.isWin() && !gameResult.loserContains(player)) {
+        playOneTurn();
+      } else if (gameResult.isWin()) {
+        out.println("Game finished!");
+        out.println("Winner is " + gameResult.getWinner().getName());
+        return;
+      } else if (gameResult.loserContains(player)) {
+        out.println("You lose!");
         return;
       }
     }

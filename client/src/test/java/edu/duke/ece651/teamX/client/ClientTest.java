@@ -6,7 +6,6 @@ import edu.duke.ece651.teamX.shared.*;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.io.StringReader;
 import java.net.ServerSocket;
@@ -126,7 +125,7 @@ public class ClientTest {
     test_displayMap(client, communicate, serverSocket, my_map, bytes);
     // test_findTerr(client, t1);
     communicate.sendObject(serverSocket, false);
-    client.playeOneTurn();
+    client.playOneTurn();
     ArrayList<MoveSender> moves =
         (ArrayList<MoveSender>) communicate.receiveObject(serverSocket);
     ArrayList<AttackSender> attacks =

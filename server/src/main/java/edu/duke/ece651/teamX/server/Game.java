@@ -231,30 +231,23 @@ public class Game {
   }
 
   public Boolean hasWon() {
-    if (whoWons() != null) {
-      return true;
-    }
-    return false;
+    return whoWons() != null;
   }
 
   public ArrayList<Player> whoLost() {
-    ArrayList<Player> result = new ArrayList<Player>();
+    ArrayList<Player> result = new ArrayList<>();
     for (Player player : getAllPlayers()) {
       if (map.getTerritories(player).size() == 0) {
         result.add(player);
       }
     }
-    if (result.size() == 0) {
-      return null;
-    } else {
-      return result;
-    }
+    return result;
   }
 
-  public Boolean hasLost() {
-    if (whoLost() != null) {
-      return true;
-    }
-    return false;
-  }
+//  public Boolean hasLost() {
+//    if (whoLost() != null) {
+//      return true;
+//    }
+//    return false;
+//  }
 }
