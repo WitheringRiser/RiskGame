@@ -69,4 +69,24 @@ public class TextDisplayer extends Displayer<String> {
     ans.append("-----------\n");
     return ans.toString();
   }
+
+  static public void displayAttack(int attackerSize, int defenderSize, int attackerAfter, int defenderAfter,
+      Player enemyPlayer) {
+    System.out.println("----------------AttackLog----------------");
+    if (enemyPlayer != null) {
+      System.out.println(enemyPlayer.getName() + " player launch the attack!");
+    }
+
+    System.out.println("Original attacker number: " + attackerSize);
+    System.out.println("Original defender number: " + defenderSize);
+
+    System.out.println("After attack, attacker number: " + attackerAfter);
+    System.out.println("After attack, defender number: " + defenderAfter);
+    if (attackerAfter == 0) {
+      System.out.println("Attacker loses all units");
+    } else {
+      System.out.println("Attacker wins!");
+    }
+    System.out.println("-----------------------------------------");
+  }
 }
