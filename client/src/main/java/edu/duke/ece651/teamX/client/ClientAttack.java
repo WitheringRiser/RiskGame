@@ -9,7 +9,7 @@ import java.util.Iterator;
 
 public class ClientAttack extends ClientTurnAction<AttackSender> {
 
-  public ClientAttack(Socket s, PrintStream o, UserInReader uir, TextPromot tp, Map m, Player ply) {
+  public ClientAttack(Socket s, PrintStream o, UserInReader uir, TextPrompt tp, Map m, Player ply) {
     super(s, o, uir, tp, m, ply);
   }
 

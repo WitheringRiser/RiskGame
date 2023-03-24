@@ -8,9 +8,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.StringReader;
-import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Iterator;
 import org.junit.jupiter.api.Test;
 
 public class ClientActionTest {
@@ -53,8 +51,8 @@ public class ClientActionTest {
     map.addTerritory(g, p1);
     map.addTerritory(d, p2);
     map.addTerritory(e, p2);
-    TextPromot tp1 = new TextPromot(p1);
-    TextPromot tp2 = new TextPromot(p2);
+    TextPrompt tp1 = new TextPrompt(p1);
+    TextPrompt tp2 = new TextPrompt(p2);
     UserInReader uir = new UserInReader(input, output);
     //Test for the move
     ClientMove move1 =

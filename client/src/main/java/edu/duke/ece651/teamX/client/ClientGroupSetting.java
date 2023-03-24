@@ -12,16 +12,16 @@ public class ClientGroupSetting implements ClientAction {
   private Socket socket;
   private PrintStream out;
   private UserInReader inputReader;
-  private TextPromot promot;
+  private TextPrompt prompt;
   private Communicate communicate;
   private int terr_choice;
   private ArrayList<Territory> territories;
 
-  public ClientGroupSetting(Socket s, PrintStream o, UserInReader uir, TextPromot p) {
+  public ClientGroupSetting(Socket s, PrintStream o, UserInReader uir, TextPrompt p) {
     this.socket = s;
     this.out = o;
     this.inputReader = uir;
-    this.promot = p;
+    this.prompt = p;
     this.communicate = new Communicate();
     this.terr_choice = -1;
     territories = new ArrayList<Territory>();
@@ -42,18 +42,18 @@ public class ClientGroupSetting implements ClientAction {
    *
    * @param free_groups is the available group options
    * @return int the choice of user
-   * @print invalid option to promot user to choose again
+   * @print invalid option to prompt user to choose again
    */
   public int chooseTerrGroup(HashMap<Integer, ArrayList<Territory>> free_groups)
       throws IOException {
-    out.print(promot.displayTerrGroup(free_groups));
+    out.print(prompt.displayTerrGroup(free_groups));
     while (true) {
 
       int choice = inputReader.getUserInt();
       if (choice >= 0 && free_groups.containsKey(choice)) {
         return choice;
       } else {
-        out.print(promot.enterAgainPromot());
+        out.print(prompt.enterAgainPrompt());
       }
     }
   }

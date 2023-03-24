@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import org.junit.jupiter.api.Test;
 
-public class TextPromotTest {
+public class TextPromptTest {
 
   private HashMap<Integer, ArrayList<Territory>> formGroup() {
     ArrayList<Territory> terr_list1 = new ArrayList<Territory>();
@@ -34,17 +34,17 @@ public class TextPromotTest {
   @Test
   public void test_Begin() {
     Player p1 = new Player("A", 20);
-    TextPromot promot = new TextPromot(p1);
+    TextPrompt prompt = new TextPrompt(p1);
     String expected =
         "Welcome to the RISK game, Player A!\n"
             + "Please wait a few moments while we gather all players before we start...\n";
-    assertEquals(expected, promot.startPromot());
+    assertEquals(expected, prompt.startPrompt());
   }
 
   @Test
   public void test_displayGroup() {
     Player p1 = new Player("A", 20);
-    TextPromot promot = new TextPromot(p1);
+    TextPrompt prompt = new TextPrompt(p1);
     HashMap<Integer, ArrayList<Territory>> groups = formGroup();
     String expected = "Please choose one territory group as your initial territories:\n"
         +
@@ -56,34 +56,34 @@ public class TextPromotTest {
         + "(1) Group 1:\n"
         + "   - C (next to: A, D)\n"
         + "   - D (next to: B, C)\n";
-    assertEquals(expected, promot.displayTerrGroup(groups));
+    assertEquals(expected, prompt.displayTerrGroup(groups));
   }
 
   @Test
-  public void test_setUnitPromot() {
+  public void test_setUnitPrompt() {
     Player p1 = new Player("A", 20);
-    TextPromot promot = new TextPromot(p1);
+    TextPrompt prompt = new TextPrompt(p1);
     HashMap<Integer, ArrayList<Territory>> groups = formGroup();
     String expected = "You have 20 available units to place.\n"
         + "Please choose a territory to place units:\n"
         + "(0) A (next to: B, C) with 0 units\n"
         + "(1) B (next to: A, D) with 0 units\n";
-    assertEquals(expected, promot.setUnitPromot(groups.get(0), 20, false));
+    assertEquals(expected, prompt.setUnitPrompt(groups.get(0), 20, false));
     expected =
         "A player: you are going to place the units in your territories.\n\n" + expected;
-    assertEquals(expected, promot.setUnitPromot(groups.get(0), 20, true));
+    assertEquals(expected, prompt.setUnitPrompt(groups.get(0), 20, true));
 
     expected = "Please indicate how many units you want to use.\n"
         + "(type B to go back)\n";
-    assertEquals(expected, promot.enterNumPromot());
+    assertEquals(expected, prompt.enterNumPrompt());
     expected = "The input is not a valid option, please choose again.\n";
-    assertEquals(expected, promot.enterAgainPromot());
+    assertEquals(expected, prompt.enterAgainPrompt());
   }
 
   @Test
-  public void test_choose_Promot() {
+  public void test_choose_Prompt() {
     Player p1 = new Player("A", 100);
-    TextPromot promot = new TextPromot(p1);
+    TextPrompt prompt = new TextPrompt(p1);
     ArrayList<Territory> options = new ArrayList<Territory>();
     Territory t1 = new Territory("A", 20);
     Territory t2 = new Territory("B", 10);
@@ -101,35 +101,35 @@ public class TextPromotTest {
         "Please choose one of your territories to start the action:\n" + expected_;
     String expected2 =
         "Please choose one of the below options as your destination:\n" + expected_;
-    assertEquals(expected1, promot.chooseTerrPromot(options, true));
-    assertEquals(expected2, promot.chooseTerrPromot(options, false));
+    assertEquals(expected1, prompt.chooseTerrPrompt(options, true));
+    assertEquals(expected2, prompt.chooseTerrPrompt(options, false));
     String expected3 = "Please choose one of your territories to start the action:\n"
         + "(type B to go back)\n\n"
         + "No option available, please go back (B) and choose again\n";
-    assertEquals(expected3, promot.chooseTerrPromot(null, true));
+    assertEquals(expected3, prompt.chooseTerrPrompt(null, true));
     options.clear();
-    assertEquals(expected3, promot.chooseTerrPromot(options, true));
+    assertEquals(expected3, prompt.chooseTerrPrompt(options, true));
   }
 
   @Test
   public void test_commitMessage() {
     Player p = new Player("A", 20);
-    TextPromot promot = new TextPromot(p);
+    TextPrompt prompt = new TextPrompt(p);
     String expected = "-------------------------------------------------------\n"
         + "Actions received!\n"
         + "Waiting for the server to process the actions...\n"
         + "-------------------------------------------------------\n";
-    assertEquals(expected, promot.commitMessage());
+    assertEquals(expected, prompt.commitMessage());
   }
 
   @Test
-  public void test_oneTurnPromot() {
+  public void test_oneTurnPrompt() {
     Player p = new Player("A", 0);
-    TextPromot promot = new TextPromot(p);
+    TextPrompt prompt = new TextPrompt(p);
     String expected = "You are the A player, what would you like to do?\n"
         + "   (M)ove\n"
         + "   (A)ttack\n"
         + "   (D)one\n";
-    assertEquals(expected, promot.oneTurnPromot());
+    assertEquals(expected, prompt.oneTurnPrompt());
   }
 }

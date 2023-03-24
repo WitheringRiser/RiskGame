@@ -12,7 +12,7 @@ public class Client {
   private Socket socket;
   private Communicate communicate;
   private Player player; // init
-  private TextPromot promot; // init
+  private TextPrompt prompt; // init
   private Map map;
   private PrintStream out;
   private UserInReader inputReader;
@@ -37,8 +37,8 @@ public class Client {
    */
   public void init() throws IOException, ClassNotFoundException {
     player = communicate.receivePlayer(socket);
-    promot = new TextPromot(player);
-    out.print(promot.startPromot());
+    prompt = new TextPrompt(player);
+    out.print(prompt.startPrompt());
     ArrayList<Territory> territories = chooseTerrGroup();
     setAllUnits(territories); // place units in territories
     // attacks = new ArrayList<AttackSender>();
@@ -53,7 +53,7 @@ public class Client {
    * @throws ClassNotFoundException
    */
   public ArrayList<Territory> chooseTerrGroup() throws IOException, ClassNotFoundException {
-    ClientGroupSetting grouSetting = new ClientGroupSetting(socket, out, inputReader, promot);
+    ClientGroupSetting grouSetting = new ClientGroupSetting(socket, out, inputReader, prompt);
     grouSetting.perform();
     grouSetting.commit();
     return grouSetting.getGroup();
@@ -66,7 +66,7 @@ public class Client {
    * @throws IOException
    */
   public void setAllUnits(ArrayList<Territory> territories) throws IOException {
-    ClientUnitSetting unitSetting = new ClientUnitSetting(socket, out, inputReader, promot,
+    ClientUnitSetting unitSetting = new ClientUnitSetting(socket, out, inputReader, prompt,
         territories,
         player.getUnitNum());
     unitSetting.perform();
@@ -127,8 +127,8 @@ public class Client {
    */
   public void playeOneTurn() throws IOException, ClassNotFoundException {
     boolean playerLost = false;
-    ClientAttack attack = new ClientAttack(socket, out, inputReader, promot, map, player);
-    ClientMove move = new ClientMove(socket, out, inputReader, promot, map, player);
+    ClientAttack attack = new ClientAttack(socket, out, inputReader, prompt, map, player);
+    ClientMove move = new ClientMove(socket, out, inputReader, prompt, map, player);
     if (receiveHasLost()){
       for (Player p : losers){
         if (p == player){
@@ -138,7 +138,7 @@ public class Client {
     }
     while (true && !playerLost) {
       displayMap();
-      out.print(promot.oneTurnPromot());
+      out.print(prompt.oneTurnPrompt());
       String user_in = inputReader.readString();
       user_in = user_in.toUpperCase();
       if (user_in.equals("M")) {
@@ -147,10 +147,10 @@ public class Client {
         attack.perform();
       } else if (user_in.equals("D")) {
         performCommit(move, attack);
-        out.print(promot.commitMessage());
+        out.print(prompt.commitMessage());
         return;
       } else {
-        out.print(promot.enterAgainPromot());
+        out.print(prompt.enterAgainPrompt());
       }
     }
   }
