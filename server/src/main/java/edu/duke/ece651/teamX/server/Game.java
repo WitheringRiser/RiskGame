@@ -256,6 +256,12 @@ public class Game {
     }
   }
 
+  private void incrementAllTerritoryByOneUnit() {
+    for (Territory terr : map.getAllTerritories()) {
+      terr.addUnits(null, 1);
+    }
+  }
+
 
   private void playOneTurn(int try_num, Communicate communicate,
       ArrayList<Socket> socket_list)
@@ -282,8 +288,6 @@ public class Game {
     } catch (IllegalArgumentException e) {
 //      TODO: send back to client
     }
-
-    printMasterMap();
   }
 
   public void play(int port) throws IOException, ClassNotFoundException {
@@ -307,10 +311,10 @@ public class Game {
 
       setUnits(res);
     }
-    // print out the master map
-    printMasterMap();
 
     while (true) {
+      // print out the master map
+      printMasterMap();
       sendMapAll();
       GameResult gameResult = getGameResult();
       sendGameResult(gameResult, communicate, socket_list);
@@ -319,6 +323,7 @@ public class Game {
         break;
       }
       playOneTurn(num_player, communicate, socket_list);
+      incrementAllTerritoryByOneUnit();
     }
   }
 

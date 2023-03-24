@@ -184,4 +184,8 @@ public class Map implements Serializable {
     return null;
   }
 
+  public Iterable<Territory> getAllTerritories() {
+    return map_dict.keySet();
+  }
+
 }
