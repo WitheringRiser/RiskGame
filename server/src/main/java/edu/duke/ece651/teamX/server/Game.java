@@ -244,10 +244,9 @@ public class Game {
         result.add(player);
       }
     }
-    if (result.size() == 0){
+    if (result.size() == 0) {
       return null;
-    }
-    else{
+    } else {
       return result;
     }
   }

@@ -113,7 +113,7 @@ public class Client {
     boolean hasLost = (boolean) communicate.receiveObject(socket);
     if (hasLost) {
       losers = (ArrayList<Player>) communicate.receiveObject(socket);
-      for (Player player : losers){
+      for (Player player : losers) {
         out.println("player who has lost: " + player.getName());
       }
     }
@@ -129,9 +129,9 @@ public class Client {
     boolean playerLost = false;
     ClientAttack attack = new ClientAttack(socket, out, inputReader, prompt, map, player);
     ClientMove move = new ClientMove(socket, out, inputReader, prompt, map, player);
-    if (receiveHasLost()){
-      for (Player p : losers){
-        if (p == player){
+    if (receiveHasLost()) {
+      for (Player p : losers) {
+        if (p == player) {
           playerLost = true;
         }
       }
@@ -154,8 +154,6 @@ public class Client {
       }
     }
   }
-
-  
 
 
   //  TODO: need detect win or lose
