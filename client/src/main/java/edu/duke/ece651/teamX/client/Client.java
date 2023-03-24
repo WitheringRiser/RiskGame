@@ -145,8 +145,8 @@ public class Client {
         out.println("Winner is " + gameResult.getWinner().getName());
         return;
       } else if (gameResult.loserContains(player)) {
-        out.println("You lose!");
-        return;
+        displayMap();
+        out.println("You lose! Right now you are watching the game!");
       }
     }
   }

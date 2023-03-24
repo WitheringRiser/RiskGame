@@ -52,7 +52,10 @@ public class App {
   }
 
   private static GameResult getGameResult(Game game) {
-    return new GameResult(game.hasWon(), game.whoWons(), game.whoLost());
+//    return new GameResult(game.hasWon(), game.whoWons(), game.whoLost());
+    ArrayList<Player> losers = new ArrayList<>();
+    losers.add(new Player("Green", 20));
+    return new GameResult(game.hasWon(), game.whoWons(), losers);
   }
 
   private static void sendGameResult(GameResult gameResult, Communicate communicate,
@@ -67,9 +70,14 @@ public class App {
       ArrayList<Socket> socket_list)
       throws IOException, ClassNotFoundException {
 
+    GameResult gameResult = getGameResult(game);
     // collect all the moves and attacks from players
     ArrayList<ActionSender> allActions = new ArrayList<>();
     for (int i = 0; i < try_num; i++) {
+//      if this player has lost, skip
+      if (gameResult.loserContains(game.getPlayerFromSocket(socket_list.get(i)))) {
+        continue;
+      }
       ArrayList<MoveSender> moves =
           (ArrayList<MoveSender>) communicate.receiveObject(socket_list.get(i));
       ArrayList<AttackSender> attacks =
