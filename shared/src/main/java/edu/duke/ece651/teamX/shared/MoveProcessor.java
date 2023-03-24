@@ -24,6 +24,7 @@ public class MoveProcessor {
 //      set the arraylist of units with certain number
       source.removeUnits(num);
       destination.addUnits(null, num);
+      TextDisplayer.displayMove(source, destination, num, map.getOwner(source));
     }
   }
 }

@@ -70,7 +70,7 @@ public class TextDisplayer extends Displayer<String> {
     return ans.toString();
   }
 
-  static public void displayAttack(int attackerSize, int defenderSize, int attackerAfter,
+  public static void displayAttack(int attackerSize, int defenderSize, int attackerAfter,
       int defenderAfter,
       Player enemyPlayer) {
     System.out.println("----------------AttackLog----------------");
@@ -90,4 +90,13 @@ public class TextDisplayer extends Displayer<String> {
     }
     System.out.println("-----------------------------------------");
   }
+
+  public static void displayMove(Territory source, Territory destination, int num, Player player) {
+    System.out.println("----------------MoveLog----------------");
+    System.out.println(player.getName() + " player launch the move!");
+    System.out.println("Move " + num + " units from " + source.getName() + " to " + destination
+        .getName());
+    System.out.println("---------------------------------------");
+  }
+
 }
