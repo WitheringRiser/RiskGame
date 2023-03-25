@@ -14,9 +14,6 @@ public class ActionSender implements Serializable {
     unitsNum = _unitsNum;
   }
 
-  public ActionSender() {
-
-  }
 
   public Territory getSource() {
     return source;

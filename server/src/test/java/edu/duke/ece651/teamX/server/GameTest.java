@@ -58,4 +58,45 @@ public class GameTest {
     assertEquals(true, myGame.getMap().getMap().containsValue(p1));
     assertEquals(false, myGame.getMap().getMap().containsValue(p2));
   }
+
+  @Test
+  public void Game_test_all() throws IOException {
+    Game game = new Game(3, 20);
+    ArrayList<Territory> terr_list1 = new ArrayList<Territory>();
+    terr_list1.add(new Territory("aTerritory"));
+    terr_list1.add(new Territory("bTerritory"));
+    terr_list1.add(new Territory("cTerritory"));
+    Player p1 = new Player("Red", 20);
+    game.setGroupOwner(terr_list1, p1);
+    ServerSocket ss = new ServerSocket(4484);
+    Socket clientSocket = new Socket("localhost", 4484);
+    Socket serverSocket = ss.accept();
+    game.createPlayer(clientSocket, "Red");
+    assertEquals(p1, game.getPlayerFromSocket(clientSocket));
+    assertNull(game.getPlayerFromSocket(null));
+
+    ArrayList<Territory> terr_list2 = new ArrayList<Territory>();
+    terr_list2.add(new Territory("dTerritory"));
+    terr_list2.add(new Territory("eTerritory"));
+    terr_list2.add(new Territory("fTerritory"));
+    assertFalse(game.setUnits(terr_list2));
+    assertTrue(game.setUnits(terr_list1));
+  }
+
+  @Test
+  public void getMoveSenders_test() {
+    Game game = new Game(3, 20);
+    ArrayList<ActionSender> allActions = new ArrayList<>();
+    Territory source = new Territory("abc");
+    Territory dest = new Territory("def");
+    MoveSender move_sender = new MoveSender(source, dest, 1);
+    AttackSender attack_sender = new AttackSender(source, dest, 1);
+    allActions.add(move_sender);
+    allActions.add(attack_sender);
+    ArrayList<MoveSender> allMoves = new ArrayList<>();
+    allMoves.add(move_sender);
+    ArrayList<AttackSender> allAttacks = new ArrayList<>();
+    allAttacks.add(attack_sender);
+  }
+
 }

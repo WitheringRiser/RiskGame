@@ -83,4 +83,21 @@ public class MapTest {
     assertEquals(true, terrs.contains(new Territory("cTerritory")));
     assertEquals(false, terrs.contains(new Territory("aTerritory")));
   }
+
+  @Test
+  public void setTerritoryUnits_test() {
+    Map map = new Map();
+    Territory t1 = new Territory("aTerritory");
+    Territory t2 = new Territory("bTerritory");
+    Player p1 = new Player("Red", 20);
+    Player p2 = new Player("Blue", 20);
+    ArrayList<Unit> units = new ArrayList<>();
+    units.add(null);
+    assertFalse(map.setTerritoryUnits(t1, null));
+    assertFalse(map.setTerritoryUnits(null, null));
+    assertFalse(map.setTerritoryUnits(t1, units));
+
+    map.addTerritory(t1, p1);
+    map.setTerritoryUnits(t1, units);
+  }
 }
