@@ -190,13 +190,13 @@ public class Game {
     return attackSenders;
   }
 
-  // TODO: don't make checker constructor directly check and throw exception
-  //  otherwise it's hard to call the check function from outside
-  public void checkAction() {
-  }
-
-  public void handleActions(Iterable<Action> actions) {
-  }
+//  // TODO: don't make checker constructor directly check and throw exception
+//  //  otherwise it's hard to call the check function from outside
+//  public void checkAction() {
+//  }
+//
+//  public void handleActions(Iterable<Action> actions) {
+//  }
 
   /**
    * Print out the master map

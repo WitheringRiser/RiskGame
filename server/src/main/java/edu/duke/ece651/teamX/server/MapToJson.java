@@ -11,8 +11,6 @@ public class MapToJson {
   private JSONObject ans;
   private HashMap<Integer, ArrayList<Territory>> myTerrMap;
 
-  public MapToJson() {
-  }
 
   public MapToJson(HashMap<Integer, ArrayList<Territory>> rhsTerrMap) {
     this.ans = new JSONObject();
