@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class Player implements Serializable {
 
-  private final String name;
+  public final String name;
   private final int unit_num;  // The initial number of units
 
   /**

@@ -7,9 +7,80 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import edu.duke.ece651.teamX.shared.*;
+import javafx.animation.PauseTransition;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.text.Font;
+import javafx.stage.Stage;
+import javafx.util.Duration;
+
+import java.awt.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import static javafx.scene.text.FontPosture.ITALIC;
+import static javafx.scene.text.FontWeight.BOLD;
+
 public class Map implements Serializable {
 
   private HashMap<Territory, Player> map_dict;
+
+  @FXML private Button UpgradeBtn;
+    @FXML private Button MoveBtn;
+    @FXML private Button AttackBtn;
+    @FXML private Button DoneBtn;
+
+    @FXML private Label Food;
+    @FXML private Label Tech;
+    @FXML private Label AllianceInfo;
+
+    @FXML private Button ButtonA;
+    @FXML private Button ButtonB;
+    @FXML private Button ButtonC;
+    @FXML private Button ButtonD;
+    @FXML private Button ButtonE;
+    @FXML private Button ButtonF;
+    @FXML private Button ButtonG;
+    @FXML private Button ButtonH;
+    @FXML private Button ButtonI;
+    @FXML private Button ButtonJ;
+    @FXML private Button ButtonK;
+    @FXML private Button ButtonL;
+
+    @FXML private TreeView<String> Detail;
+    @FXML private Label Prompt;
+
+    @FXML private ImageView Figure;
+
+    private Stage Window;
+    private Boolean firstTime;
+
+    private Player CurrPlayer;
+    private HashMap<String, Button> ButtonMap;
+    private HashMap<Integer, ArrayList<Territory>> TerrMap;
+    private void InitButtonMap(){
+        ButtonMap = new HashMap<>();
+        ButtonMap.put("A", ButtonA);
+        ButtonMap.put("B", ButtonB);
+        ButtonMap.put("C", ButtonC);
+        ButtonMap.put("D", ButtonD);
+        ButtonMap.put("E", ButtonE);
+        ButtonMap.put("F", ButtonF);
+        ButtonMap.put("G", ButtonG);
+        ButtonMap.put("H", ButtonH);
+        ButtonMap.put("I", ButtonI);
+        ButtonMap.put("J", ButtonJ);
+        ButtonMap.put("K", ButtonK);
+        ButtonMap.put("L", ButtonL);
+    }
 
   /**
    * Construct a map by initializing an empty hashmap
@@ -17,6 +88,13 @@ public class Map implements Serializable {
   public Map() {
     this.map_dict = new HashMap<>();
   }
+
+  public Map(Player player, Stage Window, Boolean first){
+    this.Window = Window;
+    this.CurrPlayer = player;
+    //this.TerrMap = player.map;
+    this.firstTime = first;
+}
 
   public int getTerritoryNum() {
     return this.map_dict.size();
