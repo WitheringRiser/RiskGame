@@ -16,5 +16,23 @@ application {
     mainClassName = 'edu.duke.ece651.teamX.client.App'
 }
 
-
+//tasks.named('test') {
+//    // Use JUnit Platform for unit tests.
+//    useJUnitPlatform()
+//}
+//test {
+//    testLogging {
+//        showStandardStreams = true
+//        exceptionFormat = 'full'
+//    }
+//}
+//clover {
+//    compiler {
+//        additionalArgs = "-g:lines,source,vars"
+//    }
+//    report {
+//        xml = true
+//        html = true
+//    }
+//}
 
