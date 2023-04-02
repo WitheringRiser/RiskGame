@@ -10,23 +10,3 @@ plugins {
     // Apply the java-library plugin to add support for Java Library
     id 'java-library'
 }
-
-//tasks.named('test') {
-//    // Use JUnit Platform for unit tests.
-//    useJUnitPlatform()
-//}
-//test {
-//    testLogging {
-//        showStandardStreams = true
-//        exceptionFormat = 'full'
-//    }
-//}
-//clover {
-//    compiler {
-//        additionalArgs = "-g:lines,source,vars"
-//    }
-//    report {
-//        xml = true
-//        html = true
-//    }
-//}
