@@ -21,6 +21,3 @@ application {
     // Define the main class for the application.
     mainClassName = 'edu.duke.ece651.teamX.client.App'
 }
-
-
-
