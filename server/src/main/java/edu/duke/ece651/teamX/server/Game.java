@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Game {
-
   private int num_player;
   private int init_units;
   private HashMap<Player, Socket> player_dict;
@@ -26,7 +25,7 @@ public class Game {
     num_player = p_num;
     init_units = u_num;
     player_dict = new HashMap<Player, Socket>();
-    status_dict=new HashMap<Player, Boolean>();
+    status_dict = new HashMap<Player, Boolean>();
     map = new Map();
     communicate = new Communicate();
   }
@@ -54,7 +53,7 @@ public class Game {
     return null;
   }
 
-  //Getter mainly for testing
+  // Getter mainly for testing
   public int getNumPlayer() {
     return num_player;
   }
@@ -89,7 +88,6 @@ public class Game {
     }
   }
 
-
   /**
    * Send available territory groups to a client
    *
@@ -116,10 +114,10 @@ public class Game {
   public void createMap() throws IOException, ClassNotFoundException {
     HashMap<Integer, ArrayList<Territory>> terr_groups = setupGroup();
     for (Player p : getAllPlayers()) {
-      sendTerrGroup(terr_groups, p);  //Let client make decision
+      sendTerrGroup(terr_groups, p); // Let client make decision
       int choice = communicate.receiveInt(getPlayerSocket(p));
-      setGroupOwner(terr_groups.get(choice), p);  //Set owner of the group
-      terr_groups.remove(choice);                 //remove this option
+      setGroupOwner(terr_groups.get(choice), p); // Set owner of the group
+      terr_groups.remove(choice); // remove this option
     }
   }
 
@@ -145,18 +143,25 @@ public class Game {
   }
 
   public void sendMap(Player player) throws IOException {
-    if(getPlayerSocket(player).isClosed()){
-      status_dict.put(player, false);
-    }
-    else{
+    try {
       communicate.sendMap(getPlayerSocket(player), map);
       status_dict.put(player, true);
-    }    
+    } catch (IOException ioe) {
+      status_dict.put(player, false);
+    }
+  }
+
+  private boolean hasConnection(){
+    for(Boolean b : status_dict.values() ){
+      if (b){
+        return true;
+      }
+    }
+    return false;
   }
 
   public void handleActionSenders(Iterable<ActionSender> actionSenders)
       throws IllegalArgumentException {
-
     Iterable<MoveSender> moveSenders = getMoveSenders(actionSenders);
     Iterable<AttackSender> attackSenders = getAttackSenders(actionSenders);
 
@@ -167,8 +172,7 @@ public class Game {
 
   private void handleAttackSenders(Iterable<AttackSender> attackSenders)
       throws IllegalArgumentException {
-    AttackProcessor attackProcessor = new AttackProcessor((ArrayList<AttackSender>) attackSenders,
-        map);
+    AttackProcessor attackProcessor = new AttackProcessor((ArrayList<AttackSender>) attackSenders, map);
     attackProcessor.resovleAllAttack();
   }
 
@@ -198,13 +202,13 @@ public class Game {
     return attackSenders;
   }
 
-//  // TODO: don't make checker constructor directly check and throw exception
-//  //  otherwise it's hard to call the check function from outside
-//  public void checkAction() {
-//  }
-//
-//  public void handleActions(Iterable<Action> actions) {
-//  }
+  // // TODO: don't make checker constructor directly check and throw exception
+  // // otherwise it's hard to call the check function from outside
+  // public void checkAction() {
+  // }
+  //
+  // public void handleActions(Iterable<Action> actions) {
+  // }
 
   /**
    * Print out the master map
@@ -213,7 +217,7 @@ public class Game {
     map.printMap();
   }
 
-  //  print all actionsenders content, only for testing and debugging
+  // print all actionsenders content, only for testing and debugging
   public void printActions(Iterable<ActionSender> allActions) {
     System.out.println("Attack:");
     for (AttackSender a : getAttackSenders(allActions)) {
@@ -257,10 +261,15 @@ public class Game {
     return new GameResult(hasWon(), whoWons(), whoLost());
   }
 
-  private static void sendGameResult(GameResult gameResult, Communicate communicate,
+  private static void sendGameResult(GameResult gameResult,
+      Communicate communicate,
       ArrayList<Socket> socket_list) throws IOException {
     for (Socket s : socket_list) {
-      communicate.sendGameResult(s, gameResult);
+      try {
+        communicate.sendGameResult(s, gameResult);
+      } catch (IOException ioe) {
+        continue;
+      }
     }
   }
 
@@ -270,36 +279,38 @@ public class Game {
     }
   }
 
-
-  private void playOneTurn(int try_num, Communicate communicate,
+  private void playOneTurn(int try_num,
+      Communicate communicate,
       ArrayList<Socket> socket_list)
       throws IOException, ClassNotFoundException {
-
     GameResult gameResult = getGameResult();
     // collect all the moves and attacks from players
     ArrayList<ActionSender> allActions = new ArrayList<>();
     for (Player player : getAllPlayers()) {
-//      if this player has lost, skip
+      // if this player has lost, skip
       if (gameResult.loserContains(getPlayerFromSocket(getPlayerSocket(player)))) {
         continue;
       }
       Socket s = getPlayerSocket(player);
-      // if the client lose connection, skip
-      if(!status_dict.get(player)||s.isClosed()){
+      // if the client lose connection when sending map, skip
+      if (!status_dict.get(player)) {
         continue;
       }
-      ArrayList<MoveSender> moves =
-          (ArrayList<MoveSender>) communicate.receiveObject(s);
-      ArrayList<AttackSender> attacks =
-          (ArrayList<AttackSender>) communicate.receiveObject(s);
-      allActions.addAll(moves);
-      allActions.addAll(attacks);
+      try {
+        ArrayList<MoveSender> moves = (ArrayList<MoveSender>) communicate.receiveObject(s);
+        ArrayList<AttackSender> attacks = (ArrayList<AttackSender>) communicate.receiveObject(s);
+        allActions.addAll(moves);
+        allActions.addAll(attacks);
+      } catch (IOException ioe) {// if lose connection when receive --> skip
+        continue;
+      }
+
     }
     printActions(allActions);
     try {
       handleActionSenders(allActions);
     } catch (IllegalArgumentException e) {
-//      TODO: send back to client
+      // TODO: send back to client
     }
   }
 
@@ -307,7 +318,7 @@ public class Game {
     Communicate communicate = new Communicate();
     ServerSocket ss = new ServerSocket(port);
     PlayerName namer = new ColorPlayerName();
-    //Connect to players (Might need to be done in Game)
+    // Connect to players (Might need to be done in Game)
     ArrayList<Socket> socket_list = new ArrayList<Socket>();
     for (int i = 0; i < num_player; i++) {
       Socket pSocket = ss.accept();
@@ -319,16 +330,18 @@ public class Game {
 
     for (int i = 0; i < num_player; i++) {
       // receive results from client and let game setUnits using this result
-      ArrayList<Territory> res =
-          (ArrayList<Territory>) communicate.receiveObject(socket_list.get(i));
+      ArrayList<Territory> res = (ArrayList<Territory>) communicate.receiveObject(socket_list.get(i));
 
       setUnits(res);
     }
 
-    while (true) {
+    while (true) {      
+      sendMapAll();
+      if(!hasConnection()){
+        continue;
+      }
       // print out the master map
       printMasterMap();
-      sendMapAll();
       GameResult gameResult = getGameResult();
       sendGameResult(gameResult, communicate, socket_list);
       if (gameResult.isWin()) {
@@ -339,5 +352,4 @@ public class Game {
       incrementAllTerritoryByOneUnit();
     }
   }
-
 }
