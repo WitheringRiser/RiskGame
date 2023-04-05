@@ -12,6 +12,7 @@ public class Game {
   private int num_player;
   private int init_units;
   private HashMap<Player, Socket> player_dict;
+  private HashMap<Player, Boolean> status_dict;
   private Map map;
   private Communicate communicate;
 
@@ -25,6 +26,7 @@ public class Game {
     num_player = p_num;
     init_units = u_num;
     player_dict = new HashMap<Player, Socket>();
+    status_dict=new HashMap<Player, Boolean>();
     map = new Map();
     communicate = new Communicate();
   }
@@ -143,7 +145,13 @@ public class Game {
   }
 
   public void sendMap(Player player) throws IOException {
-    communicate.sendMap(getPlayerSocket(player), map);
+    if(getPlayerSocket(player).isClosed()){
+      status_dict.put(player, false);
+    }
+    else{
+      communicate.sendMap(getPlayerSocket(player), map);
+      status_dict.put(player, true);
+    }    
   }
 
   public void handleActionSenders(Iterable<ActionSender> actionSenders)
@@ -270,15 +278,20 @@ public class Game {
     GameResult gameResult = getGameResult();
     // collect all the moves and attacks from players
     ArrayList<ActionSender> allActions = new ArrayList<>();
-    for (int i = 0; i < try_num; i++) {
+    for (Player player : getAllPlayers()) {
 //      if this player has lost, skip
-      if (gameResult.loserContains(getPlayerFromSocket(socket_list.get(i)))) {
+      if (gameResult.loserContains(getPlayerFromSocket(getPlayerSocket(player)))) {
+        continue;
+      }
+      Socket s = getPlayerSocket(player);
+      // if the client lose connection, skip
+      if(!status_dict.get(player)||s.isClosed()){
         continue;
       }
       ArrayList<MoveSender> moves =
-          (ArrayList<MoveSender>) communicate.receiveObject(socket_list.get(i));
+          (ArrayList<MoveSender>) communicate.receiveObject(s);
       ArrayList<AttackSender> attacks =
-          (ArrayList<AttackSender>) communicate.receiveObject(socket_list.get(i));
+          (ArrayList<AttackSender>) communicate.receiveObject(s);
       allActions.addAll(moves);
       allActions.addAll(attacks);
     }

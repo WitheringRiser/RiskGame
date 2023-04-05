@@ -31,7 +31,6 @@ public class App {
   }
 
 
-  //!!!! Just for testing!!!!
   public static void main(String[] args) throws IOException, ClassNotFoundException {
     Scanner input = new Scanner(System.in);
     int playerNum = getPlayerNum(input);
