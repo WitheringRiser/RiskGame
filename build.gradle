@@ -20,6 +20,7 @@ allprojects {
 subprojects {
     apply plugin: "java"
     apply plugin: "jacoco"
+    apply plugin: "com.bmuschko.clover"
     repositories {
         jcenter()
     }
@@ -34,7 +35,12 @@ subprojects {
         testImplementation 'org.junit.platform:junit-platform-launcher:1.6.2'
         implementation 'com.google.guava:guava:30.1.1-jre'
         implementation 'org.json:json:20180813'
-
+        clover 'org.openclover:clover:4.4.1'
+    }
+    clover {
+        compiler {
+            additionalArgs = "-g:lines,source,vars"
+        }
     }
     test {
         testLogging {
@@ -67,6 +73,13 @@ project(':client') {
     dependencies {
         implementation project(':shared')
 //        testImplementation project(path: ':shared', configuration: "testPkg")
+    }
+}
+
+clover {
+    report {
+        xml = true
+        html = true
     }
 }
 
