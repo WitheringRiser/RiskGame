@@ -2,7 +2,6 @@ package edu.duke.ece651.teamX.server;
 
 import edu.duke.ece651.teamX.shared.*;
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -261,10 +260,9 @@ public class Game {
     return new GameResult(hasWon(), whoWons(), whoLost());
   }
 
-  private static void sendGameResult(GameResult gameResult,
-      Communicate communicate,
-      ArrayList<Socket> socket_list) throws IOException {
-    for (Socket s : socket_list) {
+  private void sendGameResult(GameResult gameResult,
+      Communicate communicate) throws IOException {
+    for (Socket s : player_dict.values()) {
       try {
         communicate.sendGameResult(s, gameResult);
       } catch (IOException ioe) {
@@ -280,8 +278,7 @@ public class Game {
   }
 
   private void playOneTurn(int try_num,
-      Communicate communicate,
-      ArrayList<Socket> socket_list)
+      Communicate communicate)
       throws IOException, ClassNotFoundException {
     GameResult gameResult = getGameResult();
     // collect all the moves and attacks from players
@@ -314,24 +311,12 @@ public class Game {
     }
   }
 
-  public void play(int port) throws IOException, ClassNotFoundException {
-    Communicate communicate = new Communicate();
-    ServerSocket ss = new ServerSocket(port);
-    PlayerName namer = new ColorPlayerName();
-    // Connect to players (Might need to be done in Game)
-    ArrayList<Socket> socket_list = new ArrayList<Socket>();
-    for (int i = 0; i < num_player; i++) {
-      Socket pSocket = ss.accept();
-      socket_list.add(pSocket);
-      createPlayer(pSocket, namer.getName());
-    }
-
+  public void run() throws IOException, ClassNotFoundException {   
     createMap();
 
-    for (int i = 0; i < num_player; i++) {
+    for (Socket s : player_dict.values()) {
       // receive results from client and let game setUnits using this result
-      ArrayList<Territory> res = (ArrayList<Territory>) communicate.receiveObject(socket_list.get(i));
-
+      ArrayList<Territory> res = (ArrayList<Territory>) communicate.receiveObject(s);
       setUnits(res);
     }
 
@@ -343,12 +328,12 @@ public class Game {
       // print out the master map
       printMasterMap();
       GameResult gameResult = getGameResult();
-      sendGameResult(gameResult, communicate, socket_list);
+      sendGameResult(gameResult, communicate);
       if (gameResult.isWin()) {
         System.out.println("Game over");
         break;
       }
-      playOneTurn(num_player, communicate, socket_list);
+      playOneTurn(num_player, communicate);
       incrementAllTerritoryByOneUnit();
     }
   }
