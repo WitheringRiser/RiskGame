@@ -36,9 +36,23 @@ public class Admin implements Runnable {
      * Need read lock for namePasswordDic
      * @return the user name
      */
-    private String login() throws IOException, ClassNotFoundException{
-
-        return "";
+    public String login() throws IOException, ClassNotFoundException{        
+        while(true){
+            ArrayList<String> namePassWord = (ArrayList<String>)communicate.receiveObject(socket);
+            if(namePasswordDic.containsKey(namePassWord.get(0))){
+                if(namePasswordDic.get(namePassWord.get(0)).equals(namePassWord.get(1))){
+                    communicate.sendObject(socket, "");
+                    return namePassWord.get(0);
+                }
+                else{
+                    communicate.sendObject(socket, "Password incorrect");
+                }
+            }
+            else{
+                communicate.sendObject(socket, "Invalid username");
+            }
+        }
+       
     }
 
     /**
@@ -49,9 +63,18 @@ public class Admin implements Runnable {
      * Need write lock for namePasswordDic
      * @return the user name
      */
-    private String createAccount() throws IOException, ClassNotFoundException{
-
-        return "";
+    public String createAccount() throws IOException, ClassNotFoundException{
+        while(true){
+            ArrayList<String> newInfo = (ArrayList<String>)communicate.receiveObject(socket);
+            if(!namePasswordDic.containsKey(newInfo.get(0))){
+                namePasswordDic.put(newInfo.get(0), newInfo.get(1));
+                communicate.sendObject(socket, "");
+                return newInfo.get(0);
+            }
+            else{
+                communicate.sendObject(socket, "Username already exist");
+            }
+        }
     }
 
     /**
@@ -64,7 +87,8 @@ public class Admin implements Runnable {
      * 
      * Need write lock for nameGameDic
      */
-    private void createNewRoom(String name) throws IOException, ClassNotFoundException{
+    public void createNewRoom(String name) throws IOException, ClassNotFoundException{
+
     }
 
     /**
@@ -76,7 +100,7 @@ public class Admin implements Runnable {
      * 
      * Need write lock for nameGameDic
      */
-    private void joinNewRoom(String name) throws IOException, ClassNotFoundException{
+    public void joinNewRoom(String name) throws IOException, ClassNotFoundException{
 
     }
 
