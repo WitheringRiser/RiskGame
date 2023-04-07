@@ -3,12 +3,24 @@
  */
 package edu.duke.ece651.teamX.server;
 
+import edu.duke.ece651.teamX.shared.*;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.HashMap;
+import java.util.ArrayList;
 
 public class App {
+  private HashMap<String, String> namePasswordDic;
+  private HashMap<String, ArrayList<Game>> nameGameDic;
 
-  private static int getPlayerNum(Scanner input) {
+  public App() {
+    namePasswordDic = new HashMap<String, String>();
+    nameGameDic = new HashMap<String, ArrayList<Game>>();
+  }
+
+  private int getPlayerNum(Scanner input) {
     int playerNum;
     // Prompt for first integer input for player number
     System.out.print("Enter the player number(between 2 and 4): ");
@@ -19,7 +31,7 @@ public class App {
     return playerNum;
   }
 
-  private static int getPort(Scanner input) {
+  private int getPort(Scanner input) {
     int port;
     // Prompt for second integer input for port number
     System.out.print("Enter the port number(between 1 and 65535): ");
@@ -30,15 +42,20 @@ public class App {
     return port;
   }
 
-
-  //!!!! Just for testing!!!!
   public static void main(String[] args) throws IOException, ClassNotFoundException {
     Scanner input = new Scanner(System.in);
-    int playerNum = getPlayerNum(input);
-    int port = getPort(input);
+    App app = new App();
+    int playerNum = app.getPlayerNum(input);
+    int port = app.getPort(input);
     input.close();
     Game game = new Game(playerNum, 20);
-    game.play(port);
+    ServerSocket ss = new ServerSocket(port);
+    PlayerName namer = new ColorPlayerName();
+    for (int i = 0; i < playerNum; i++) {
+      Socket pSocket = ss.accept();
+      game.createPlayer(pSocket, namer.getName());
+    }
+    game.run();
   }
 
 }
