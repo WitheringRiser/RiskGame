@@ -76,6 +76,12 @@ public class GameTest {
     Map received_map = communicate.receiveMap(clientSocket);
     assertEquals(8, received_map.getTerritoryNum());
     GameResult gameRes = communicate.receiveGameResult(clientSocket);
+    assertTrue(gameRes.isWin());
+    assertEquals(p1, gameRes.getWinner());
+    playerSocket.close();
+    clientSocket.close();
+    ss.close();   
+
   }
 
   @Test
@@ -111,6 +117,10 @@ public class GameTest {
     terr_list2.add(new Territory("fTerritory"));
     assertFalse(game.setUnits(terr_list2));
     assertTrue(game.setUnits(terr_list1));
+    clientSocket.close();
+    ss.close();
+    serverSocket.close();
+
   }
 
   @Test

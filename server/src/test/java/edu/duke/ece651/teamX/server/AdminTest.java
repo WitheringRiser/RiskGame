@@ -48,5 +48,29 @@ public class AdminTest {
     assertEquals("Password incorrect", (String)communicate.receiveObject(clientSocket));
     assertEquals("Invalid username", (String)communicate.receiveObject(clientSocket));
     assertEquals("", (String)communicate.receiveObject(clientSocket));
+    playerSocket.close();
+    clientSocket.close();
+    ss.close();
+  }
+  @Test
+  public void test_createRoom() throws IOException, ClassNotFoundException {
+    HashMap<String, String> namePasswordDic = new HashMap<String, String>();
+    ArrayList<Game> GameList = new ArrayList<Game>();
+    Communicate communicate = new Communicate();
+    ServerSocket ss = new ServerSocket(4448);
+    Socket clientSocket = new Socket("localhost", 4448);
+    Socket playerSocket = ss.accept();
+    Admin adm = new Admin(namePasswordDic, GameList, playerSocket);
+    communicate.sendInt(clientSocket, 3);
+    adm.createNewRoom("Red0");
+    Player p = communicate.receivePlayer(clientSocket);
+    assertEquals("Red0", p.getName());
+    assertEquals(1, GameList.size());
+    assertTrue(GameList.get(0).containsPlayer("Red0"));
+    assertEquals(1, GameList.get(0).getActualNumPlayer());
+    assertEquals(3, GameList.get(0).getNumPlayer());
+    clientSocket.close();
+    playerSocket.close();
+    ss.close();
   }
 }
