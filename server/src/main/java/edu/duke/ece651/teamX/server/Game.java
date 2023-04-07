@@ -2,18 +2,17 @@ package edu.duke.ece651.teamX.server;
 
 import edu.duke.ece651.teamX.shared.*;
 import java.io.IOException;
-import java.io.Serializable;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
-public class Game implements Runnable, Serializable {
+public class Game implements Runnable {
   private int num_player;
   private int init_units;
   private HashMap<Player, Socket> player_dict;
   private HashMap<Player, Socket> status_dict;
   private Map map;
-  private Communicate communicate;
   private boolean hasBegin;
   private boolean isEnd;
 
@@ -29,7 +28,6 @@ public class Game implements Runnable, Serializable {
     player_dict = new HashMap<Player, Socket>();
     status_dict = new HashMap<Player, Socket>();
     map = new Map();
-    communicate = new Communicate();
     hasBegin = false;
     isEnd = false;
   }
@@ -40,9 +38,13 @@ public class Game implements Runnable, Serializable {
    * @param p Player
    * @return the socket of the player
    */
-  private Socket getPlayerSocket(Player p) { return player_dict.get(p); }
+  public Socket getPlayerSocket(Player p) {
+    return player_dict.get(p);
+  }
 
-  private Iterable<Player> getAllPlayers() { return player_dict.keySet(); }
+  private Iterable<Player> getAllPlayers() {
+    return player_dict.keySet();
+  }
 
   public boolean containsPlayer(String p_name) {
     for (Player p : player_dict.keySet()) {
@@ -63,11 +65,18 @@ public class Game implements Runnable, Serializable {
   }
 
   // Get the expected number of palyers
-  public int getNumPlayer() { return num_player; }
-  // Get current number of players
-  public int getActualNumPlayer() { return player_dict.size(); }
+  public int getNumPlayer() {
+    return num_player;
+  }
 
-  public Map getMap() { return map; }
+  // Get current number of players
+  public int getActualNumPlayer() {
+    return player_dict.size();
+  }
+
+  public Map getMap() {
+    return map;
+  }
 
   /**
    * Check if the game is already begin
@@ -76,16 +85,18 @@ public class Game implements Runnable, Serializable {
    * @return true if it has call the run() function
    *         false otherwise
    */
-  public boolean checkHasBegin() { return hasBegin; }
+  public boolean checkHasBegin() {
+    return hasBegin;
+  }
 
   /**
    * Get all territory groups from parser
    *
    * @return a hashmap of territory groups
    */
-  public HashMap<Integer, ArrayList<Territory> > setupGroup() {
+  public HashMap<Integer, ArrayList<Territory>> setupGroup() {
     WorldParser parser = new WorldParser(num_player);
-    HashMap<Integer, ArrayList<Territory> > res = parser.getWorld();
+    HashMap<Integer, ArrayList<Territory>> res = parser.getWorld();
     return res;
   }
 
@@ -110,9 +121,9 @@ public class Game implements Runnable, Serializable {
    * @param free_groups us current available territory groups
    * @param player      is the client to receive the groups
    */
-  public void sendTerrGroup(HashMap<Integer, ArrayList<Territory> > free_groups,
-                            Player player) throws IOException {
-    communicate.sendObject(getPlayerSocket(player), free_groups);
+  public void sendTerrGroup(HashMap<Integer, ArrayList<Territory>> free_groups,
+      Player player) throws IOException {
+    Communicate.sendObject(getPlayerSocket(player), free_groups);
   }
 
   /**
@@ -121,19 +132,29 @@ public class Game implements Runnable, Serializable {
   public void createPlayer(Socket player_socket, String name) throws IOException {
     Player p = new Player(name, init_units);
     player_dict.put(p, player_socket);
-    communicate.sendPlayer(player_socket, p);
+    Communicate.sendPlayer(player_socket, p);
+  }
+
+  public boolean updateSocket(String name, Socket newSocket) {
+    for (Player p : player_dict.keySet()) {
+      if (p.getName().equals(name)) {
+        player_dict.put(p, newSocket);
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
    * Create the map by adding territories and their owners
    */
   public void createMap() throws IOException, ClassNotFoundException {
-    HashMap<Integer, ArrayList<Territory> > terr_groups = setupGroup();
+    HashMap<Integer, ArrayList<Territory>> terr_groups = setupGroup();
     for (Player p : getAllPlayers()) {
-      sendTerrGroup(terr_groups, p);  // Let client make decision
-      int choice = communicate.receiveInt(getPlayerSocket(p));
-      setGroupOwner(terr_groups.get(choice), p);  // Set owner of the group
-      terr_groups.remove(choice);                 // remove this option
+      sendTerrGroup(terr_groups, p); // Let client make decision
+      int choice = Communicate.receiveInt(getPlayerSocket(p));
+      setGroupOwner(terr_groups.get(choice), p); // Set owner of the group
+      terr_groups.remove(choice); // remove this option
     }
   }
 
@@ -161,11 +182,10 @@ public class Game implements Runnable, Serializable {
   public void sendMap(Player player) throws IOException {
     try {
       Socket s = getPlayerSocket(player);
-      communicate.sendMap(s, map);
-      //If there are new valid connection, we update here
+      Communicate.sendMap(s, map);
+      // If there are new valid connection, we update here
       status_dict.put(player, s);
-    }
-    catch (IOException ioe) {
+    } catch (IOException ioe) {
       status_dict.put(player, null);
     }
   }
@@ -191,15 +211,13 @@ public class Game implements Runnable, Serializable {
 
   private void handleAttackSenders(Iterable<AttackSender> attackSenders)
       throws IllegalArgumentException {
-    AttackProcessor attackProcessor =
-        new AttackProcessor((ArrayList<AttackSender>)attackSenders, map);
+    AttackProcessor attackProcessor = new AttackProcessor((ArrayList<AttackSender>) attackSenders, map);
     attackProcessor.resovleAllAttack();
   }
 
   private void handleMoveSenders(Iterable<MoveSender> moveSenders)
       throws IllegalArgumentException {
-    MoveProcessor moveProcessor =
-        new MoveProcessor((ArrayList<MoveSender>)moveSenders, map);
+    MoveProcessor moveProcessor = new MoveProcessor((ArrayList<MoveSender>) moveSenders, map);
     moveProcessor.resolveAllMove();
   }
 
@@ -207,7 +225,7 @@ public class Game implements Runnable, Serializable {
     ArrayList<MoveSender> moveSenders = new ArrayList<>();
     for (ActionSender actionSender : actionSenders) {
       if (actionSender instanceof MoveSender) {
-        moveSenders.add((MoveSender)actionSender);
+        moveSenders.add((MoveSender) actionSender);
       }
     }
     return moveSenders;
@@ -217,38 +235,32 @@ public class Game implements Runnable, Serializable {
     ArrayList<AttackSender> attackSenders = new ArrayList<>();
     for (ActionSender actionSender : actionSenders) {
       if (actionSender instanceof AttackSender) {
-        attackSenders.add((AttackSender)actionSender);
+        attackSenders.add((AttackSender) actionSender);
       }
     }
     return attackSenders;
   }
 
-  // // TODO: don't make checker constructor directly check and throw exception
-  // // otherwise it's hard to call the check function from outside
-  // public void checkAction() {
-  // }
-  //
-  // public void handleActions(Iterable<Action> actions) {
-  // }
-
   /**
    * Print out the master map
    */
-  public void printMasterMap() { map.printMap(); }
+  public void printMasterMap() {
+    map.printMap();
+  }
 
   // print all actionsenders content, only for testing and debugging
   public void printActions(Iterable<ActionSender> allActions) {
     System.out.println("Attack:");
     for (AttackSender a : getAttackSenders(allActions)) {
       System.out.println("From " + a.getSource().getName() + " to " +
-                         a.getDestination().getName() +
-                         " units: " + Integer.toString(a.getUnitsNum()));
+          a.getDestination().getName() +
+          " units: " + Integer.toString(a.getUnitsNum()));
     }
     System.out.println("Move:");
     for (MoveSender a : getMoveSenders(allActions)) {
       System.out.println("From " + a.getSource().getName() + " to " +
-                         a.getDestination().getName() +
-                         " units: " + Integer.toString(a.getUnitsNum()));
+          a.getDestination().getName() +
+          " units: " + Integer.toString(a.getUnitsNum()));
     }
     System.out.println("---------------------\n");
   }
@@ -256,15 +268,20 @@ public class Game implements Runnable, Serializable {
   public Player whoWons() {
     for (Player player : getAllPlayers()) {
       if (map.getTerritories(player).size() == map.getTerritoryNum()) {
-        isEnd = true;  //If a player win --> the game is end
+        isEnd = true; // If a player win --> the game is end
         return player;
       }
     }
     return null;
   }
 
-  public boolean hasWon() { return whoWons() != null; }
-  public boolean checkIsEnd() { return isEnd; }
+  public boolean hasWon() {
+    return whoWons() != null;
+  }
+
+  public boolean checkIsEnd() {
+    return isEnd;
+  }
 
   public ArrayList<Player> whoLost() {
     ArrayList<Player> result = new ArrayList<>();
@@ -280,21 +297,30 @@ public class Game implements Runnable, Serializable {
     return new GameResult(hasWon(), whoWons(), whoLost());
   }
 
-  private void sendGameResult(GameResult gameResult, Communicate communicate)
+  private void sendGameResult(GameResult gameResult)
       throws IOException {
     for (Player p : player_dict.keySet()) {
-      //Need to send to the socket we send map to
+      // Need to send to the socket we send map to
       Socket s = status_dict.get(p);
       if (s.equals(null)) {
         continue;
       }
       try {
-        communicate.sendGameResult(s, gameResult);
-      }
-      catch (IOException ioe) {
+        Communicate.sendGameResult(s, gameResult);
+      } catch (IOException ioe) {
         continue;
       }
     }
+  }
+
+  public RoomSender getRoomSender() {
+    if (hasBegin) {
+      return new RoomSender(num_player, player_dict.size(), new HashSet<Player>(player_dict.keySet()), map,
+          hasBegin, isEnd, whoWons(), whoLost());
+    }
+
+    return new RoomSender(num_player, player_dict.size(), new HashSet<Player>(player_dict.keySet()), map,
+    hasBegin, false, null,null);
   }
 
   private void incrementAllTerritoryByOneUnit() {
@@ -303,7 +329,7 @@ public class Game implements Runnable, Serializable {
     }
   }
 
-  private void playOneTurn(int try_num, Communicate communicate)
+  private void playOneTurn(int try_num)
       throws IOException, ClassNotFoundException {
     GameResult gameResult = getGameResult();
     // collect all the moves and attacks from players
@@ -313,28 +339,25 @@ public class Game implements Runnable, Serializable {
       if (gameResult.loserContains(player)) {
         continue;
       }
-      //Need to receive from the socket that we send map to
+      // Need to receive from the socket that we send map to
       Socket s = status_dict.get(player);
       // if the client lose connection when sending map, skip
       if (s.equals(null)) {
         continue;
       }
       try {
-        ArrayList<MoveSender> moves = (ArrayList<MoveSender>)communicate.receiveObject(s);
-        ArrayList<AttackSender> attacks =
-            (ArrayList<AttackSender>)communicate.receiveObject(s);
+        ArrayList<MoveSender> moves = (ArrayList<MoveSender>) Communicate.receiveObject(s);
+        ArrayList<AttackSender> attacks = (ArrayList<AttackSender>) Communicate.receiveObject(s);
         allActions.addAll(moves);
         allActions.addAll(attacks);
-      }
-      catch (IOException ioe) {  // if lose connection when receive --> skip
+      } catch (IOException ioe) { // if lose connection when receive --> skip
         continue;
       }
     }
     printActions(allActions);
     try {
       handleActionSenders(allActions);
-    }
-    catch (IllegalArgumentException e) {
+    } catch (IllegalArgumentException e) {
       // TODO: send back to client
     }
   }
@@ -351,12 +374,12 @@ public class Game implements Runnable, Serializable {
       // print out the master map
       printMasterMap();
       GameResult gameResult = getGameResult();
-      sendGameResult(gameResult, communicate);
+      sendGameResult(gameResult);
       if (gameResult.isWin()) {
         System.out.println("Game over");
         break;
       }
-      playOneTurn(num_player, communicate);
+      playOneTurn(num_player);
       incrementAllTerritoryByOneUnit();
     }
   }
@@ -368,15 +391,14 @@ public class Game implements Runnable, Serializable {
 
       for (Socket s : player_dict.values()) {
         // receive results from client and let game setUnits using this result
-        ArrayList<Territory> res = (ArrayList<Territory>)communicate.receiveObject(s);
+        ArrayList<Territory> res = (ArrayList<Territory>) Communicate.receiveObject(s);
         setUnits(res);
       }
       if (num_player != getActualNumPlayer()) {
         throw new RuntimeException("The actual player num is not as expected");
       }
       playTurns();
-    }
-    catch (Exception e) {
+    } catch (Exception e) {
       System.out.println(e.getMessage());
       isEnd = true;
     }
@@ -390,7 +412,7 @@ public class Game implements Runnable, Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Game og = (Game)o;
+    Game og = (Game) o;
     if (!map.equals(og.map) || !player_dict.equals(og.player_dict)) {
       return false;
     }

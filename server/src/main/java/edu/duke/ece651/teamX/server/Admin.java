@@ -114,7 +114,26 @@ public class Admin implements Runnable {
      * 
      * Need write lock for nameGameDic
      */
-  private void joinActiveRoom(String name) throws IOException, ClassNotFoundException {}
+  public void joinActiveRoom(String name) throws IOException, ClassNotFoundException {
+    ArrayList<Game> searchRes = new ArrayList<Game>();
+    ArrayList<RoomSender> sendList = new ArrayList<>();
+    for (Game g : GameList) {
+      if (g.containsPlayer(name)) {
+        searchRes.add(g);
+        sendList.add(g.getRoomSender());
+      }
+    }
+    communicate.sendObject(socket, sendList);
+    int choice = communicate.receiveInt(socket);
+    Game cGame = searchRes.get(choice);
+    if (cGame.checkIsEnd()) {
+      communicate.sendObject(socket, "The game is already end");
+    }
+    else {
+      cGame.updateSocket(name, socket);
+      communicate.sendObject(socket, "");
+    }
+  }
 
   /**
      * Client authentication

@@ -5,10 +5,10 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.net.ServerSocket;
+import java.io.Serializable;
 import java.net.Socket;
 
-public class Communicate {
+public class Communicate{
 
   /**
    * Send object through socket
@@ -17,7 +17,7 @@ public class Communicate {
    * @param obj
    * @throws IOException
    */
-  public void sendObject(Socket socket, Object obj) throws IOException {
+  public static void sendObject(Socket socket, Object obj) throws IOException {
     OutputStream outputStream = socket.getOutputStream();
     ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
     objectOutputStream.writeObject(obj);
@@ -30,7 +30,7 @@ public class Communicate {
    * @param map
    * @throws IOException
    */
-  public void sendMap(Socket socket, Map map) throws IOException {
+  public static void sendMap(Socket socket, Map map) throws IOException {
     sendObject(socket, map);
   }
 
@@ -41,15 +41,15 @@ public class Communicate {
    * @param num    is the choice or decision to send
    * @throws IOException
    */
-  public void sendInt(Socket socket, Integer num) throws IOException {
+  public static void sendInt(Socket socket, Integer num) throws IOException {
     sendObject(socket, num);
   }
 
-  public void sendPlayer(Socket socket, Player player) throws IOException {
+  public static void sendPlayer(Socket socket, Player player) throws IOException {
     sendObject(socket, player);
   }
 
-  public void sendGameResult(Socket socket, GameResult gameResult) throws IOException {
+  public static void sendGameResult(Socket socket, GameResult gameResult) throws IOException {
     sendObject(socket, gameResult);
   }
 
@@ -61,7 +61,7 @@ public class Communicate {
    * @throws IOException
    * @throws ClassNotFoundException
    */
-  public Object receiveObject(Socket socket) throws IOException, ClassNotFoundException {
+  public static Object receiveObject(Socket socket) throws IOException, ClassNotFoundException {
     InputStream inputStream = socket.getInputStream();
     ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
     return objectInputStream.readObject();
@@ -75,19 +75,19 @@ public class Communicate {
    * @throws IOException
    * @throws ClassNotFoundException
    */
-  public Map receiveMap(Socket socket) throws IOException, ClassNotFoundException {
+  public static Map receiveMap(Socket socket) throws IOException, ClassNotFoundException {
     return (Map) receiveObject(socket);
   }
 
-  public Integer receiveInt(Socket socket) throws IOException, ClassNotFoundException {
+  public static Integer receiveInt(Socket socket) throws IOException, ClassNotFoundException {
     return (Integer) receiveObject(socket);
   }
 
-  public Player receivePlayer(Socket socket) throws IOException, ClassNotFoundException {
+  public static Player receivePlayer(Socket socket) throws IOException, ClassNotFoundException {
     return (Player) receiveObject(socket);
   }
 
-  public GameResult receiveGameResult(Socket socket) throws IOException, ClassNotFoundException {
+  public static GameResult receiveGameResult(Socket socket) throws IOException, ClassNotFoundException {
     return (GameResult) receiveObject(socket);
   }
 }
