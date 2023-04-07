@@ -111,4 +111,41 @@ public class AdminTest {
     playerSocket2.close();
     ss.close();
   }
+  @Test
+  public void test_joinNewRoo()
+      throws IOException, ClassNotFoundException, InterruptedException {
+    HashMap<String, String> namePasswordDic = new HashMap<String, String>();
+    ArrayList<Game> GameList = new ArrayList<Game>();
+    Communicate communicate = new Communicate();
+    ServerSocket ss = new ServerSocket(4450);
+    Socket clientSocket1 = new Socket("localhost", 4450);
+    Socket playerSocket1 = ss.accept();
+    Admin adm1 = new Admin(namePasswordDic, GameList, playerSocket1);
+    communicate.sendInt(clientSocket1, 3);
+    communicate.sendInt(clientSocket1, 2);
+    communicate.sendInt(clientSocket1, 4);
+    communicate.sendInt(clientSocket1, 2);
+    adm1.createNewRoom("Red");
+    adm1.createNewRoom("Red");
+    adm1.createNewRoom("Red");
+    adm1.createNewRoom("Blue");
+    Socket clientSocket2 = new Socket("localhost", 4450);
+    Socket playerSocket2 = ss.accept();
+    Admin adm2 = new Admin(namePasswordDic, GameList, playerSocket2);
+    communicate.sendInt(clientSocket2, 0);
+    adm2.joinNewRoom("Blue");
+    ArrayList<RoomSender> searchRes =
+        (ArrayList<RoomSender>)communicate.receiveObject(clientSocket2);
+    assertEquals(3, searchRes.size());
+    assertEquals(2, GameList.get(0).getActualNumPlayer());
+    communicate.sendInt(clientSocket2, 0);
+    // communicate.sendInt(clientSocket2, 0);
+    //communicate.sendInt(clientSocket1, 1);
+    // communicate.sendInt(clientSocket1, 1);
+    adm2.joinNewRoom("Blue");
+
+    assertEquals(2, GameList.get(1).getActualNumPlayer());
+    Thread.sleep(1000);  //wait 1 second for game to process
+    assertTrue(GameList.get(1).checkHasBegin());
+  }
 }

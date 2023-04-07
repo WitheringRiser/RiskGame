@@ -388,7 +388,6 @@ public class Game implements Runnable {
     hasBegin = true;
     try {
       createMap();
-
       for (Socket s : player_dict.values()) {
         // receive results from client and let game setUnits using this result
         ArrayList<Territory> res = (ArrayList<Territory>) Communicate.receiveObject(s);

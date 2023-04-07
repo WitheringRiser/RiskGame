@@ -103,7 +103,33 @@ public class Admin implements Runnable {
      * 
      * Need write lock for nameGameDic
      */
-  public void joinNewRoom(String name) throws IOException, ClassNotFoundException {}
+  public void joinNewRoom(String name) throws IOException, ClassNotFoundException {
+    ArrayList<Game> searchRes = new ArrayList<Game>();
+    ArrayList<RoomSender> sendList = new ArrayList<>();
+    for (Game g : GameList) {
+      if (!g.containsPlayer(name)&&!g.checkHasBegin()) {
+        searchRes.add(g);
+        sendList.add(g.getRoomSender());
+      }
+    }
+    communicate.sendObject(socket, sendList);
+    int choice = communicate.receiveInt(socket);
+    Game cGame = searchRes.get(choice);
+    String msg;
+    if(cGame.checkHasBegin()){
+      msg="The room has already full";
+    }
+    else{
+      cGame.createPlayer(socket, name);
+      //If room full --> start the game by making a new thread
+      if (cGame.getActualNumPlayer()==cGame.getNumPlayer()){
+        Thread gameThread = new Thread(cGame);
+        gameThread.start();
+      }
+      msg="";
+    }
+    communicate.sendObject(socket, msg);
+  }
 
   /**
      * Let user go back to a still active room
@@ -126,13 +152,15 @@ public class Admin implements Runnable {
     communicate.sendObject(socket, sendList);
     int choice = communicate.receiveInt(socket);
     Game cGame = searchRes.get(choice);
+    String msg;
     if (cGame.checkIsEnd()) {
-      communicate.sendObject(socket, "The game is already end");
+      msg="The game is already end";
     }
     else {
       cGame.updateSocket(name, socket);
-      communicate.sendObject(socket, "");
+      msg="";      
     }
+    communicate.sendObject(socket, msg);
   }
 
   /**
