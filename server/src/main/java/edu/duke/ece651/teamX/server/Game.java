@@ -130,14 +130,20 @@ public class Game implements Runnable {
    * Create a Player object for client and inform that client
    */
   public void createPlayer(Socket player_socket, String name) throws IOException {
-    Player p = new Player(name, init_units);
-    player_dict.put(p, player_socket);
+    Player p = new Player(name, init_units);    
     Communicate.sendPlayer(player_socket, p);
+    player_dict.put(p, player_socket);
   }
 
   public boolean updateSocket(String name, Socket newSocket) {
     for (Player p : player_dict.keySet()) {
       if (p.getName().equals(name)) {
+        try{
+          Communicate.sendPlayer(newSocket, p);
+        }
+        catch(IOException ioe){
+          return false;
+        }
         player_dict.put(p, newSocket);
         return true;
       }
@@ -387,15 +393,15 @@ public class Game implements Runnable {
   public void run() {
     hasBegin = true;
     try {
+      if (num_player != getActualNumPlayer()) {
+        throw new RuntimeException("The actual player num is not as expected");
+      }
       createMap();
       for (Socket s : player_dict.values()) {
         // receive results from client and let game setUnits using this result
         ArrayList<Territory> res = (ArrayList<Territory>) Communicate.receiveObject(s);
         setUnits(res);
-      }
-      if (num_player != getActualNumPlayer()) {
-        throw new RuntimeException("The actual player num is not as expected");
-      }
+      }      
       playTurns();
     } catch (Exception e) {
       System.out.println(e.getMessage());
