@@ -37,7 +37,7 @@ public class Territory implements Serializable {
 
   public Territory(String in_name, int num) {
     this(in_name);
-    addUnits(null, num);
+    addUnits(num);
   }
 
   private void getResearchRule() {
@@ -82,6 +82,12 @@ public class Territory implements Serializable {
     }
   }
 
+  public void addUnits(int number) {
+    for (int i = 0; i < number; ++i) {
+      units.add(new BasicUnit());
+    }
+  }
+
   public void addUnits(ArrayList<Unit> list) {
     units.addAll(list);
   }
@@ -111,11 +117,10 @@ public class Territory implements Serializable {
     }
     return unitList;
   }
-  
+
   public ArrayList<Unit> getUnits() {
     return units;
   }
-  
 
   /**
    * consume technology resources
