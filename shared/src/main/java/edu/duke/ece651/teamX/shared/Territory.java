@@ -2,14 +2,20 @@ package edu.duke.ece651.teamX.shared;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Objects;
 
 public class Territory implements Serializable {
 
   private ArrayList<Unit> units;
   private ArrayList<Territory> neighbours;
   private final String name; // a territory is uniquely defined by name
+
+  private int food_reources;
+  private int tech_resources;
+
+  private int tech_level;
+  private HashMap<Integer, Integer> researchRule;
 
   /**
    * Constructs a Territory object with the specified name
@@ -20,13 +26,26 @@ public class Territory implements Serializable {
     this.units = new ArrayList<Unit>();
     this.neighbours = new ArrayList<Territory>();
     this.name = in_name;
+    this.tech_level = 1;
+
+    this.food_reources = 100; // Temporarily set at 100
+    this.tech_resources = 100; // Temporarily set at 100
+
+    this.researchRule = new HashMap<Integer, Integer>();
+    getResearchRule();
   }
 
   public Territory(String in_name, int num) {
-    this.units = new ArrayList<Unit>();
+    this(in_name);
     addUnits(null, num);
-    this.neighbours = new ArrayList<Territory>();
-    this.name = in_name;
+  }
+
+  private void getResearchRule() {
+    this.researchRule.put(1, 20);
+    this.researchRule.put(2, 40);
+    this.researchRule.put(3, 80);
+    this.researchRule.put(4, 160);
+    this.researchRule.put(5, 320);
   }
 
   /**
@@ -42,6 +61,10 @@ public class Territory implements Serializable {
 
   public Iterator<Territory> getNeighbours() {
     return neighbours.iterator();
+  }
+
+  public int getTechLevel() {
+    return tech_level;
   }
   /*
    * public Iterator<Unit> getUnits() {
@@ -88,9 +111,37 @@ public class Territory implements Serializable {
     }
     return unitList;
   }
-
+  
   public ArrayList<Unit> getUnits() {
     return units;
+  }
+  
+
+  /**
+   * consume technology resources
+   * 
+   * @param num: the number of technology resources need to be consumed
+   * @return true if consume successfully, false otherwise
+   */
+  public boolean consumeTech(int num) {
+    if (tech_resources < num) {
+      return false;
+    }
+    tech_resources -= num;
+    return true;
+  }
+
+  /**
+   * research to upgrade technology level
+   * 
+   * @return true if upgrade successfully, false otherwise
+   */
+  public boolean upgradeLevel() {
+    if (consumeTech(researchRule.get(tech_level))) {
+      tech_level += 1;
+      return true;
+    }
+    return false;
   }
 
   /**

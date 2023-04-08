@@ -40,4 +40,17 @@ public class TerritoryTest {
     assertEquals(terrDic.get(t1), "owner1");
     assertEquals(terrDic.get(t2), "owner1");
   }
+
+  @Test
+  void testRearch() {
+    Territory t1 = new Territory("aTerritory");
+    assertEquals(t1.getTechLevel(), 1);
+    assertTrue(t1.upgradeLevel());
+    assertEquals(t1.getTechLevel(), 2);
+    assertTrue(t1.upgradeLevel());
+    assertEquals(t1.getTechLevel(), 3);
+    assertFalse(t1.upgradeLevel());
+    assertEquals(t1.getTechLevel(), 3);
+
+  }
 }
