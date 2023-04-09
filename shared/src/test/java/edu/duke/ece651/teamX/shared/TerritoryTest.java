@@ -40,4 +40,30 @@ public class TerritoryTest {
     assertEquals(terrDic.get(t1), "owner1");
     assertEquals(terrDic.get(t2), "owner1");
   }
+
+  @Test
+  void testResearch() {
+    Territory t1 = new Territory("aTerritory");
+    assertEquals(t1.getTechLevel(), 1);
+    assertTrue(t1.upgradeLevel());
+    assertEquals(t1.getTechLevel(), 2);
+    assertTrue(t1.upgradeLevel());
+    assertEquals(t1.getTechLevel(), 3);
+    assertFalse(t1.upgradeLevel());
+    assertEquals(t1.getTechLevel(), 3);
+  }
+
+  @Test
+  void testUpgradeUnits() {
+    Territory t1 = new Territory("aTerritory", 3);
+    assertEquals(t1.upgradeUnit(0, 2), "the maximum technology level doesn't permit this upgrade");
+    assertEquals(t1.upgradeUnit(3, 1), "the unit doesn't exist, please check the index");
+    assertEquals(t1.upgradeUnit(0, 1), null);
+    assertEquals(t1.upgradeUnit(0, 0), "the level is not legal or the unit has reached the highest level");
+    t1.upgradeLevel();
+    t1.upgradeLevel();
+
+    assertEquals(null, t1.upgradeUnit(1, 3));
+    assertEquals(t1.upgradeUnit(2,2), "the technology resource is not enough to upgrade this unit");
+  }
 }
