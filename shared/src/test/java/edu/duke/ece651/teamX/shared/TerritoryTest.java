@@ -2,6 +2,7 @@ package edu.duke.ece651.teamX.shared;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import org.junit.jupiter.api.Test;
 
@@ -42,28 +43,17 @@ public class TerritoryTest {
   }
 
   @Test
-  void testResearch() {
-    Territory t1 = new Territory("aTerritory");
-    assertEquals(t1.getTechLevel(), 1);
-    assertTrue(t1.upgradeLevel());
-    assertEquals(t1.getTechLevel(), 2);
-    assertTrue(t1.upgradeLevel());
-    assertEquals(t1.getTechLevel(), 3);
-    assertFalse(t1.upgradeLevel());
-    assertEquals(t1.getTechLevel(), 3);
+  void testRemoveFromList() {
+    Territory t1 = new Territory("a", 3);
+    ArrayList<Integer> a1 = new ArrayList<>();
+    ArrayList<Integer> a2 = new ArrayList<>();
+    a1.add(0);
+    a1.add(1);
+    t1.removeUnitsFromList(a1);
+    assertEquals(t1.getUnitsNumber(), 1);
+    a2.add(1);
+    assertThrows(IllegalArgumentException.class, () -> t1.removeUnitsFromList(a2));
   }
 
-  @Test
-  void testUpgradeUnits() {
-    Territory t1 = new Territory("aTerritory", 3);
-    assertEquals(t1.upgradeUnit(0, 2), "the maximum technology level doesn't permit this upgrade");
-    assertEquals(t1.upgradeUnit(3, 1), "the unit doesn't exist, please check the index");
-    assertEquals(t1.upgradeUnit(0, 1), null);
-    assertEquals(t1.upgradeUnit(0, 0), "the level is not legal or the unit has reached the highest level");
-    t1.upgradeLevel();
-    t1.upgradeLevel();
 
-    assertEquals(null, t1.upgradeUnit(1, 3));
-    assertEquals(t1.upgradeUnit(2,2), "the technology resource is not enough to upgrade this unit");
-  }
 }
