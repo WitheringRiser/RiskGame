@@ -14,7 +14,8 @@ public class UpgradeProcessor {
   public void resolveAllUpgrade() {
     for (UpgradeSender u : allUpgrade) {
       Territory source = map.getTerritoryByName(u.getSource().getName());
-      String result = source.upgradeUnit(u.getIndex(), u.getToLevel());
+      Player p = map.getOwner(source);
+      String result = p.upgradeUnit(source, u.getIndex(), u.getToLevel());
       if (result != null) {
         throw new IllegalArgumentException(result);
       }

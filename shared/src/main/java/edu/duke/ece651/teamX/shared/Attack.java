@@ -7,6 +7,7 @@ public class Attack extends BasicAction {
 
   private static Random rand = null;
   private ArrayList<Unit> attacker;
+  private ArrayList<Unit> defender;
   private Player enemyPlayer;
 
   Attack(Territory _source, Territory _destination) {
@@ -27,6 +28,17 @@ public class Attack extends BasicAction {
     rand = new Random(seed);
 
     attacker = source.removeUnits(num);
+    // defender = destination.removeUnits(destination.getUnitsNumber());
+    enemyPlayer = player;
+  }
+
+  Attack(Territory _source, Territory _destination, ArrayList<Integer> indexList, int seed, Player player) {
+    super(_source, _destination);
+
+    rand = new Random(seed);
+
+    attacker = source.removeUnitsFromList(indexList);
+    defender = destination.removeUnits(destination.getUnitsNumber());
     enemyPlayer = player;
   }
 
@@ -42,6 +54,26 @@ public class Attack extends BasicAction {
     return rand.nextInt(max) + 1;
   }
 
+  public int getHighestUnitIndex(ArrayList<Unit> units) {
+    int res = 0;
+    for (int i = 0; i < units.size(); ++i) {
+      if (units.get(i).getBonus() > units.get(res).getBonus()) {
+        res = i;
+      }
+    }
+    return res;
+  }
+
+  public int getLowestUnitIndex(ArrayList<Unit> units) {
+    int res = 0;
+    for (int i = 0; i < units.size(); ++i) {
+      if (units.get(i).getBonus() < units.get(res).getBonus()) {
+        res = i;
+      }
+    }
+    return res;
+  }
+
   /**
    * perform one unit attck
    */
@@ -50,6 +82,7 @@ public class Attack extends BasicAction {
     int defenderDice = rollDice(max);
     if (enemyDice > defenderDice) {
       destination.removeUnits(1);
+      //defender.remove(0);
     } else {
       attacker.remove(0);
     }

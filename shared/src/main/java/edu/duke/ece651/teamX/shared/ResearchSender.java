@@ -1,13 +1,13 @@
 package edu.duke.ece651.teamX.shared;
 
 public class ResearchSender {
-  private Territory source;
+  private Player player;
 
-  public ResearchSender(Territory _source) {
-    this.source = _source;
+  public ResearchSender(Player _player) {
+    this.player = _player;
   }
 
-  public Territory getSource() {
-    return source;
+  public Player getPlayer() {
+    return player;
   }
 }

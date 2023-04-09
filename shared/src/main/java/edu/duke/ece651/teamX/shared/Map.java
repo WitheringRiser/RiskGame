@@ -33,54 +33,77 @@ public class Map implements Serializable {
 
   private HashMap<Territory, Player> map_dict;
 
-  @FXML private Button UpgradeBtn;
-    @FXML private Button MoveBtn;
-    @FXML private Button AttackBtn;
-    @FXML private Button DoneBtn;
+  @FXML
+  private Button UpgradeBtn;
+  @FXML
+  private Button MoveBtn;
+  @FXML
+  private Button AttackBtn;
+  @FXML
+  private Button DoneBtn;
 
-    @FXML private Label Food;
-    @FXML private Label Tech;
-    @FXML private Label AllianceInfo;
+  @FXML
+  private Label Food;
+  @FXML
+  private Label Tech;
+  @FXML
+  private Label AllianceInfo;
 
-    @FXML private Button ButtonA;
-    @FXML private Button ButtonB;
-    @FXML private Button ButtonC;
-    @FXML private Button ButtonD;
-    @FXML private Button ButtonE;
-    @FXML private Button ButtonF;
-    @FXML private Button ButtonG;
-    @FXML private Button ButtonH;
-    @FXML private Button ButtonI;
-    @FXML private Button ButtonJ;
-    @FXML private Button ButtonK;
-    @FXML private Button ButtonL;
+  @FXML
+  private Button ButtonA;
+  @FXML
+  private Button ButtonB;
+  @FXML
+  private Button ButtonC;
+  @FXML
+  private Button ButtonD;
+  @FXML
+  private Button ButtonE;
+  @FXML
+  private Button ButtonF;
+  @FXML
+  private Button ButtonG;
+  @FXML
+  private Button ButtonH;
+  @FXML
+  private Button ButtonI;
+  @FXML
+  private Button ButtonJ;
+  @FXML
+  private Button ButtonK;
+  @FXML
+  private Button ButtonL;
 
-    @FXML private TreeView<String> Detail;
-    @FXML private Label Prompt;
+  @FXML
+  private TreeView<String> Detail;
+  @FXML
+  private Label Prompt;
 
-    @FXML private ImageView Figure;
+  @FXML
+  private ImageView Figure;
 
-    private Stage Window;
-    private Boolean firstTime;
+  private Stage Window;
+  private Boolean firstTime;
 
-    private Player CurrPlayer;
-    private HashMap<String, Button> ButtonMap;
-    private HashMap<Integer, ArrayList<Territory>> TerrMap;
-    private void InitButtonMap(){
-        ButtonMap = new HashMap<>();
-        ButtonMap.put("A", ButtonA);
-        ButtonMap.put("B", ButtonB);
-        ButtonMap.put("C", ButtonC);
-        ButtonMap.put("D", ButtonD);
-        ButtonMap.put("E", ButtonE);
-        ButtonMap.put("F", ButtonF);
-        ButtonMap.put("G", ButtonG);
-        ButtonMap.put("H", ButtonH);
-        ButtonMap.put("I", ButtonI);
-        ButtonMap.put("J", ButtonJ);
-        ButtonMap.put("K", ButtonK);
-        ButtonMap.put("L", ButtonL);
-    }
+  private Player CurrPlayer;
+  private HashMap<String, Button> ButtonMap;
+  private HashMap<Integer, ArrayList<Territory>> TerrMap;
+
+  private void InitButtonMap() {
+    ButtonMap = new HashMap<>();
+    ButtonMap.put("A", ButtonA);
+    ButtonMap.put("B", ButtonB);
+    ButtonMap.put("C", ButtonC);
+    ButtonMap.put("D", ButtonD);
+    ButtonMap.put("E", ButtonE);
+    ButtonMap.put("F", ButtonF);
+    ButtonMap.put("G", ButtonG);
+    ButtonMap.put("H", ButtonH);
+    ButtonMap.put("I", ButtonI);
+    ButtonMap.put("J", ButtonJ);
+    ButtonMap.put("K", ButtonK);
+    ButtonMap.put("L", ButtonL);
+  }
 
   /**
    * Construct a map by initializing an empty hashmap
@@ -89,12 +112,12 @@ public class Map implements Serializable {
     this.map_dict = new HashMap<>();
   }
 
-  public Map(Player player, Stage Window, Boolean first){
+  public Map(Player player, Stage Window, Boolean first) {
     this.Window = Window;
     this.CurrPlayer = player;
-    //this.TerrMap = player.map;
+    // this.TerrMap = player.map;
     this.firstTime = first;
-}
+  }
 
   public int getTerritoryNum() {
     return this.map_dict.size();
@@ -105,7 +128,8 @@ public class Map implements Serializable {
   }
 
   /**
-   * Check if the territory is already in the hashmap Note: We do not allow have multiple
+   * Check if the territory is already in the hashmap Note: We do not allow have
+   * multiple
    * territories with the same name
    *
    * @param terr is the territory to check
@@ -168,7 +192,8 @@ public class Map implements Serializable {
   }
 
   /**
-   * Get the owner of the input terr Will check the existence of the territory first
+   * Get the owner of the input terr Will check the existence of the territory
+   * first
    *
    * @param terr is the territory we want to get the owner of
    * @return the owner of the territory. null indicates no owner
@@ -257,6 +282,15 @@ public class Map implements Serializable {
     for (Territory t : map_dict.keySet()) {
       if (t.getName().equals(name)) {
         return t;
+      }
+    }
+    return null;
+  }
+
+  public Player getPlayerByName(String name) {
+    for (Player p : map_dict.values()) {
+      if (p.getName().equals(name)) {
+        return p;
       }
     }
     return null;

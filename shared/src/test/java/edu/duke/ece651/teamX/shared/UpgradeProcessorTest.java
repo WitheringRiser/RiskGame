@@ -14,9 +14,11 @@ public class UpgradeProcessorTest {
     UpgradeSender u2 = new UpgradeSender(new Territory("b"), 5, 1);
     ArrayList<UpgradeSender> all = new ArrayList<>();
     all.add(u2);
+    Player play1 = new Player("p1", 10);
+    Player play2 = new Player("p2", 20);
     Map map = new Map();
-    map.addTerritory(new Territory("a", 3), null);
-    map.addTerritory(new Territory("b", 3), null);
+    map.addTerritory(new Territory("a", 3), play1);
+    map.addTerritory(new Territory("b", 3), play2);
     UpgradeProcessor p = new UpgradeProcessor(all, map);
     assertThrows(IllegalArgumentException.class, () -> p.resolveAllUpgrade());
     all.remove(u2);
