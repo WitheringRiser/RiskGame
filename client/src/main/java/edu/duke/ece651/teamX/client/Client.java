@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import javafx.util.Pair;
+import java.util.HashMap;
 
 public class Client {
 
@@ -17,6 +19,8 @@ public class Client {
   private PrintStream out;
   private UserInReader inputReader;
   private ArrayList<Player> losers;
+  private int foodResource;
+    private int techResource;
 
   /**
    * Construct a Client object
@@ -104,6 +108,39 @@ public class Client {
   private GameResult receiveGameResult() throws IOException, ClassNotFoundException {
     return communicate.receiveGameResult(socket);
   }
+
+  public int getFoodResource() { return foodResource; }
+  public int getTechResource() { return techResource; }
+  public void setTechResource(int t) { techResource = t;}
+  public void setFoodResource(int f) { foodResource = f;}
+
+  //ability to increment tech resources at the end of each turn
+  public void AddTechResource(Map TerrMap, Pair<Integer, String> PlayerInfo){
+    
+    TerritoryProduce AddResource = new TerritoryProduce();
+    HashMap<Territory, Player> HM_Terr = new HashMap<Territory, Player>();
+    HM_Terr = TerrMap.getMap();
+    ArrayList<Territory> MyTerr = new ArrayList<>();
+    
+    for(int i = 0; i < HM_Terr.size(); i++){
+        int CurrAdd = AddResource.getTech(HM_Terr.get(i).getName());
+        this.techResource += CurrAdd;
+    }
+}
+
+//ability to increment food resources at the end of each turn
+public void AddFoodResource(Map TerrMap, Pair<Integer, String> PlayerInfo){
+    
+  TerritoryProduce AddResource = new TerritoryProduce();
+  HashMap<Territory, Player> HM_Terr = new HashMap<Territory, Player>();
+  HM_Terr = TerrMap.getMap();
+  ArrayList<Territory> MyTerr = new ArrayList<>();
+  
+  for(int i = 0; i < HM_Terr.size(); i++){
+      int CurrAdd = AddResource.getFood(HM_Terr.get(i).getName());
+      this.foodResource += CurrAdd;
+  }
+}
 
 
   /**

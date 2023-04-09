@@ -1,0 +1,24 @@
+Desert-5
+Mountains-7
+Swamp-5
+Beach-3
+Savanna-4
+Jungle-6
+Bamboo Forest-6
+Dark Forest-4
+Lukas Tundra-5
+Frozen Ocean-3
+Plateau-8
+Desert Hills-4
+Plains-5
+Rocky Cliffs-7
+Forest-5
+Mesa-3
+Lake-4
+River-6
+Jincheng Taiga-6
+Badlands-4
+Russ Mushroom Fields-5
+Xinmeng Ocean-3
+Snowy Beach-8
+Zhou Caves-4
