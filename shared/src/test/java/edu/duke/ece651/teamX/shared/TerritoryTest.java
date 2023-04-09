@@ -60,6 +60,10 @@ public class TerritoryTest {
     assertEquals(t1.upgradeUnit(3, 1), "the unit doesn't exist, please check the index");
     assertEquals(t1.upgradeUnit(0, 1), null);
     assertEquals(t1.upgradeUnit(0, 0), "the level is not legal or the unit has reached the highest level");
-    
+    t1.upgradeLevel();
+    t1.upgradeLevel();
+
+    assertEquals(null, t1.upgradeUnit(1, 3));
+    assertEquals(t1.upgradeUnit(2,2), "the technology resource is not enough to upgrade this unit");
   }
 }
