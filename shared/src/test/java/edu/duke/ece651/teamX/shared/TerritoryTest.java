@@ -42,7 +42,7 @@ public class TerritoryTest {
   }
 
   @Test
-  void testRearch() {
+  void testResearch() {
     Territory t1 = new Territory("aTerritory");
     assertEquals(t1.getTechLevel(), 1);
     assertTrue(t1.upgradeLevel());
@@ -51,6 +51,15 @@ public class TerritoryTest {
     assertEquals(t1.getTechLevel(), 3);
     assertFalse(t1.upgradeLevel());
     assertEquals(t1.getTechLevel(), 3);
+  }
 
+  @Test
+  void testUpgradeUnits() {
+    Territory t1 = new Territory("aTerritory", 3);
+    assertEquals(t1.upgradeUnit(0, 2), "the maximum technology level doesn't permit this upgrade");
+    assertEquals(t1.upgradeUnit(3, 1), "the unit doesn't exist, please check the index");
+    assertEquals(t1.upgradeUnit(0, 1), null);
+    assertEquals(t1.upgradeUnit(0, 0), "the level is not legal or the unit has reached the highest level");
+    
   }
 }

@@ -150,6 +150,31 @@ public class Territory implements Serializable {
   }
 
   /**
+   * upgrade one unit
+   * 
+   * @param index:   the index of the unit
+   * @param toLevel: the level the unit upgrade to
+   * @return null if upgrade successfully, otherwise the string describe the
+   *         reason for failure
+   */
+  public String upgradeUnit(int index, int toLevel) {
+    if (tech_level < toLevel) {
+      return "the maximum technology level doesn't permit this upgrade";
+    }
+    if (index < 0 || index >= units.size()) {
+      return "the unit doesn't exist, please check the index";
+    }
+    Unit u = units.get(index);
+    if (!consumeTech(u.getCost(toLevel))) {
+      return "the technology resource is not enough to upgrade this unit";
+    }
+    if (!u.upgradeLevel(toLevel)) {
+      return "the level is not legal or the unit has reached the highest level";
+    }
+    return null;
+  }
+
+  /**
    * Check if two territory are equals Currently only use name to compare
    */
   @Override
