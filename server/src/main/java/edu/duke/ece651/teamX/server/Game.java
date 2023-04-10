@@ -431,7 +431,7 @@ public class Game implements Runnable {
       playTurns();
     } catch (Exception e) {
       System.out.println(e.getMessage());
-      // isEnd = true;
+      isEnd = true;
     }
   }
 
