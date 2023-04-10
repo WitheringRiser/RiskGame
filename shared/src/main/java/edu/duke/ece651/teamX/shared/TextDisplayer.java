@@ -1,5 +1,6 @@
 package edu.duke.ece651.teamX.shared;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -70,25 +71,23 @@ public class TextDisplayer extends Displayer<String> {
     return ans.toString();
   }
 
-  public static void displayAttack(int attackerSize, int defenderSize, int attackerAfter,
-      int defenderAfter,
-      Player enemyPlayer) {
-    System.out.println("----------------AttackLog----------------");
-    if (enemyPlayer != null) {
-      System.out.println(enemyPlayer.getName() + " player launch the attack!");
+  public static void displayAttackOriginal(Territory t, ArrayList<Attacker> attackers, Map map) {
+    StringBuilder ans = new StringBuilder();
+    ans.append("----------------AttackLog----------------\n");
+    ans.append("In " + t.getName() + "(belongs to " + map.getOwner(t).getName() + "), ");
+    ans.append("fight between:\n");
+    for (Attacker attacker : attackers) {
+      ans.append(attacker.getOwner().getName() + " with " + attacker.getAttacker().size() + " units\n");
     }
+    System.out.print(ans.toString());
+  }
 
-    System.out.println("Original attacker number: " + attackerSize);
-    System.out.println("Original defender number: " + defenderSize);
-
-    System.out.println("After attack, attacker number: " + attackerAfter);
-    System.out.println("After attack, defender number: " + defenderAfter);
-    if (attackerAfter == 0) {
-      System.out.println("Attacker loses all units");
-    } else {
-      System.out.println("Attacker wins!");
-    }
-    System.out.println("-----------------------------------------");
+  public static void displayAttackAfter(Territory t, Map map) {
+    StringBuilder ans = new StringBuilder();
+    ans.append("After attack, \n" + t.getName() + " belongs to " + map.getOwner(t).getName() + " with "
+        + t.getUnitsNumber() + " units\n");
+    ans.append("-----------------------------------------\n");
+    System.out.print(ans.toString());
   }
 
   public static void displayMove(Territory source, Territory destination, int num, Player player) {
