@@ -12,7 +12,8 @@ public class MultiAttack {
 
   MultiAttack(ArrayList<Attacker> enemies, Territory defender, Map map, Random rand) {
     this.enemies = enemies;
-    this.enemies.add(new Attacker(defender.removeUnits(defender.getUnitsNumber()), map.getOwner(defender)));
+    this.enemies.add(
+        new Attacker(defender.removeUnits(defender.getUnitsNumber()), map.getOwner(defender)));
     this.destination = defender;
     this.map = map;
     this.rand = rand;

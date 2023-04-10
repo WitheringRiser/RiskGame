@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Attack {
+
   private Unit attacker;
   private Unit defender;
 

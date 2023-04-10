@@ -20,7 +20,7 @@ public class Client {
   private UserInReader inputReader;
   private ArrayList<Player> losers;
   private int foodResource;
-    private int techResource;
+  private int techResource;
 
   /**
    * Construct a Client object
@@ -109,38 +109,49 @@ public class Client {
     return communicate.receiveGameResult(socket);
   }
 
-  public int getFoodResource() { return foodResource; }
-  public int getTechResource() { return techResource; }
-  public void setTechResource(int t) { techResource = t;}
-  public void setFoodResource(int f) { foodResource = f;}
+  public int getFoodResource() {
+    return foodResource;
+  }
+
+  public int getTechResource() {
+    return techResource;
+  }
+
+  public void setTechResource(int t) {
+    techResource = t;
+  }
+
+  public void setFoodResource(int f) {
+    foodResource = f;
+  }
 
   //ability to increment tech resources at the end of each turn
-  public void AddTechResource(Map TerrMap, Pair<Integer, String> PlayerInfo){
-    
+  public void AddTechResource(Map TerrMap, Pair<Integer, String> PlayerInfo) {
+
     TerritoryProduce AddResource = new TerritoryProduce();
     HashMap<Territory, Player> HM_Terr = new HashMap<Territory, Player>();
     HM_Terr = TerrMap.getMap();
     ArrayList<Territory> MyTerr = new ArrayList<>();
-    
-    for(int i = 0; i < HM_Terr.size(); i++){
-        int CurrAdd = AddResource.getTech(HM_Terr.get(i).getName());
-        this.techResource += CurrAdd;
-    }
-}
 
-//ability to increment food resources at the end of each turn
-public void AddFoodResource(Map TerrMap, Pair<Integer, String> PlayerInfo){
-    
-  TerritoryProduce AddResource = new TerritoryProduce();
-  HashMap<Territory, Player> HM_Terr = new HashMap<Territory, Player>();
-  HM_Terr = TerrMap.getMap();
-  ArrayList<Territory> MyTerr = new ArrayList<>();
-  
-  for(int i = 0; i < HM_Terr.size(); i++){
+    for (int i = 0; i < HM_Terr.size(); i++) {
+      int CurrAdd = AddResource.getTech(HM_Terr.get(i).getName());
+      this.techResource += CurrAdd;
+    }
+  }
+
+  //ability to increment food resources at the end of each turn
+  public void AddFoodResource(Map TerrMap, Pair<Integer, String> PlayerInfo) {
+
+    TerritoryProduce AddResource = new TerritoryProduce();
+    HashMap<Territory, Player> HM_Terr = new HashMap<Territory, Player>();
+    HM_Terr = TerrMap.getMap();
+    ArrayList<Territory> MyTerr = new ArrayList<>();
+
+    for (int i = 0; i < HM_Terr.size(); i++) {
       int CurrAdd = AddResource.getFood(HM_Terr.get(i).getName());
       this.foodResource += CurrAdd;
+    }
   }
-}
 
 
   /**
@@ -194,24 +205,25 @@ public void AddFoodResource(Map TerrMap, Pair<Integer, String> PlayerInfo){
 
   /**
    * When enter a new game, begin from choosing group
+   *
    * @throws IOException
    * @throws ClassNotFoundException
    */
-  public void start() throws IOException, ClassNotFoundException{
+  public void start() throws IOException, ClassNotFoundException {
     init();
     playTurns();
-  } 
+  }
 
   /**
-   * When switch to a game that is palying
-   * Receive palyer again to initialize
+   * When switch to a game that is palying Receive palyer again to initialize
+   *
    * @throws IOException
    * @throws ClassNotFoundException
    */
-  public void continuePlay()  throws IOException, ClassNotFoundException{
+  public void continuePlay() throws IOException, ClassNotFoundException {
     player = communicate.receivePlayer(socket);
     prompt = new TextPrompt(player);
-    out.println("Welcome back, player "+player.getName());
+    out.println("Welcome back, player " + player.getName());
     playTurns();
   }
 }

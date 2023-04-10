@@ -63,7 +63,7 @@ public class Player implements Serializable {
 
   /**
    * consume technology resources
-   * 
+   *
    * @param num: the number of technology resources need to be consumed
    * @return true if consume successfully, false otherwise
    */
@@ -77,7 +77,7 @@ public class Player implements Serializable {
 
   /**
    * research to upgrade technology level
-   * 
+   *
    * @return true if upgrade successfully, false otherwise
    */
   public boolean upgradeLevel() {
@@ -90,11 +90,10 @@ public class Player implements Serializable {
 
   /**
    * upgrade one unit
-   * 
+   *
    * @param index:   the index of the unit
    * @param toLevel: the level the unit upgrade to
-   * @return null if upgrade successfully, otherwise the string describe the
-   *         reason for failure
+   * @return null if upgrade successfully, otherwise the string describe the reason for failure
    */
   public String upgradeUnit(Territory source, int index, int toLevel) {
     ArrayList<Unit> units = source.getUnits();
@@ -115,8 +114,7 @@ public class Player implements Serializable {
   }
 
   /**
-   * Check if two Player equals Compare name, number of units, and number of
-   * territories
+   * Check if two Player equals Compare name, number of units, and number of territories
    */
   @Override
   public boolean equals(Object o) {

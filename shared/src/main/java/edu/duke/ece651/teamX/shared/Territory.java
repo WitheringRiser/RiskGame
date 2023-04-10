@@ -22,7 +22,7 @@ public class Territory implements Serializable {
     this.name = in_name;
 
   }
-  
+
   public Territory(String in_name, int num) {
     this(in_name);
     addUnits(num);
@@ -43,7 +43,7 @@ public class Territory implements Serializable {
     return neighbours.iterator();
   }
 
-  
+
   /*
    * public Iterator<Unit> getUnits() {
    * return units.iterator();
@@ -111,7 +111,6 @@ public class Territory implements Serializable {
   public ArrayList<Unit> getUnits() {
     return units;
   }
-
 
 
   /**

@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+
 public class Game implements Runnable {
+
   private int num_player;
   private int init_units;
   private HashMap<Player, Socket> player_dict;
@@ -79,11 +81,9 @@ public class Game implements Runnable {
   }
 
   /**
-   * Check if the game is already begin
-   * --> cannot add new clients in it
-   * 
-   * @return true if it has call the run() function
-   *         false otherwise
+   * Check if the game is already begin --> cannot add new clients in it
+   *
+   * @return true if it has call the run() function false otherwise
    */
   public boolean checkHasBegin() {
     return hasBegin;
@@ -130,7 +130,7 @@ public class Game implements Runnable {
    * Create a Player object for client and inform that client
    */
   public void createPlayer(Socket player_socket, String name) throws IOException {
-    Player p = new Player(name, init_units);    
+    Player p = new Player(name, init_units);
     Communicate.sendPlayer(player_socket, p);
     player_dict.put(p, player_socket);
   }
@@ -138,11 +138,10 @@ public class Game implements Runnable {
   public boolean updateSocket(String name, Socket newSocket) {
     for (Player p : player_dict.keySet()) {
       if (p.getName().equals(name)) {
-        try{
+        try {
           Communicate.sendPlayer(newSocket, p);
           getPlayerSocket(p).close();
-        }
-        catch(IOException ioe){
+        } catch (IOException ioe) {
           return false;
         }
         player_dict.put(p, newSocket);
@@ -157,16 +156,15 @@ public class Game implements Runnable {
    */
   public void createMap() throws IOException, ClassNotFoundException {
     HashMap<Integer, ArrayList<Territory>> terr_groups = setupGroup();
-    
+
     for (Player p : player_dict.keySet()) {
-      int choice ;
-      try{
+      int choice;
+      try {
         sendTerrGroup(terr_groups, p); // Let client make decision
-        choice= Communicate.receiveInt(getPlayerSocket(p));
+        choice = Communicate.receiveInt(getPlayerSocket(p));
         status_dict.put(p, getPlayerSocket(p));
-        
-      }
-      catch(Exception ioe){//if the client loses connection -> choose the first
+
+      } catch (Exception ioe) {//if the client loses connection -> choose the first
         choice = terr_groups.keySet().stream().findFirst().get();
         status_dict.put(p, null);
       }
@@ -209,7 +207,7 @@ public class Game implements Runnable {
 
   private boolean hasConnection() {
     for (Socket s : status_dict.values()) {
-      if (s!=null) {
+      if (s != null) {
         return true;
       }
     }
@@ -228,7 +226,8 @@ public class Game implements Runnable {
 
   private void handleAttackSenders(Iterable<AttackSender> attackSenders)
       throws IllegalArgumentException {
-    AttackProcessor attackProcessor = new AttackProcessor((ArrayList<AttackSender>) attackSenders, map);
+    AttackProcessor attackProcessor = new AttackProcessor((ArrayList<AttackSender>) attackSenders,
+        map);
     attackProcessor.resovleAllAttack();
   }
 
@@ -319,7 +318,7 @@ public class Game implements Runnable {
     for (Player p : player_dict.keySet()) {
       // Need to send to the socket we send map to
       Socket s = status_dict.get(p);
-      if (s==null) {
+      if (s == null) {
         continue;
       }
       try {
@@ -331,17 +330,20 @@ public class Game implements Runnable {
   }
 
   public RoomSender getRoomSender() {
-    if(isEnd){
-      return new RoomSender(num_player, player_dict.size(), new HashSet<Player>(player_dict.keySet()), map,
+    if (isEnd) {
+      return new RoomSender(num_player, player_dict.size(),
+          new HashSet<Player>(player_dict.keySet()), map,
           hasBegin, isEnd, whoWons(), whoLost());
     }
     if (hasBegin) {
-      return new RoomSender(num_player, player_dict.size(), new HashSet<Player>(player_dict.keySet()), map,
+      return new RoomSender(num_player, player_dict.size(),
+          new HashSet<Player>(player_dict.keySet()), map,
           hasBegin, isEnd, null, whoLost());
     }
 
-    return new RoomSender(num_player, player_dict.size(), new HashSet<Player>(player_dict.keySet()), map,
-    hasBegin, false, null,null);
+    return new RoomSender(num_player, player_dict.size(), new HashSet<Player>(player_dict.keySet()),
+        map,
+        hasBegin, false, null, null);
   }
 
   private void incrementAllTerritoryByOneUnit() {
@@ -363,7 +365,7 @@ public class Game implements Runnable {
       // Need to receive from the socket that we send map to
       Socket s = status_dict.get(player);
       // if the client lose connection when sending map, skip
-      if (s==null) {
+      if (s == null) {
         continue;
       }
       try {
@@ -414,25 +416,24 @@ public class Game implements Runnable {
       createMap();
       for (Player p : status_dict.keySet()) {
         Socket s = status_dict.get(p);
-        try{
-          if(s==null){
+        try {
+          if (s == null) {
             throw new IOException("no connection when send territory group");
           }
           // receive results from client and let game setUnits using this result
           ArrayList<Territory> res = (ArrayList<Territory>) Communicate.receiveObject(s);
           setUnits(res);
-        }
-        catch(Exception ioe){
-          ArrayList<Territory> allTerr=map.getTerritories(p);
-          int num = init_units/allTerr.size();
-          for (Territory t : allTerr){
+        } catch (Exception ioe) {
+          ArrayList<Territory> allTerr = map.getTerritories(p);
+          int num = init_units / allTerr.size();
+          for (Territory t : allTerr) {
             t.addUnits(num);
           }
-          if(init_units>num*allTerr.size()){
-            allTerr.get(0).addUnits(init_units-num*allTerr.size());
+          if (init_units > num * allTerr.size()) {
+            allTerr.get(0).addUnits(init_units - num * allTerr.size());
           }
         }
-      }      
+      }
       playTurns();
     } catch (Exception e) {
       System.out.println(e.getMessage());

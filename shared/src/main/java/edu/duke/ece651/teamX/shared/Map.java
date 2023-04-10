@@ -128,8 +128,7 @@ public class Map implements Serializable {
   }
 
   /**
-   * Check if the territory is already in the hashmap Note: We do not allow have
-   * multiple
+   * Check if the territory is already in the hashmap Note: We do not allow have multiple
    * territories with the same name
    *
    * @param terr is the territory to check
@@ -192,8 +191,7 @@ public class Map implements Serializable {
   }
 
   /**
-   * Get the owner of the input terr Will check the existence of the territory
-   * first
+   * Get the owner of the input terr Will check the existence of the territory first
    *
    * @param terr is the territory we want to get the owner of
    * @return the owner of the territory. null indicates no owner

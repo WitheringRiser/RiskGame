@@ -38,7 +38,9 @@ public class AttackProcessor {
     HashMap<Territory, ArrayList<Attacker>> hashmap = getHashMap(_allAttack);
     ArrayList<MultiAttack> allAttack = new ArrayList<MultiAttack>();
     for (Territory defender : hashmap.keySet()) {
-      allAttack.add(new MultiAttack(hashmap.get(defender), map.getTerritoryByName(defender.getName()), map, rand));
+      allAttack.add(
+          new MultiAttack(hashmap.get(defender), map.getTerritoryByName(defender.getName()), map,
+              rand));
     }
     return allAttack;
   }

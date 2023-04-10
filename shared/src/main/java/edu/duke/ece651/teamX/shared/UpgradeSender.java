@@ -1,6 +1,7 @@
 package edu.duke.ece651.teamX.shared;
 
 public class UpgradeSender {
+
   private Territory source;
   private int index;
   private int toLevel;

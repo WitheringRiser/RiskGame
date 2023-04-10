@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class AttackProcessorTest {
+
   @Test
   public void test_invalid_totalSum() {
     ArrayList<AttackSender> allAttack = new ArrayList<AttackSender>();
@@ -106,7 +107,7 @@ public class AttackProcessorTest {
 
     allAttack.add(new AttackSender(t1, t2, 11));
     allAttack.add(new AttackSender(t2, t1, indexList));
-    
+
     assertThrows(IllegalArgumentException.class, () -> new AttackProcessor(allAttack, map, 0));
   }
 

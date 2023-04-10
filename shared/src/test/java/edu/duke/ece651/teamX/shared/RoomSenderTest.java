@@ -8,6 +8,7 @@ import java.net.Socket;
 import org.junit.jupiter.api.Test;
 
 public class RoomSenderTest {
+
   @Test
   public void test_RoomSender() throws IOException, ClassNotFoundException {
     RoomSender aSender = new RoomSender(2, 2, null, null, true, false, null, null);
@@ -15,7 +16,7 @@ public class RoomSenderTest {
     Socket clientSocket = new Socket("localhost", 4451);
     Socket playerSocket = ss.accept();
     Communicate.sendObject(playerSocket, aSender);
-    RoomSender rSender = (RoomSender)Communicate.receiveObject(clientSocket);
+    RoomSender rSender = (RoomSender) Communicate.receiveObject(clientSocket);
     assertEquals(2, rSender.getTotalNum());
     assertEquals(2, rSender.getJointedNum());
     assertEquals(null, rSender.getPlayerSet());

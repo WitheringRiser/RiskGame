@@ -14,10 +14,11 @@ import java.util.ArrayList;
 import edu.duke.ece651.teamX.shared.Communicate;
 
 public class App {
+
   private ArrayList<String> authentication(Socket clientSocket, UserInReader uir)
       throws IOException, ClassNotFoundException {
     ArrayList<String> namePassword = new ArrayList<String>();
-    int choice = uir.enterNum(1, "0 for create account, 1 for login","Please choose from 0 or 1");
+    int choice = uir.enterNum(1, "0 for create account, 1 for login", "Please choose from 0 or 1");
     Communicate.sendInt(clientSocket, choice);
     while (true) {
       System.out.println("Input userName: ");
@@ -36,23 +37,27 @@ public class App {
     }
   }
 
-  private void createGame(Socket clientSocket, UserInReader uir) throws IOException, ClassNotFoundException {
+  private void createGame(Socket clientSocket, UserInReader uir)
+      throws IOException, ClassNotFoundException {
     System.out.println("Enter number of player between 2 and 4");
-    int playerNum = uir.enterNum(2, 4,  "Please input between 2 and 4");
+    int playerNum = uir.enterNum(2, 4, "Please input between 2 and 4");
     Communicate.sendInt(clientSocket, playerNum);
   }
 
-  private RoomSender joinGame(Socket clientSocket, UserInReader uir) throws IOException, ClassNotFoundException {
+  private RoomSender joinGame(Socket clientSocket, UserInReader uir)
+      throws IOException, ClassNotFoundException {
 
-    ArrayList<RoomSender> roomList = (ArrayList<RoomSender>) Communicate.receiveObject(clientSocket);
+    ArrayList<RoomSender> roomList = (ArrayList<RoomSender>) Communicate.receiveObject(
+        clientSocket);
     if (roomList.size() == 0) {
       System.out.println("No option avaliable");
       return null;
     }
     System.out.println("Please choose a room to join:");
     for (int i = 0; i < roomList.size(); i++) {
-      System.out.println(i + " total player num: " + roomList.get(i).getTotalNum() + " joined player num: "
-          + roomList.get(i).getJointedNum());
+      System.out.println(
+          i + " total player num: " + roomList.get(i).getTotalNum() + " joined player num: "
+              + roomList.get(i).getJointedNum());
     }
     int roomInd = uir.enterNum(roomList.size() - 1, "not a valid option");
     Communicate.sendInt(clientSocket, roomInd);
@@ -85,7 +90,8 @@ public class App {
     ArrayList<String> namePassword = app.authentication(clientSocket, uir);
 
     while (true) {
-      int choice = uir.enterNum(2, "0 for create a new game, 1 for join a new game, 2 for switch game",
+      int choice = uir.enterNum(2,
+          "0 for create a new game, 1 for join a new game, 2 for switch game",
           "Need to between 0 and 2");
       Communicate.sendInt(clientSocket, choice);
       if (choice == 0) {

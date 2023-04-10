@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.concurrent.locks.*;
 
 public class App {
+
   private HashMap<String, String> namePasswordDic;
   private ArrayList<Game> GameList;
   private ReadWriteLock gameLock;
@@ -56,7 +57,8 @@ public class App {
     while (true) {
       try {
         Socket pSocket = ss.accept();
-        Thread adminT = new Thread(new Admin(app.namePasswordDic, app.GameList, pSocket, app.gameLock, app.nameLock));
+        Thread adminT = new Thread(
+            new Admin(app.namePasswordDic, app.GameList, pSocket, app.gameLock, app.nameLock));
         adminT.start();
       } catch (Exception e) {
         System.out.println(e.getMessage());

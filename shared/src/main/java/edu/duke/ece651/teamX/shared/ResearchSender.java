@@ -1,6 +1,7 @@
 package edu.duke.ece651.teamX.shared;
 
 public class ResearchSender {
+
   private Player player;
 
   public ResearchSender(Player _player) {

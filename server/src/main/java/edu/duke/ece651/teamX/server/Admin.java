@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.concurrent.locks.*;
 
 public class Admin implements Runnable {
+
   private HashMap<String, String> namePasswordDic;
   private ArrayList<Game> GameList;
 
@@ -19,7 +20,7 @@ public class Admin implements Runnable {
 
   /**
    * Construct an Admin object for each connection
-   * 
+   *
    * @param np_ptr is the pointer to player_dict saved in App
    * @param ng_ptr is the pointer to status dict save in App
    * @param cs     is the client socket for Admin to communicate
@@ -38,14 +39,11 @@ public class Admin implements Runnable {
   }
 
   /**
-   * Client authentication
-   * Receive username and password, compare them with data in namePasswordDic
-   * If the username and password is not match, or username not exist,
-   * send error message to user
-   * If the client is authenticated, send empty message to client,
-   * and move to next step
-   * Need read lock for namePasswordDic
-   * 
+   * Client authentication Receive username and password, compare them with data in namePasswordDic
+   * If the username and password is not match, or username not exist, send error message to user If
+   * the client is authenticated, send empty message to client, and move to next step Need read lock
+   * for namePasswordDic
+   *
    * @return the user name
    */
   public String login() throws IOException, ClassNotFoundException {
@@ -76,12 +74,10 @@ public class Admin implements Runnable {
   }
 
   /**
-   * Create a new client account and save it into namePasswordDic
-   * If the username already exist, send error message to client
-   * If the creation is successful, send empty message to client
-   * After creation, the user is default as authenticated
-   * Need write lock for namePasswordDic
-   * 
+   * Create a new client account and save it into namePasswordDic If the username already exist,
+   * send error message to client If the creation is successful, send empty message to client After
+   * creation, the user is default as authenticated Need write lock for namePasswordDic
+   *
    * @return the user name
    */
   public String createAccount() throws IOException, ClassNotFoundException {
@@ -104,13 +100,11 @@ public class Admin implements Runnable {
   }
 
   /**
-   * Create a new Game object according to user's requirement
-   * User will send the playerNum to Admin
-   * After create the room, the client is added to the game
-   * Add the newly created game into
-   * 
+   * Create a new Game object according to user's requirement User will send the playerNum to Admin
+   * After create the room, the client is added to the game Add the newly created game into
+   *
    * @param name is the username of the client
-   * 
+   *             <p>
    *             Need write lock for nameGameDic
    */
   public void createNewRoom(String name) throws IOException, ClassNotFoundException {
@@ -126,13 +120,12 @@ public class Admin implements Runnable {
   }
 
   /**
-   * Let the user join a room that is not active
-   * The client should send back player+index of the room in nameGameDic
-   * Need to append the Game in the arraylist of that username
-   * If the room is already begin, send new options to user
-   * 
+   * Let the user join a room that is not active The client should send back player+index of the
+   * room in nameGameDic Need to append the Game in the arraylist of that username If the room is
+   * already begin, send new options to user
+   *
    * @param name is the username of the client
-   * 
+   *             <p>
    *             Need write lock for nameGameDic
    */
   public void joinNewRoom(String name) throws IOException, ClassNotFoundException {
@@ -169,17 +162,16 @@ public class Admin implements Runnable {
     } finally {
       gameLock.writeLock().unlock();
     }
-    
+
   }
 
   /**
-   * Let user go back to a still active room
-   * The client should send back the index of the room they want to go
-   * If the game already end, need to send error message to user
-   * If suceesfully join, send empty message to user
-   * 
+   * Let user go back to a still active room The client should send back the index of the room they
+   * want to go If the game already end, need to send error message to user If suceesfully join,
+   * send empty message to user
+   *
    * @param name is the username of the client
-   * 
+   *             <p>
    *             Need write lock for nameGameDic
    */
   public void joinActiveRoom(String name) throws IOException, ClassNotFoundException {
@@ -205,19 +197,18 @@ public class Admin implements Runnable {
       if (cGame.checkIsEnd()) {
         communicate.sendObject(socket, "The game is already end");
       } else {
-        communicate.sendObject(socket,"");
+        communicate.sendObject(socket, "");
         cGame.updateSocket(name, socket);
       }
     } finally {
       gameLock.writeLock().unlock();
     }
-    
+
   }
 
   /**
-   * Client authentication
-   * Assign the client to their chosen room
-   * Need to handle IOException, ClassNotFoundException errors
+   * Client authentication Assign the client to their chosen room Need to handle IOException,
+   * ClassNotFoundException errors
    */
   public void run() {
     try {
