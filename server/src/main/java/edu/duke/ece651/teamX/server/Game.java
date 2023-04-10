@@ -6,7 +6,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-
+import java.util.Set;
 public class Game implements Runnable {
   private int num_player;
   private int init_units;
@@ -157,7 +157,8 @@ public class Game implements Runnable {
    */
   public void createMap() throws IOException, ClassNotFoundException {
     HashMap<Integer, ArrayList<Territory>> terr_groups = setupGroup();
-    for (Player p : getAllPlayers()) {
+    
+    for (Player p : player_dict.keySet()) {
       int choice ;
       try{
         sendTerrGroup(terr_groups, p); // Let client make decision
@@ -330,9 +331,13 @@ public class Game implements Runnable {
   }
 
   public RoomSender getRoomSender() {
-    if (hasBegin) {
+    if(isEnd){
       return new RoomSender(num_player, player_dict.size(), new HashSet<Player>(player_dict.keySet()), map,
           hasBegin, isEnd, whoWons(), whoLost());
+    }
+    if (hasBegin) {
+      return new RoomSender(num_player, player_dict.size(), new HashSet<Player>(player_dict.keySet()), map,
+          hasBegin, isEnd, null, whoLost());
     }
 
     return new RoomSender(num_player, player_dict.size(), new HashSet<Player>(player_dict.keySet()), map,
