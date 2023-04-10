@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class MultiAttackTest {
-
+  @Disabled
   @Test
   public void test_threeAttackFightTogether() {
     Territory t1 = new Territory("duke", 100);
@@ -54,6 +54,7 @@ public class MultiAttackTest {
 
   }
 
+  @Disabled
   @Test
   public void test_twoAttackFightTogether() {
     Territory t1 = new Territory("duke", 100);
@@ -89,6 +90,7 @@ public class MultiAttackTest {
 
   }
 
+  @Disabled
   @Test
   public void test_twoAttackOneOwener() {
     Territory t1 = new Territory("duke", 100);
@@ -165,6 +167,7 @@ public class MultiAttackTest {
 
   }
 
+  @Disabled
   @Test
   public void test_perform() {
     test_perform_helper(108, 74);

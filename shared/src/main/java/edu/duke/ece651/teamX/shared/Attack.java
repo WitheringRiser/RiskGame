@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class Attack extends BasicAction {
 
-  private static Random rand = null;
+  private Random rand = null;
   private ArrayList<Unit> attacker;
   private ArrayList<Unit> defender;
   private Player enemyPlayer;
@@ -28,7 +28,7 @@ public class Attack extends BasicAction {
     rand = new Random(seed);
 
     attacker = source.removeUnits(num);
-    // defender = destination.removeUnits(destination.getUnitsNumber());
+    defender = destination.removeUnits(destination.getUnitsNumber());
     enemyPlayer = player;
   }
 
@@ -50,8 +50,8 @@ public class Attack extends BasicAction {
     return enemyPlayer;
   }
 
-  public int rollDice(int max) {
-    return rand.nextInt(max) + 1;
+  public int rollDice(int max, int bonus) {
+    return rand.nextInt(max) + 1 + bonus;
   }
 
   public int getHighestUnitIndex(ArrayList<Unit> units) {
@@ -77,14 +77,13 @@ public class Attack extends BasicAction {
   /**
    * perform one unit attck
    */
-  public void unitAttack(int max) {
-    int enemyDice = rollDice(max);
-    int defenderDice = rollDice(max);
+  public void unitAttack(Unit enemy, Unit def, int max) {
+    int enemyDice = rollDice(max, enemy.getBonus());
+    int defenderDice = rollDice(max, def.getBonus());
     if (enemyDice > defenderDice) {
-      destination.removeUnits(1);
-      //defender.remove(0);
+      defender.remove(def);
     } else {
-      attacker.remove(0);
+      attacker.remove(enemy);
     }
   }
 
@@ -94,15 +93,21 @@ public class Attack extends BasicAction {
   @Override
   public boolean perform() {
     int attackerSize = attacker.size();
-    int destinationOriginalSize = destination.getUnitsNumber();
-
-    while (attacker.size() > 0 && destination.getUnitsNumber() > 0) {
-      unitAttack(20);
+    int destinationOriginalSize = defender.size();
+    int i = 0;
+    while (attacker.size() > 0 && defender.size() > 0) {
+      if (i % 2 == 0) {
+        unitAttack(attacker.get(getHighestUnitIndex(attacker)), defender.get(getLowestUnitIndex(defender)), 20);
+        i = 1;
+      } else {
+        unitAttack(attacker.get(getLowestUnitIndex(attacker)), defender.get(getHighestUnitIndex(defender)), 20);
+        i = 0;
+      }
     }
     TextDisplayer.displayAttack(attackerSize, destinationOriginalSize, attacker.size(),
-        destination.getUnitsNumber(),
-        enemyPlayer);
+        defender.size(), enemyPlayer);
     if (attacker.size() == 0) {
+      destination.setUnits(defender);
       return false;
     } else {
       destination.setUnits(attacker);

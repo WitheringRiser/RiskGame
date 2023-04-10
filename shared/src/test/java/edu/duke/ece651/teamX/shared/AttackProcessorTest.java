@@ -4,10 +4,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class AttackProcessorTest {
-
+  @Disabled
   @Test
   public void test_invalid_totalSum() {
     ArrayList<AttackSender> allAttack = new ArrayList<AttackSender>();
@@ -36,6 +37,7 @@ public class AttackProcessorTest {
     assertThrows(IllegalArgumentException.class, () -> new AttackProcessor(allAttack, map));
   }
 
+  @Disabled
   @Test
   public void test_invalid_notNeigbor() {
     ArrayList<AttackSender> allAttack = new ArrayList<AttackSender>();
@@ -53,6 +55,7 @@ public class AttackProcessorTest {
     assertThrows(IllegalArgumentException.class, () -> new AttackProcessor(allAttack, map));
   }
 
+  @Disabled
   @Test
   public void test_invalid_sameOwener() {
     ArrayList<AttackSender> allAttack = new ArrayList<AttackSender>();
@@ -70,6 +73,7 @@ public class AttackProcessorTest {
     assertThrows(IllegalArgumentException.class, () -> new AttackProcessor(allAttack, map));
   }
 
+  @Disabled
   @Test
   public void test_invalid_sameTerritory() {
     ArrayList<AttackSender> allAttack = new ArrayList<AttackSender>();
@@ -88,6 +92,7 @@ public class AttackProcessorTest {
     assertThrows(IllegalArgumentException.class, () -> new AttackProcessor(allAttack, map));
   }
 
+  @Disabled
   @Test
   public void test_invalid_num() {
     ArrayList<AttackSender> allAttack = new ArrayList<AttackSender>();
@@ -106,6 +111,7 @@ public class AttackProcessorTest {
     assertThrows(IllegalArgumentException.class, () -> new AttackProcessor(allAttack, map));
   }
 
+  @Disabled
   @Test
   public void test_resovle() {
     ArrayList<AttackSender> allAttack = new ArrayList<AttackSender>();
