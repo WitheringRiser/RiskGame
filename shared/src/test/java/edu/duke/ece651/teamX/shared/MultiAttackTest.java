@@ -79,6 +79,7 @@ public class MultiAttackTest {
     System.out.println(displayer.display());
 
   }
+
   @Test
   public void test_AttackWithBonus() {
     Territory t1 = new Territory("duke", 10);
@@ -126,6 +127,6 @@ public class MultiAttackTest {
     test_perform_helper(108, 75);
     test_perform_helper(8, 23);
   }
-  
+
 
 }

@@ -8,7 +8,7 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.Socket;
 
-public class Communicate{
+public class Communicate {
 
   /**
    * Send object through socket
@@ -87,7 +87,8 @@ public class Communicate{
     return (Player) receiveObject(socket);
   }
 
-  public static GameResult receiveGameResult(Socket socket) throws IOException, ClassNotFoundException {
+  public static GameResult receiveGameResult(Socket socket)
+      throws IOException, ClassNotFoundException {
     return (GameResult) receiveObject(socket);
   }
 }

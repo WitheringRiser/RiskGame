@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 
 public class UpgradeProcessorTest {
+
   @Test
   public void test_resolve() {
     UpgradeSender u1 = new UpgradeSender(new Territory("a"), 0, 1);

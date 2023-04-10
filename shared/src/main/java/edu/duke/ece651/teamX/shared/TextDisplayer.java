@@ -77,15 +77,17 @@ public class TextDisplayer extends Displayer<String> {
     ans.append("In " + t.getName() + "(belongs to " + map.getOwner(t).getName() + "), ");
     ans.append("fight between:\n");
     for (Attacker attacker : attackers) {
-      ans.append(attacker.getOwner().getName() + " with " + attacker.getAttacker().size() + " units\n");
+      ans.append(
+          attacker.getOwner().getName() + " with " + attacker.getAttacker().size() + " units\n");
     }
     System.out.print(ans.toString());
   }
 
   public static void displayAttackAfter(Territory t, Map map) {
     StringBuilder ans = new StringBuilder();
-    ans.append("After attack, \n" + t.getName() + " belongs to " + map.getOwner(t).getName() + " with "
-        + t.getUnitsNumber() + " units\n");
+    ans.append(
+        "After attack, \n" + t.getName() + " belongs to " + map.getOwner(t).getName() + " with "
+            + t.getUnitsNumber() + " units\n");
     ans.append("-----------------------------------------\n");
     System.out.print(ans.toString());
   }

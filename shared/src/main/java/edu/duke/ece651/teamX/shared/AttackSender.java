@@ -3,6 +3,7 @@ package edu.duke.ece651.teamX.shared;
 import java.util.ArrayList;
 
 public class AttackSender extends ActionSender {
+
   private ArrayList<Integer> indexList;
 
   public AttackSender(Territory _source, Territory _destination, int _unitsNum) {

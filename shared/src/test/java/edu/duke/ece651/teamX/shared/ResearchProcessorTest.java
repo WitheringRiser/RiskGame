@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 
 public class ResearchProcessorTest {
+
   @Test
   public void test_resolve() {
     ResearchSender r1 = new ResearchSender(new Player("a", 10));

@@ -3,6 +3,7 @@ package edu.duke.ece651.teamX.shared;
 import java.util.HashMap;
 
 public class BasicUnit extends Unit {
+
   private HashMap<Integer, String> nameMap;
   private HashMap<Integer, Integer> bonusMap;
   private HashMap<Integer, Integer> costMap;
