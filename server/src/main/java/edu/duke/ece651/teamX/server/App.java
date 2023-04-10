@@ -10,26 +10,31 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.concurrent.locks.*;
 
 public class App {
   private HashMap<String, String> namePasswordDic;
-  private HashMap<String, ArrayList<Game>> nameGameDic;
+  private ArrayList<Game> GameList;
+  private ReadWriteLock gameLock;
+  private ReadWriteLock nameLock;
 
   public App() {
     namePasswordDic = new HashMap<String, String>();
-    nameGameDic = new HashMap<String, ArrayList<Game>>();
+    GameList = new ArrayList<Game>();
+    gameLock = new ReentrantReadWriteLock();
+    nameLock = new ReentrantReadWriteLock();
   }
 
-  private int getPlayerNum(Scanner input) {
-    int playerNum;
-    // Prompt for first integer input for player number
-    System.out.print("Enter the player number(between 2 and 4): ");
-    while (!input.hasNextInt() || (playerNum = input.nextInt()) < 2 || playerNum > 4) {
-      input.nextLine(); // clear input buffer
-      System.out.print("Invalid input. Please enter a positive integer between 2 and 4: ");
-    }
-    return playerNum;
-  }
+  // private int getPlayerNum(Scanner input) {
+  //   int playerNum;
+  //   // Prompt for first integer input for player number
+  //   System.out.print("Enter the player number(between 2 and 4): ");
+  //   while (!input.hasNextInt() || (playerNum = input.nextInt()) < 2 || playerNum > 4) {
+  //     input.nextLine(); // clear input buffer
+  //     System.out.print("Invalid input. Please enter a positive integer between 2 and 4: ");
+  //   }
+  //   return playerNum;
+  // }
 
   private int getPort(Scanner input) {
     int port;
@@ -43,19 +48,20 @@ public class App {
   }
 
   public static void main(String[] args) throws IOException, ClassNotFoundException {
-    Scanner input = new Scanner(System.in);
     App app = new App();
-    int playerNum = app.getPlayerNum(input);
+    Scanner input = new Scanner(System.in);
     int port = app.getPort(input);
     input.close();
-    Game game = new Game(playerNum, 20);
     ServerSocket ss = new ServerSocket(port);
-    PlayerName namer = new ColorPlayerName();
-    for (int i = 0; i < playerNum; i++) {
-      Socket pSocket = ss.accept();
-      game.createPlayer(pSocket, namer.getName());
+    while (true) {
+      try {
+        Socket pSocket = ss.accept();
+        Thread adminT = new Thread(new Admin(app.namePasswordDic, app.GameList, pSocket, app.gameLock, app.nameLock));
+        adminT.start();
+      } catch (Exception e) {
+        System.out.println(e.getMessage());
+      }
     }
-    game.run();
   }
 
 }

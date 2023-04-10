@@ -191,4 +191,27 @@ public void AddFoodResource(Map TerrMap, Pair<Integer, String> PlayerInfo){
       }
     }
   }
+
+  /**
+   * When enter a new game, begin from choosing group
+   * @throws IOException
+   * @throws ClassNotFoundException
+   */
+  public void start() throws IOException, ClassNotFoundException{
+    init();
+    playTurns();
+  } 
+
+  /**
+   * When switch to a game that is palying
+   * Receive palyer again to initialize
+   * @throws IOException
+   * @throws ClassNotFoundException
+   */
+  public void continuePlay()  throws IOException, ClassNotFoundException{
+    player = communicate.receivePlayer(socket);
+    prompt = new TextPrompt(player);
+    out.println("Welcome back, player "+player.getName());
+    playTurns();
+  }
 }

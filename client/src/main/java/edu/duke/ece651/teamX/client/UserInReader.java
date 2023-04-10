@@ -81,6 +81,16 @@ public class UserInReader {
     }
   }
 
+  public int enterNum(int min_num, int max_num, String enterAgainPrompt) throws IOException {
+    while (true) {
+      int num = enterNum(max_num,enterAgainPrompt);
+      if(num>=min_num){
+        return num;
+      }
+      out.print(enterAgainPrompt);
+    }
+  }
+
   /**
    * @param max_num          is the maximum number of available units
    * @param startPrompt      is the start input prompt

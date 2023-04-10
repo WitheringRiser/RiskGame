@@ -3,13 +3,66 @@
  */
 package edu.duke.ece651.teamX.client;
 
+import edu.duke.ece651.teamX.shared.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.ArrayList;
+
+import edu.duke.ece651.teamX.shared.Communicate;
 
 public class App {
+  private ArrayList<String> authentication(Socket clientSocket, UserInReader uir)
+      throws IOException, ClassNotFoundException {
+    ArrayList<String> namePassword = new ArrayList<String>();
+    int choice = uir.enterNum(1, "0 for create account, 1 for login","Please choose from 0 or 1");
+    Communicate.sendInt(clientSocket, choice);
+    while (true) {
+      System.out.println("Input userName: ");
+      String uName = uir.readString();
+      System.out.println("Input password: ");
+      String password = uir.readString();
+      namePassword.add(uName);
+      namePassword.add(password);
+      Communicate.sendObject(clientSocket, namePassword);
+      String mes = (String) Communicate.receiveObject(clientSocket);
+      if (mes.length() == 0) {
+        return namePassword;
+      }
+      System.out.println(mes);
+      namePassword.clear();
+    }
+  }
+
+  private void createGame(Socket clientSocket, UserInReader uir) throws IOException, ClassNotFoundException {
+    System.out.println("Enter number of player between 2 and 4");
+    int playerNum = uir.enterNum(2, 4,  "Please input between 2 and 4");
+    Communicate.sendInt(clientSocket, playerNum);
+  }
+
+  private RoomSender joinGame(Socket clientSocket, UserInReader uir) throws IOException, ClassNotFoundException {
+
+    ArrayList<RoomSender> roomList = (ArrayList<RoomSender>) Communicate.receiveObject(clientSocket);
+    if (roomList.size() == 0) {
+      System.out.println("No option avaliable");
+      return null;
+    }
+    System.out.println("Please choose a room to join:");
+    for (int i = 0; i < roomList.size(); i++) {
+      System.out.println(i + " total player num: " + roomList.get(i).getTotalNum() + " joined player num: "
+          + roomList.get(i).getJointedNum());
+    }
+    int roomInd = uir.enterNum(roomList.size() - 1, "not a valid option");
+    Communicate.sendInt(clientSocket, roomInd);
+    String message = (String) Communicate.receiveObject(clientSocket);
+    if (message.length() == 0) {
+      return roomList.get(roomInd);
+    }
+    System.out.println(message);
+    return null;
+  }
 
   public static void main(String[] args) throws IOException, ClassNotFoundException {
     int port;
@@ -24,13 +77,40 @@ public class App {
         return;
       }
     }
+    App app = new App();
     Socket clientSocket = new Socket("localhost", port);
     BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
     PrintStream out = System.out;
+    UserInReader uir = new UserInReader(input, out);
+    ArrayList<String> namePassword = app.authentication(clientSocket, uir);
 
-    Client client = new Client(clientSocket, input, out);
-    client.init();
+    while (true) {
+      int choice = uir.enterNum(2, "0 for create a new game, 1 for join a new game, 2 for switch game",
+          "Need to between 0 and 2");
+      Communicate.sendInt(clientSocket, choice);
+      if (choice == 0) {
+        app.createGame(clientSocket, uir);
+        Client client = new Client(clientSocket, input, out);
+        client.start();
+        break;
+      } else {
+        RoomSender rs = app.joinGame(clientSocket, uir);
+        if (rs != null) {
+          Client client = new Client(clientSocket, input, out);
+          if (rs.getIsBegin()) {
+            client.continuePlay();
+          } else {
+            client.start();
 
-    client.playTurns();
+          }
+          break;
+        }
+        clientSocket.close();
+        clientSocket = new Socket("localhost", port);
+        Communicate.sendInt(clientSocket, 1);
+        Communicate.sendObject(clientSocket, namePassword);
+        Communicate.receiveObject(clientSocket);
+      }
+    }
   }
 }

@@ -130,14 +130,21 @@ public class Game implements Runnable {
    * Create a Player object for client and inform that client
    */
   public void createPlayer(Socket player_socket, String name) throws IOException {
-    Player p = new Player(name, init_units);
-    player_dict.put(p, player_socket);
+    Player p = new Player(name, init_units);    
     Communicate.sendPlayer(player_socket, p);
+    player_dict.put(p, player_socket);
   }
 
   public boolean updateSocket(String name, Socket newSocket) {
     for (Player p : player_dict.keySet()) {
       if (p.getName().equals(name)) {
+        try{
+          Communicate.sendPlayer(newSocket, p);
+          getPlayerSocket(p).close();
+        }
+        catch(IOException ioe){
+          return false;
+        }
         player_dict.put(p, newSocket);
         return true;
       }
@@ -151,10 +158,17 @@ public class Game implements Runnable {
   public void createMap() throws IOException, ClassNotFoundException {
     HashMap<Integer, ArrayList<Territory>> terr_groups = setupGroup();
     for (Player p : getAllPlayers()) {
-      sendTerrGroup(terr_groups, p); // Let client make decision
-      int choice = Communicate.receiveInt(getPlayerSocket(p));
+      int choice ;
+      try{
+        sendTerrGroup(terr_groups, p); // Let client make decision
+        choice= Communicate.receiveInt(getPlayerSocket(p));
+        
+      }
+      catch(Exception ioe){//if the client loses connection -> choose the first
+        choice = terr_groups.keySet().stream().findFirst().get();
+      }
       setGroupOwner(terr_groups.get(choice), p); // Set owner of the group
-      terr_groups.remove(choice); // remove this option
+      terr_groups.remove(choice); // remove this option     
     }
   }
 
@@ -192,7 +206,7 @@ public class Game implements Runnable {
 
   private boolean hasConnection() {
     for (Socket s : status_dict.values()) {
-      if (!s.equals(null)) {
+      if (s!=null) {
         return true;
       }
     }
@@ -302,7 +316,7 @@ public class Game implements Runnable {
     for (Player p : player_dict.keySet()) {
       // Need to send to the socket we send map to
       Socket s = status_dict.get(p);
-      if (s.equals(null)) {
+      if (s==null) {
         continue;
       }
       try {
@@ -342,7 +356,7 @@ public class Game implements Runnable {
       // Need to receive from the socket that we send map to
       Socket s = status_dict.get(player);
       // if the client lose connection when sending map, skip
-      if (s.equals(null)) {
+      if (s==null) {
         continue;
       }
       try {
@@ -387,15 +401,27 @@ public class Game implements Runnable {
   public void run() {
     hasBegin = true;
     try {
-      createMap();
-      for (Socket s : player_dict.values()) {
-        // receive results from client and let game setUnits using this result
-        ArrayList<Territory> res = (ArrayList<Territory>) Communicate.receiveObject(s);
-        setUnits(res);
-      }
       if (num_player != getActualNumPlayer()) {
         throw new RuntimeException("The actual player num is not as expected");
       }
+      createMap();
+      for (Socket s : player_dict.values()) {
+        try{
+          // receive results from client and let game setUnits using this result
+          ArrayList<Territory> res = (ArrayList<Territory>) Communicate.receiveObject(s);
+          setUnits(res);
+        }
+        catch(IOException ioe){
+          ArrayList<Territory> allTerr=map.getTerritories(getPlayerFromSocket(s));
+          int num = init_units/allTerr.size();
+          for (Territory t : allTerr){
+            t.addUnits(num);
+          }
+          if(init_units>num*allTerr.size()){
+            allTerr.get(0).addUnits(init_units-num*allTerr.size());
+          }
+        }
+      }      
       playTurns();
     } catch (Exception e) {
       System.out.println(e.getMessage());
