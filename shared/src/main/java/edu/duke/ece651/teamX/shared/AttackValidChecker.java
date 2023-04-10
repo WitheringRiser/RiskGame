@@ -13,6 +13,19 @@ public class AttackValidChecker {
     allAttack = _allAttack;
     checkUnitAndAdjacent();
     checkTotalAttackNum();
+    checkIndex();
+  }
+
+  public void checkIndex() {
+    for (AttackSender attack : allAttack) {
+      Territory source = map.getTerritoryByName(attack.getSource().getName());
+      ArrayList<Integer> indexList = attack.getIndexList();
+      for (Integer i : indexList) {
+        if (i < 0 || i >= source.getUnitsNumber()) {
+          throw new IllegalArgumentException("index is invalid");
+        }
+      }
+    }
   }
 
   public void checkUnitAndAdjacent() {

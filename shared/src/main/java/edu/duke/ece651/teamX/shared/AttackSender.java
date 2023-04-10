@@ -17,4 +17,9 @@ public class AttackSender extends ActionSender {
     super(_source, _destination, _indexList.size());
     indexList = _indexList;
   }
+
+  public ArrayList<Integer> getIndexList() {
+    return indexList;
+  }
+
 }
