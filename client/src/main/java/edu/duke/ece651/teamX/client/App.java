@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
-
+import java.util.Scanner;
 public class App {
 
   public static void main(String[] args) throws IOException, ClassNotFoundException {
@@ -27,7 +27,7 @@ public class App {
     Socket clientSocket = new Socket("localhost", port);
     BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
     PrintStream out = System.out;
-
+    UserInReader uir = new UserInReader(input, out);
     Client client = new Client(clientSocket, input, out);
     client.init();
 
