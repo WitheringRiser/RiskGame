@@ -162,10 +162,12 @@ public class Game implements Runnable {
       try{
         sendTerrGroup(terr_groups, p); // Let client make decision
         choice= Communicate.receiveInt(getPlayerSocket(p));
+        status_dict.put(p, getPlayerSocket(p));
         
       }
       catch(Exception ioe){//if the client loses connection -> choose the first
         choice = terr_groups.keySet().stream().findFirst().get();
+        status_dict.put(p, null);
       }
       setGroupOwner(terr_groups.get(choice), p); // Set owner of the group
       terr_groups.remove(choice); // remove this option     
@@ -405,14 +407,18 @@ public class Game implements Runnable {
         throw new RuntimeException("The actual player num is not as expected");
       }
       createMap();
-      for (Socket s : player_dict.values()) {
+      for (Player p : status_dict.keySet()) {
+        Socket s = status_dict.get(p);
         try{
+          if(s==null){
+            throw new IOException("no connection when send territory group");
+          }
           // receive results from client and let game setUnits using this result
           ArrayList<Territory> res = (ArrayList<Territory>) Communicate.receiveObject(s);
           setUnits(res);
         }
-        catch(IOException ioe){
-          ArrayList<Territory> allTerr=map.getTerritories(getPlayerFromSocket(s));
+        catch(Exception ioe){
+          ArrayList<Territory> allTerr=map.getTerritories(p);
           int num = init_units/allTerr.size();
           for (Territory t : allTerr){
             t.addUnits(num);
@@ -425,7 +431,7 @@ public class Game implements Runnable {
       playTurns();
     } catch (Exception e) {
       System.out.println(e.getMessage());
-      isEnd = true;
+      // isEnd = true;
     }
   }
 
