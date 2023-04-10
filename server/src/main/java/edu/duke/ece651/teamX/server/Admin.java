@@ -156,20 +156,20 @@ public class Admin implements Runnable {
     gameLock.writeLock().lock();
     try {
       if (cGame.checkHasBegin() || cGame.getActualNumPlayer() == cGame.getNumPlayer()) {
-        msg = "The room has already full";
+        communicate.sendObject(socket, "The room has already full");
       } else {
+        communicate.sendObject(socket, "");
         cGame.createPlayer(socket, name);
         // If room full --> start the game by making a new thread
         if (cGame.getActualNumPlayer() == cGame.getNumPlayer()) {
           Thread gameThread = new Thread(cGame);
           gameThread.start();
         }
-        msg = "";
       }
     } finally {
       gameLock.writeLock().unlock();
     }
-    communicate.sendObject(socket, msg);
+    
   }
 
   /**
@@ -203,15 +203,15 @@ public class Admin implements Runnable {
     gameLock.writeLock().lock();
     try {
       if (cGame.checkIsEnd()) {
-        msg = "The game is already end";
+        communicate.sendObject(socket, "The game is already end");
       } else {
+        communicate.sendObject(socket,"");
         cGame.updateSocket(name, socket);
-        msg = "";
       }
     } finally {
       gameLock.writeLock().unlock();
     }
-    communicate.sendObject(socket, msg);
+    
   }
 
   /**

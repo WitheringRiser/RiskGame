@@ -198,7 +198,7 @@ public class Game implements Runnable {
 
   private boolean hasConnection() {
     for (Socket s : status_dict.values()) {
-      if (!s.equals(null)) {
+      if (s!=null) {
         return true;
       }
     }
@@ -308,7 +308,7 @@ public class Game implements Runnable {
     for (Player p : player_dict.keySet()) {
       // Need to send to the socket we send map to
       Socket s = status_dict.get(p);
-      if (s.equals(null)) {
+      if (s==null) {
         continue;
       }
       try {
@@ -348,7 +348,7 @@ public class Game implements Runnable {
       // Need to receive from the socket that we send map to
       Socket s = status_dict.get(player);
       // if the client lose connection when sending map, skip
-      if (s.equals(null)) {
+      if (s==null) {
         continue;
       }
       try {
