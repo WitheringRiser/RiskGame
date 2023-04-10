@@ -2,8 +2,8 @@ package edu.duke.ece651.teamX.shared;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Objects;
 
 public class Territory implements Serializable {
 
@@ -20,13 +20,12 @@ public class Territory implements Serializable {
     this.units = new ArrayList<Unit>();
     this.neighbours = new ArrayList<Territory>();
     this.name = in_name;
-  }
 
+  }
+  
   public Territory(String in_name, int num) {
-    this.units = new ArrayList<Unit>();
-    addUnits(null, num);
-    this.neighbours = new ArrayList<Territory>();
-    this.name = in_name;
+    this(in_name);
+    addUnits(num);
   }
 
   /**
@@ -43,6 +42,8 @@ public class Territory implements Serializable {
   public Iterator<Territory> getNeighbours() {
     return neighbours.iterator();
   }
+
+  
   /*
    * public Iterator<Unit> getUnits() {
    * return units.iterator();
@@ -56,6 +57,12 @@ public class Territory implements Serializable {
   public void addUnits(Unit unit, int number) {
     for (int i = 0; i < number; ++i) {
       units.add(unit);
+    }
+  }
+
+  public void addUnits(int number) {
+    for (int i = 0; i < number; ++i) {
+      units.add(new BasicUnit());
     }
   }
 
@@ -89,9 +96,23 @@ public class Territory implements Serializable {
     return unitList;
   }
 
+  public ArrayList<Unit> removeUnitsFromList(ArrayList<Integer> indexList) {
+    ArrayList<Unit> unitList = new ArrayList<Unit>();
+    for (Integer i : indexList) {
+      if (i < 0 || i >= units.size()) {
+        throw new IllegalArgumentException("index is invalid");
+      }
+      unitList.add(units.get(i));
+    }
+    units.removeAll(unitList);
+    return unitList;
+  }
+
   public ArrayList<Unit> getUnits() {
     return units;
   }
+
+
 
   /**
    * Check if two territory are equals Currently only use name to compare
