@@ -140,6 +140,7 @@ public class Game implements Runnable {
       if (p.getName().equals(name)) {
         try{
           Communicate.sendPlayer(newSocket, p);
+          getPlayerSocket(p).close();
         }
         catch(IOException ioe){
           return false;
@@ -157,10 +158,17 @@ public class Game implements Runnable {
   public void createMap() throws IOException, ClassNotFoundException {
     HashMap<Integer, ArrayList<Territory>> terr_groups = setupGroup();
     for (Player p : getAllPlayers()) {
-      sendTerrGroup(terr_groups, p); // Let client make decision
-      int choice = Communicate.receiveInt(getPlayerSocket(p));
+      int choice ;
+      try{
+        sendTerrGroup(terr_groups, p); // Let client make decision
+        choice= Communicate.receiveInt(getPlayerSocket(p));
+        
+      }
+      catch(Exception ioe){//if the client loses connection -> choose the first
+        choice = terr_groups.keySet().stream().findFirst().get();
+      }
       setGroupOwner(terr_groups.get(choice), p); // Set owner of the group
-      terr_groups.remove(choice); // remove this option
+      terr_groups.remove(choice); // remove this option     
     }
   }
 
@@ -398,9 +406,21 @@ public class Game implements Runnable {
       }
       createMap();
       for (Socket s : player_dict.values()) {
-        // receive results from client and let game setUnits using this result
-        ArrayList<Territory> res = (ArrayList<Territory>) Communicate.receiveObject(s);
-        setUnits(res);
+        try{
+          // receive results from client and let game setUnits using this result
+          ArrayList<Territory> res = (ArrayList<Territory>) Communicate.receiveObject(s);
+          setUnits(res);
+        }
+        catch(IOException ioe){
+          ArrayList<Territory> allTerr=map.getTerritories(getPlayerFromSocket(s));
+          int num = init_units/allTerr.size();
+          for (Territory t : allTerr){
+            t.addUnits(num);
+          }
+          if(init_units>num*allTerr.size()){
+            allTerr.get(0).addUnits(init_units-num*allTerr.size());
+          }
+        }
       }      
       playTurns();
     } catch (Exception e) {
