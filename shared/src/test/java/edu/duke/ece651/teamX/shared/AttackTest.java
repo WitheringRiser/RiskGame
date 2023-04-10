@@ -32,6 +32,8 @@ public class AttackTest {
     Attack at3 = new Attack(enemy5.getUnits().get(0), defender5.getUnits().get(2));
     assertFalse(at3.unitAttack(rand, 20));
 
+    Attack at4 = new Attack(null, defender5.getUnits().get(2));
+    assertFalse(at4.unitAttack(rand, 20));
   }
 
 }

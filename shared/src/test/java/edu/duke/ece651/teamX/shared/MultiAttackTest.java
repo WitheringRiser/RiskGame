@@ -36,6 +36,7 @@ public class MultiAttackTest {
     enemies.add(new Attacker(t3.removeUnits(5), p1));
     Random rand = new Random(0);
     MultiAttack ma = new MultiAttack(enemies, defender, map, rand);
+    assertEquals(ma.getHighestUnit(null), null);
     ma.perform();
     assertEquals(2, defender.getUnitsNumber());
     System.out.println(displayer.display());
@@ -119,6 +120,7 @@ public class MultiAttackTest {
     System.out.println(displayer.display());
 
   }
+
   @Test
   public void test_mutltiplayer_perform() {
     test_perform_helper(108, 75);

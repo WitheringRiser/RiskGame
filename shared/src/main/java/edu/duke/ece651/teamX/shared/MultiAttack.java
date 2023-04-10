@@ -18,7 +18,10 @@ public class MultiAttack {
     this.rand = rand;
   }
 
-  private Unit getHighestUnit(ArrayList<Unit> units) {
+  public Unit getHighestUnit(ArrayList<Unit> units) {
+    if (units == null || units.size() == 0) {
+      return null;
+    }
     int res = 0;
     for (int i = 0; i < units.size(); ++i) {
       if (units.get(i).getBonus() > units.get(res).getBonus()) {
@@ -29,6 +32,9 @@ public class MultiAttack {
   }
 
   private Unit getLowestUnit(ArrayList<Unit> units) {
+    if (units == null || units.size() == 0) {
+      return null;
+    }
     int res = 0;
     for (int i = 0; i < units.size(); ++i) {
       if (units.get(i).getBonus() < units.get(res).getBonus()) {
@@ -69,7 +75,7 @@ public class MultiAttack {
     }
   }
 
-  public ArrayList<Attacker> getFinalAttacker() {
+  private ArrayList<Attacker> getFinalAttacker() {
     int index1 = 0;
     int index2 = 1;
     while (!onlyOneEnemy()) {

@@ -20,6 +20,12 @@ public class Attack {
    * perform one unit attck
    */
   public boolean unitAttack(Random rand, int max) {
+    if (attacker == null) {
+      return false;
+    }
+    if (defender == null) {
+      return true;
+    }
     int enemyDice = rollDice(rand, max, attacker.getBonus());
     int defenderDice = rollDice(rand, max, defender.getBonus());
     if (enemyDice > defenderDice) {
