@@ -1,7 +1,10 @@
 package edu.duke.ece651.teamX.client.controller;
 
+import edu.duke.ece651.teamX.client.view.GameScreen;
 import javafx.event.ActionEvent;
 import javafx.fxml.*;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
@@ -12,8 +15,10 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import edu.duke.ece651.teamX.shared.Communicate;
+import javafx.stage.Stage;
 
 public class LoginController {
+
   @FXML
   TextField usernameField;
   @FXML
@@ -22,9 +27,11 @@ public class LoginController {
   Text resultText;
   private ArrayList<String> namePassword;
   private Socket clientSocket;
+  private Stage stage;
 
-  public LoginController(Socket socket) {
+  public LoginController(Socket socket, Stage stage) throws IOException {
     clientSocket = socket;
+    this.stage = stage;
   }
 
   private void formNamePassword() {
@@ -44,10 +51,23 @@ public class LoginController {
     // System.out.println(mes);
     if (mes.length() == 0) {
       resultText.setText("Login success");
+      GameController gc = new GameController(stage);
+      GameScreen gs = new GameScreen(gc);
     } else {
       resultText.setText(mes);
     }
 
+  }
+
+  public void setNewLayout() throws IOException {
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/Login.fxml"));
+    loader.setController(this);
+    Parent root = loader.load();
+    Scene scene = new Scene(root, 640, 480);
+
+    stage.setTitle("Login or Create Account");
+    stage.setScene(scene);
+    stage.show();
   }
 
   @FXML

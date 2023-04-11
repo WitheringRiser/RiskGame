@@ -112,6 +112,16 @@ public class Territory implements Serializable {
     return units;
   }
 
+  public int getTerritorySize() {
+    TerritorySize ts = new TerritorySize();
+    try {
+      return ts.getTerritorySize(name);
+    } catch (NullPointerException e) {
+      System.out.println("Territory name is not in the size map");
+      return -1;
+    }
+  }
+
 
   /**
    * Check if two territory are equals Currently only use name to compare
