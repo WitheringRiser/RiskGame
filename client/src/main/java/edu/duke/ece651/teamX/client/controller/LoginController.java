@@ -1,5 +1,6 @@
 package edu.duke.ece651.teamX.client.controller;
 
+import edu.duke.ece651.teamX.client.view.GameScreen;
 import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.Parent;
@@ -50,6 +51,8 @@ public class LoginController {
     // System.out.println(mes);
     if (mes.length() == 0) {
       resultText.setText("Login success");
+      GameController gc = new GameController(stage);
+      GameScreen gs = new GameScreen(gc);
     } else {
       resultText.setText(mes);
     }
