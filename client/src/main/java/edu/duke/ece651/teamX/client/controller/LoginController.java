@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import edu.duke.ece651.teamX.shared.Communicate;
 import javafx.stage.Stage;
 
-public class LoginController {
+public class LoginController implements Controller {
 
   @FXML
   TextField usernameField;
