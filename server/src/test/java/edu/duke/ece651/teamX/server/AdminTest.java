@@ -12,7 +12,6 @@ import java.util.concurrent.locks.*;
 import org.junit.jupiter.api.Test;
 
 public class AdminTest {
-
   @Test
   public void test_createAccountLogin() throws IOException, ClassNotFoundException {
     HashMap<String, String> namePasswordDic = new HashMap<String, String>();
@@ -38,21 +37,27 @@ public class AdminTest {
     newUP4.add("1234");
     communicate.sendObject(clientSocket, newUP1);
     adm.createAccount();
-    assertEquals("", (String) communicate.receiveObject(clientSocket));
+
+    assertEquals("", (String)communicate.receiveObject(clientSocket));
 
     communicate.sendObject(clientSocket, newUP3);
     communicate.sendObject(clientSocket, newUP2);
     adm.createAccount();
+    adm.createAccount();
     assertEquals("Username already exist",
-        (String) communicate.receiveObject(clientSocket));
-    assertEquals("", (String) communicate.receiveObject(clientSocket));
+                 (String)communicate.receiveObject(clientSocket));
+    assertEquals("", (String)communicate.receiveObject(clientSocket));
+
     communicate.sendObject(clientSocket, newUP3);
     communicate.sendObject(clientSocket, newUP4);
     communicate.sendObject(clientSocket, newUP1);
     adm.login();
-    assertEquals("Password incorrect", (String) communicate.receiveObject(clientSocket));
-    assertEquals("Invalid username", (String) communicate.receiveObject(clientSocket));
-    assertEquals("", (String) communicate.receiveObject(clientSocket));
+    adm.login();
+    adm.login();
+
+    assertEquals("Password incorrect", (String)communicate.receiveObject(clientSocket));
+    assertEquals("Invalid username", (String)communicate.receiveObject(clientSocket));
+    assertEquals("", (String)communicate.receiveObject(clientSocket));
     playerSocket.close();
     clientSocket.close();
     ss.close();
@@ -107,7 +112,7 @@ public class AdminTest {
     communicate.sendInt(clientSocket2, 1);
     adm2.joinActiveRoom("Red");
     ArrayList<RoomSender> searchRes =
-        (ArrayList<RoomSender>) communicate.receiveObject(clientSocket2);
+        (ArrayList<RoomSender>)communicate.receiveObject(clientSocket2);
     assertEquals(3, searchRes.size());
     Player p = new Player("Red", 20);
     assertEquals(playerSocket2, GameList.get(1).getPlayerSocket(p));
@@ -149,7 +154,7 @@ public class AdminTest {
     communicate.sendInt(clientSocket2, 0);
     adm2.joinNewRoom("Blue");
     ArrayList<RoomSender> searchRes =
-        (ArrayList<RoomSender>) communicate.receiveObject(clientSocket2);
+        (ArrayList<RoomSender>)communicate.receiveObject(clientSocket2);
     assertEquals(3, searchRes.size());
     assertEquals(2, GameList.get(0).getActualNumPlayer());
     communicate.sendInt(clientSocket2, 0);
