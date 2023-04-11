@@ -7,6 +7,7 @@ import javafx.scene.layout.Pane;
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
 
+@Deprecated
 public class StartController {
 
   private Stage stage;
