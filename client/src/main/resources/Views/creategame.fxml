@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+
+<GridPane xmlns:fx="http://javafx.com/fxml">
+    <padding>
+        <Insets top="25" right="25" bottom="10" left="25" />
+    </padding>
+    <columnConstraints>
+        <ColumnConstraints percentWidth="60" />
+        <ColumnConstraints percentWidth="60" />
+        <ColumnConstraints percentWidth="60" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints percentHeight="20" />
+        <RowConstraints percentHeight="60" />
+        <RowConstraints percentHeight="20" />
+    </rowConstraints>
+    <Text text="Choose Number of players:"
+        GridPane.columnIndex="0" GridPane.rowIndex="0"
+        GridPane.columnSpan="2" />
+    <Button text="2"
+        GridPane.rowIndex="1"
+        GridPane.columnIndex="0"
+        styleClass="expandable,numbtn"
+        onAction="#onNumberButton" />
+    <Button text="3"
+        GridPane.rowIndex="1"
+        GridPane.columnIndex="1"
+        styleClass="expandable,numbtn"
+        onAction="#onNumberButton" />
+    <Button text="4"
+        GridPane.rowIndex="1"
+        GridPane.columnIndex="2"
+        styleClass="expandable,numbtn"
+        onAction="#onNumberButton" />
+
+    <Button text="Back"
+        GridPane.rowIndex="2"
+        GridPane.columnIndex="2"
+        styleClass="numbtn"
+        onAction="#back" />
+
+    <Text fx:id="resultText"
+        GridPane.columnIndex="1"
+        GridPane.rowIndex="1" />
+</GridPane>
