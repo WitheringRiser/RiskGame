@@ -12,6 +12,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import javafx.util.Pair;
 
@@ -76,6 +78,7 @@ public class ClientTest {
   //   assertEquals(new Territory("B"), mv_neigs.get(0));
   // }
   // private void test_action(Client client) {}
+
   @Test
   public void test_Client() throws IOException, ClassNotFoundException {
     Communicate communicate = new Communicate();

@@ -62,6 +62,12 @@ public abstract class ClientTurnAction<T extends ActionSender> implements Client
    */
   public abstract ArrayList<Territory> findDestTerrs(Territory source);
 
+  public ArrayList<Integer> chooseIndex(Territory source) throws IOException {
+    int max = source.getUnitsNumber();
+    ArrayList<Integer> indexes = inputReader.readIndexList(0, max - 1);
+    return indexes;
+  }
+
   /**
    * @return an ActionSender object with action information
    * @throws IOException
@@ -76,12 +82,16 @@ public abstract class ClientTurnAction<T extends ActionSender> implements Client
     if (dest == null) {
       return null;
     }
-    int unit_num = inputReader.enterNum(source.getUnitsNumber(), prompt.enterNumPrompt(),
+
+    int unit_num = inputReader.enterNum(source.getUnitsNumber(),
+        prompt.enterNumPrompt(),
         prompt.enterAgainPrompt());
 
     if (unit_num < 0) {
       return null;
     }
+
+    // ArrayList<Integer> indexList = chooseIndex(source);
 
     return new ActionSender(source, dest, unit_num);
   }
