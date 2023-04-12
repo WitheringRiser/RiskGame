@@ -91,19 +91,20 @@ public abstract class ClientTurnAction<T extends ActionSender> implements Client
     if (dest == null) {
       return null;
     }
+    /*
+     * int unit_num = inputReader.enterNum(source.getUnitsNumber(),
+     * prompt.enterNumPrompt(),
+     * prompt.enterAgainPrompt());
+     * 
+     * if (unit_num < 0) {
+     * return null;
+     * }
+     */
 
-    int unit_num = inputReader.enterNum(source.getUnitsNumber(),
-        prompt.enterNumPrompt(),
-        prompt.enterAgainPrompt());
+    ArrayList<Integer> indexList = chooseIndex(source,
+        map.getOwner(source).getFoodResource());
 
-    if (unit_num < 0) {
-      return null;
-    }
-
-    // ArrayList<Integer> indexList = chooseIndex(source,
-    // map.getOwner(source).getFoodResource());
-
-    return new ActionSender(source, dest, unit_num);
+    return new ActionSender(source, dest, indexList);
   }
 
   // public void perform()throws IOException, ClassNotFoundException{

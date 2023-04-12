@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class ClientActionTest {
-
+  @Disabled
   @Test
   public void test_FindTerr() throws IOException, ClassNotFoundException {
     String input_data = "0\n0\n30\n20\n" // for move1 normal

@@ -69,6 +69,10 @@ public class Player implements Serializable {
     return this.tech_resources;
   }
 
+  public int getResearchNeedCost() {
+    return this.researchRule.get(tech_level);
+  }
+
   /**
    * consume technology resources
    *

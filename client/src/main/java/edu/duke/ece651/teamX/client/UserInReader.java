@@ -1,5 +1,7 @@
 package edu.duke.ece651.teamX.client;
 
+import edu.duke.ece651.teamX.shared.*;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -146,5 +148,24 @@ public class UserInReader {
   public int enterNum(int max_num, String startPrompt, String enterAgainPrompt) throws IOException {
     out.print(startPrompt);
     return enterNum(max_num, enterAgainPrompt);
+  }
+
+  public int enterLevel(int tech_level, int resource, Unit unit)
+      throws IOException {
+    out.print("please input the level you want the unit to upgrade to");
+    while (true) {
+      String user_in = inputReader.readLine();
+      if (user_in.equals("B") || user_in.equals("b")) {
+        return -1;
+      }
+      int level = getUserInt(user_in);
+
+      if (level > tech_level || unit.getCost(level) > resource || !unit.upgradeLevel(level)) {
+        out.print("level is invalid, please input again");
+      } else {
+        return level;
+      }
+
+    }
   }
 }
