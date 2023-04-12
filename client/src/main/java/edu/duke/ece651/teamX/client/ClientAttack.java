@@ -38,9 +38,10 @@ public class ClientAttack extends ClientTurnAction<AttackSender> {
     ActionSender res = generateAction();
     if (res != null) {
       AttackSender atts = new AttackSender(res.getSource(), res.getDestination(),
-          res.getUnitsNum());
+          res.getIndexList());
       this.actions.add(atts);
-      res.getSource().removeUnits(res.getUnitsNum());
+      res.getSource().removeUnitsFromList(res.getIndexList());
+      Player p = map.getOwner(res.getSource());
     }
   }
 }

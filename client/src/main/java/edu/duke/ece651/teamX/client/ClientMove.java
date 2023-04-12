@@ -45,10 +45,9 @@ public class ClientMove extends ClientTurnAction<MoveSender> {
   public void perform() throws IOException {
     ActionSender res = generateAction();
     if (res != null) {
-      MoveSender mvs = new MoveSender(res.getSource(), res.getDestination(), res.getUnitsNum());
+      MoveSender mvs = new MoveSender(res.getSource(), res.getDestination(), res.getIndexList());
       this.actions.add(mvs);
-      res.getSource().removeUnits(res.getUnitsNum());
-      res.getDestination().addUnits(null, res.getUnitsNum());
+      res.getDestination().addUnits(res.getSource().removeUnitsFromList(res.getIndexList()));
     }
   }
 }
