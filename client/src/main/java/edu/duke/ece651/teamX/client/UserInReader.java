@@ -33,7 +33,7 @@ public class UserInReader {
     return user_in;
   }
 
-  public ArrayList<Integer> readIndexList(int min, int max) throws IOException {
+  public ArrayList<Integer> readIndexList(int min, int max, int max_num) throws IOException {
     ArrayList<Integer> indexList = new ArrayList<>();
     boolean isValidInput = false;
     do {
@@ -45,7 +45,6 @@ public class UserInReader {
       for (String token : tokens) {
         try {
           int index = Integer.parseInt(token);
-          indexList.add(index);
           if (index < min || index > max) {
             System.out.println("Invalid input. All integers must be between " + min + " and " + max + ".");
             indexList.clear();
@@ -54,6 +53,13 @@ public class UserInReader {
           }
           if (indexList.contains(index)) {
             System.out.println("Invalid input. The integer " + index + " appears multiple times.");
+            indexList.clear();
+            isValidInput = false;
+            break;
+          }
+          indexList.add(index);
+          if (indexList.size() > max_num) {
+            System.out.println("Invalid input. food resource is not enough");
             indexList.clear();
             isValidInput = false;
             break;

@@ -59,6 +59,8 @@ public class PlayerTest {
     Player p1 = new Player("a", 20);
     assertTrue(p1.consumeFood(50));
     assertTrue(p1.consumeFood(50));
+    assertEquals(p1.getFoodResource(), 0);
+    assertEquals(p1.getTechResource(), 100);
     assertFalse(p1.consumeFood(50));
   }
 }

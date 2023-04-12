@@ -61,6 +61,14 @@ public class Player implements Serializable {
     return this.unit_num;
   }
 
+  public int getFoodResource() {
+    return this.food_resources;
+  }
+
+  public int getTechResource() {
+    return this.tech_resources;
+  }
+
   /**
    * consume technology resources
    *
