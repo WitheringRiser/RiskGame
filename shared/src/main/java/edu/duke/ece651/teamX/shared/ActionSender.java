@@ -1,19 +1,31 @@
 package edu.duke.ece651.teamX.shared;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class ActionSender implements Serializable {
 
   protected Territory source;
   protected Territory destination;
   protected int unitsNum;
+  protected ArrayList<Integer> indexList;
 
   public ActionSender(Territory _source, Territory _destination, int _unitsNum) {
     source = _source;
     destination = _destination;
     unitsNum = _unitsNum;
+    indexList = new ArrayList<>();
+    for (int i = 0; i < _unitsNum; ++i) {
+      indexList.add(i);
+    }
   }
 
+  public ActionSender(Territory _source, Territory _destination, ArrayList<Integer> _indexList) {
+    source = _source;
+    destination = _destination;
+    unitsNum = _indexList.size();
+    indexList = _indexList;
+  }
 
   public Territory getSource() {
     return source;
@@ -25,6 +37,10 @@ public class ActionSender implements Serializable {
 
   public int getUnitsNum() {
     return unitsNum;
+  }
+
+  public ArrayList<Integer> getIndexList() {
+    return indexList;
   }
 
   @Override
