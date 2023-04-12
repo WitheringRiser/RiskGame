@@ -4,7 +4,7 @@
 package edu.duke.ece651.teamX.client;
 
 import edu.duke.ece651.teamX.client.controller.*;
-import edu.duke.ece651.teamX.client.view.LoginScreen;
+import edu.duke.ece651.teamX.client.view.GeneralScreen;
 import edu.duke.ece651.teamX.shared.*;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -132,6 +132,6 @@ public class App extends Application {
   public void start(Stage stage) throws IOException, ClassNotFoundException {
     Socket clientSocket = new Socket("localhost", 4444);
     LoginController lcontroller = new LoginController(clientSocket, stage);
-    LoginScreen lscreen = new LoginScreen(lcontroller);
+    GeneralScreen<LoginController> lscreen = new GeneralScreen<>(lcontroller);
   }
 }
