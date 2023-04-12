@@ -3,6 +3,7 @@ package edu.duke.ece651.teamX.client;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
 
 public class UserInReader {
 
@@ -10,7 +11,8 @@ public class UserInReader {
   private BufferedReader inputReader;
 
   /**
-   * Construct a UserInReader object The main job is to read from user and parse some input
+   * Construct a UserInReader object The main job is to read from user and parse
+   * some input
    *
    * @param input
    * @param out
@@ -29,6 +31,43 @@ public class UserInReader {
   public String readString() throws IOException {
     String user_in = inputReader.readLine();
     return user_in;
+  }
+
+  public ArrayList<Integer> readIndexList(int min, int max) throws IOException {
+    ArrayList<Integer> indexList = new ArrayList<>();
+    boolean isValidInput = false;
+    do {
+      System.out
+          .print("To select units, please enter a list of unit indexes(integers) separated by commas or spaces: ");
+      String input = readString();
+      String[] tokens = input.split("[,\\s]+");
+      isValidInput = true;
+      for (String token : tokens) {
+        try {
+          int index = Integer.parseInt(token);
+          indexList.add(index);
+          if (index < min || index > max) {
+            System.out.println("Invalid input. All integers must be between " + min + " and " + max + ".");
+            indexList.clear();
+            isValidInput = false;
+            break;
+          }
+          if (indexList.contains(index)) {
+            System.out.println("Invalid input. The integer " + index + " appears multiple times.");
+            indexList.clear();
+            isValidInput = false;
+            break;
+          }
+        } catch (NumberFormatException e) {
+          System.out.println("Invalid input. Please enter a valid list of integers.");
+          indexList.clear();
+          isValidInput = false;
+          break;
+        }
+      }
+    } while (!isValidInput);
+    return indexList;
+
   }
 
   /**
