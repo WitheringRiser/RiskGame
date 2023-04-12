@@ -52,7 +52,7 @@ public class AttackProcessor {
       Territory defender = map.getTerritoryByName(attack.getDestination().getName());
       Territory enemy = map.getTerritoryByName(attack.getSource().getName());
       ArrayList<Unit> attacker = enemy.removeUnitsFromList(attack.getIndexList());
-
+      map.getOwner(enemy).consumeFood(attack.getIndexList().size()); // consumes food
       if (ans.containsKey(defender)) {
         ans.get(defender).add(new Attacker(attacker, map.getOwner(enemy)));
       } else {

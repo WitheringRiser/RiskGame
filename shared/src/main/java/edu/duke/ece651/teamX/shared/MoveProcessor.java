@@ -17,18 +17,19 @@ public class MoveProcessor {
     allMove = _allMove;
 
     checker = new MoveValidChecker(allMove, map);
-//    checker.checkValid();
+    // checker.checkValid();
   }
 
   public void resolveAllMove() {
     for (MoveSender m : allMove) {
       Territory source = map.getTerritoryByName(m.getSource().getName());
       Territory destination = map.getTerritoryByName(m.getDestination().getName());
-      int num = m.getUnitsNum();
-//      set the arraylist of units with certain number
-      source.removeUnits(num);
-      destination.addUnits(null, num);
-      TextDisplayer.displayMove(source, destination, num, map.getOwner(source));
+      ArrayList<Integer> indexList = m.getIndexList();
+      // set the arraylist of units with certain number
+      destination.addUnits(source.removeUnitsFromList(indexList));
+      TextDisplayer.displayMove(source, destination, indexList.size(), map.getOwner(source));
+      Player p = map.getOwner(source);
+      p.consumeFood(consumeFood(source, destination, map, indexList.size(), 1));
     }
   }
 
@@ -69,9 +70,9 @@ public class MoveProcessor {
     return -1;
   }
 
-  public int consumeFood(Territory source, Territory destination, Map map, int coef) {
+  public int consumeFood(Territory source, Territory destination, Map map, int unitsNum, int coef) {
     int cost = getMinCostPathBetweenSourceDest(source, destination, map);
-    return cost * coef == 0 ? 1 : cost * coef;    // if cost is 0, then it's 1 (at least cost one)
+    return cost * coef * unitsNum == 0 ? 1 : cost * coef * unitsNum; // if cost is 0, then it's 1 (at least cost one)
   }
 
   private static class TerritoryWrapper {
@@ -96,6 +97,4 @@ public class MoveProcessor {
 
   }
 
-
 }
-

@@ -53,4 +53,12 @@ public class PlayerTest {
     assertEquals(t1.upgradeUnit(terr, 2, 2),
         "the technology resource is not enough to upgrade this unit");
   }
+
+  @Test
+  void testConsumeFood(){
+    Player p1 = new Player("a", 20);
+    assertTrue(p1.consumeFood(50));
+    assertTrue(p1.consumeFood(50));
+    assertFalse(p1.consumeFood(50));
+  }
 }
