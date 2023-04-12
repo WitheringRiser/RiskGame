@@ -17,7 +17,6 @@ import javafx.fxml.*;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class CreateGameController implements Controller {
@@ -89,9 +88,9 @@ public class CreateGameController implements Controller {
     map.addTerritory(mountains, p1);
     map.addTerritory(swamp, p1);
     map.addTerritory(beach, p1);
-    DisplayMapController displayMapController = new DisplayMapController(stage, clientSocket, map);
-    GeneralScreen<DisplayMapController> displayMapScreen = new GeneralScreen<>(
-        displayMapController);
+    TerritoryInfoController territoryInfoController = new TerritoryInfoController(stage, clientSocket, map);
+    GeneralScreen<TerritoryInfoController> displayMapScreen = new GeneralScreen<>(
+        territoryInfoController);
   }
 
 }
