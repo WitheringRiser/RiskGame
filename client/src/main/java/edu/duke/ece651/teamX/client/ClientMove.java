@@ -48,6 +48,8 @@ public class ClientMove extends ClientTurnAction<MoveSender> {
       MoveSender mvs = new MoveSender(res.getSource(), res.getDestination(), res.getIndexList());
       this.actions.add(mvs);
       res.getDestination().addUnits(res.getSource().removeUnitsFromList(res.getIndexList()));
+      // TODO: still need to consume right food resources
+      map.getOwner(res.getSource()).consumeFood(res.getIndexList().size());
     }
   }
 }

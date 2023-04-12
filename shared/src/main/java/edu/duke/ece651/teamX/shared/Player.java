@@ -9,7 +9,7 @@ public class Player implements Serializable {
   public final String name;
   private final int unit_num; // The initial number of units
 
-  private int food_reources;
+  private int food_resources;
   private int tech_resources;
 
   private int tech_level;
@@ -34,7 +34,7 @@ public class Player implements Serializable {
 
     this.tech_level = 1;
 
-    this.food_reources = 100; // Temporarily set at 100
+    this.food_resources = 100; // Temporarily set at 100
     this.tech_resources = 100; // Temporarily set at 100
 
     this.researchRule = new HashMap<Integer, Integer>();
@@ -61,6 +61,18 @@ public class Player implements Serializable {
     return this.unit_num;
   }
 
+  public int getFoodResource() {
+    return this.food_resources;
+  }
+
+  public int getTechResource() {
+    return this.tech_resources;
+  }
+
+  public int getResearchNeedCost() {
+    return this.researchRule.get(tech_level);
+  }
+
   /**
    * consume technology resources
    *
@@ -72,6 +84,20 @@ public class Player implements Serializable {
       return false;
     }
     tech_resources -= num;
+    return true;
+  }
+
+  /**
+   * consume food resources
+   *
+   * @param num: the number of food resources need to be consumed
+   * @return true if consume successfully, false otherwise
+   */
+  public boolean consumeFood(int num) {
+    if (food_resources < num) {
+      return false;
+    }
+    food_resources -= num;
     return true;
   }
 
@@ -93,7 +119,8 @@ public class Player implements Serializable {
    *
    * @param index:   the index of the unit
    * @param toLevel: the level the unit upgrade to
-   * @return null if upgrade successfully, otherwise the string describe the reason for failure
+   * @return null if upgrade successfully, otherwise the string describe the
+   *         reason for failure
    */
   public String upgradeUnit(Territory source, int index, int toLevel) {
     ArrayList<Unit> units = source.getUnits();
@@ -114,7 +141,8 @@ public class Player implements Serializable {
   }
 
   /**
-   * Check if two Player equals Compare name, number of units, and number of territories
+   * Check if two Player equals Compare name, number of units, and number of
+   * territories
    */
   @Override
   public boolean equals(Object o) {
