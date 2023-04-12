@@ -1,6 +1,10 @@
 package edu.duke.ece651.teamX.shared;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.PriorityQueue;
 
 public class MoveProcessor {
 
@@ -27,5 +31,66 @@ public class MoveProcessor {
       TextDisplayer.displayMove(source, destination, num, map.getOwner(source));
     }
   }
+
+  public int getMinCostPathBetweenSourceDest(Territory source, Territory destination, Map map) {
+    Player owner = map.getOwner(source);
+
+    PriorityQueue<TerritoryWrapper> queue = new PriorityQueue<>(
+        Comparator.comparingInt(TerritoryWrapper::getCost));
+    HashMap<Territory, TerritoryWrapper> visited = new HashMap<>();
+
+    TerritoryWrapper sourceWrapper = new TerritoryWrapper(source, 0, null);
+    queue.add(sourceWrapper);
+    visited.put(source, sourceWrapper);
+
+    while (!queue.isEmpty()) {
+      TerritoryWrapper currWrapper = queue.poll();
+      Territory curr = currWrapper.getTerritory();
+
+      if (curr.equals(destination)) {
+        return currWrapper.getCost();
+      }
+
+      Iterator<Territory> iter = curr.getNeighbours();
+      while (iter.hasNext()) {
+        Territory t = iter.next();
+        if (map.getOwner(t).equals(owner)) {
+          int edgeCost = curr.getTerritorySize() + t.getTerritorySize();
+          int newCost = currWrapper.getCost() + edgeCost;
+
+          if (!visited.containsKey(t) || visited.get(t).getCost() > newCost) {
+            TerritoryWrapper tWrapper = new TerritoryWrapper(t, newCost, currWrapper);
+            queue.add(tWrapper);
+            visited.put(t, tWrapper);
+          }
+        }
+      }
+    }
+    return -1;
+  }
+
+  private static class TerritoryWrapper {
+
+    private Territory territory;
+    private int cost;
+    private TerritoryWrapper previous;
+
+    public TerritoryWrapper(Territory territory, int cost, TerritoryWrapper previous) {
+      this.territory = territory;
+      this.cost = cost;
+      this.previous = previous;
+    }
+
+    public Territory getTerritory() {
+      return territory;
+    }
+
+    public int getCost() {
+      return cost;
+    }
+
+  }
+
+
 }
 
