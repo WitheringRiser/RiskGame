@@ -37,11 +37,11 @@ public class ClientAttack extends ClientTurnAction<AttackSender> {
   public void perform() throws IOException {
     ActionSender res = generateAction();
     if (res != null) {
-      AttackSender atts = new AttackSender(res.getSource(), res.getDestination(),
-          res.getIndexList());
+      AttackSender atts = new AttackSender(res.getSource(), res.getDestination(), res.getIndexList());
       this.actions.add(atts);
       res.getSource().removeUnitsFromList(res.getIndexList());
       Player p = map.getOwner(res.getSource());
+      p.consumeFood(res.getIndexList().size());
     }
   }
 }

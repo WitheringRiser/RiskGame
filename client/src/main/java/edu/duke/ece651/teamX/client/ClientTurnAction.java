@@ -62,9 +62,18 @@ public abstract class ClientTurnAction<T extends ActionSender> implements Client
    */
   public abstract ArrayList<Territory> findDestTerrs(Territory source);
 
-  public ArrayList<Integer> chooseIndex(Territory source) throws IOException {
+  /**
+   * get the index of units
+   * 
+   * @param source: source territory
+   * @param maxNum: max number of units the user can select(food resource is
+   *                limited)
+   * @return: arraylist of index
+   * @throws IOException
+   */
+  public ArrayList<Integer> chooseIndex(Territory source, int maxNum) throws IOException {
     int max = source.getUnitsNumber();
-    ArrayList<Integer> indexes = inputReader.readIndexList(0, max - 1);
+    ArrayList<Integer> indexes = inputReader.readIndexList(0, max - 1, maxNum);
     return indexes;
   }
 
@@ -82,18 +91,20 @@ public abstract class ClientTurnAction<T extends ActionSender> implements Client
     if (dest == null) {
       return null;
     }
+    /*
+     * int unit_num = inputReader.enterNum(source.getUnitsNumber(),
+     * prompt.enterNumPrompt(),
+     * prompt.enterAgainPrompt());
+     * 
+     * if (unit_num < 0) {
+     * return null;
+     * }
+     */
 
-    int unit_num = inputReader.enterNum(source.getUnitsNumber(),
-        prompt.enterNumPrompt(),
-        prompt.enterAgainPrompt());
+    ArrayList<Integer> indexList = chooseIndex(source,
+        map.getOwner(source).getFoodResource());
 
-    if (unit_num < 0) {
-      return null;
-    }
-
-    // ArrayList<Integer> indexList = chooseIndex(source);
-
-    return new ActionSender(source, dest, unit_num);
+    return new ActionSender(source, dest, indexList);
   }
 
   // public void perform()throws IOException, ClassNotFoundException{

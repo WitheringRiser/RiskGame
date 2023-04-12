@@ -1,5 +1,7 @@
 package edu.duke.ece651.teamX.client;
 
+import edu.duke.ece651.teamX.shared.*;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -33,7 +35,7 @@ public class UserInReader {
     return user_in;
   }
 
-  public ArrayList<Integer> readIndexList(int min, int max) throws IOException {
+  public ArrayList<Integer> readIndexList(int min, int max, int max_num) throws IOException {
     ArrayList<Integer> indexList = new ArrayList<>();
     boolean isValidInput = false;
     do {
@@ -45,7 +47,6 @@ public class UserInReader {
       for (String token : tokens) {
         try {
           int index = Integer.parseInt(token);
-          indexList.add(index);
           if (index < min || index > max) {
             System.out.println("Invalid input. All integers must be between " + min + " and " + max + ".");
             indexList.clear();
@@ -54,6 +55,13 @@ public class UserInReader {
           }
           if (indexList.contains(index)) {
             System.out.println("Invalid input. The integer " + index + " appears multiple times.");
+            indexList.clear();
+            isValidInput = false;
+            break;
+          }
+          indexList.add(index);
+          if (indexList.size() > max_num) {
+            System.out.println("Invalid input. food resource is not enough");
             indexList.clear();
             isValidInput = false;
             break;
@@ -140,5 +148,24 @@ public class UserInReader {
   public int enterNum(int max_num, String startPrompt, String enterAgainPrompt) throws IOException {
     out.print(startPrompt);
     return enterNum(max_num, enterAgainPrompt);
+  }
+
+  public int enterLevel(int tech_level, int resource, Unit unit)
+      throws IOException {
+    out.print("please input the level you want the unit to upgrade to");
+    while (true) {
+      String user_in = inputReader.readLine();
+      if (user_in.equals("B") || user_in.equals("b")) {
+        return -1;
+      }
+      int level = getUserInt(user_in);
+
+      if (level > tech_level || unit.getCost(level) > resource || !unit.upgradeLevel(level)) {
+        out.print("level is invalid, please input again");
+      } else {
+        return level;
+      }
+
+    }
   }
 }
