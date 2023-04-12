@@ -69,6 +69,11 @@ public class MoveProcessor {
     return -1;
   }
 
+  public int consumeFood(Territory source, Territory destination, Map map, int coef) {
+    int cost = getMinCostPathBetweenSourceDest(source, destination, map);
+    return cost * coef == 0 ? 1 : cost * coef;    // if cost is 0, then it's 1 (at least cost one)
+  }
+
   private static class TerritoryWrapper {
 
     private Territory territory;
