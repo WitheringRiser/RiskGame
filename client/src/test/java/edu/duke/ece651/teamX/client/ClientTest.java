@@ -78,7 +78,7 @@ public class ClientTest {
   //   assertEquals(new Territory("B"), mv_neigs.get(0));
   // }
   // private void test_action(Client client) {}
-  @Disabled
+
   @Test
   public void test_Client() throws IOException, ClassNotFoundException {
     Communicate communicate = new Communicate();
