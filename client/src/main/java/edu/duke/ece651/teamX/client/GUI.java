@@ -60,41 +60,77 @@ public class GUI implements Displayable {
     }
     sb.append("-fx-background-color: " + color + ";");
 
-    if (territoryName.equals("A")) {
-      sb.append(
-          "-fx-shape: \"M 400 150 Q 450 400 350 400 Q 200 400 50 400 Q 50 200 250 200 Q 350 200 400 150\"");
-    } else if (territoryName.equals("B")) {
-      sb.append("-fx-shape: \"M 400 300 Q 450 300 600 300 L 600 100 L 400 100 Q 350 200 400 300\"");
-    } else if (territoryName.equals("C")) {
-      sb.append(
-          "-fx-shape: \"M 350 300 C 425 300 475 300 550 300 Q 650 200 600 50 L 350 50 Q 350 200 350 300\"");
-    } else if (territoryName.equals("D")) {
-      sb.append(
-          "-fx-shape: \"M 350 300 C 425 300 475 300 600 300 Q 650 200 600 100 Q 450 50 350 150 Q 350 200 350 300\"");
-    } else if (territoryName.equals("E")) {
-      sb.append(
-          "-fx-shape: \"M 400 200 Q 450 300 550 300 Q 650 300 750 250 Q 750 0 450 50 Q 450 100 400 200\"");
-    } else if (territoryName.equals("F")) {
-      sb.append(
-          "-fx-shape: \"M 350 350 C 450 350 450 350 550 350 Q 600 200 600 100 Q 450 0 350 100 Q 350 200 350 350\"");
-    } else if (territoryName.equals("G")) {
-      sb.append(
-          "-fx-shape: \"M 350 350 C 450 350 450 350 600 350 Q 650 250 600 150 Q 500 150 350 200 Q 350 200 350 350\"");
-    } else if (territoryName.equals("H")) {
-      sb.append(
-          "-fx-shape: \"M 550 350 Q 600 400 700 400 Q 800 250 750 100 L 550 100 Q 500 200 550 350\"");
-    } else if (territoryName.equals("I")) {
-      sb.append(
-          "-fx-shape: \"M 350 450 C 500 400 550 425 700 400 Q 650 250 700 100 L 350 100 Q 300 250 350 450\"");
-    } else if (territoryName.equals("J")) {
-      sb.append(
-          "-fx-shape: \"M 350 400 Q 500 450 700 400 Q 800 300 800 200 C 450 200 500 200 350 200 Q 300 250 350 400\"");
-    } else if (territoryName.equals("K")) {
+    if (territoryName.equals("Desert")) {
       sb.append(
           "-fx-shape: \"M 350 350 C 500 350 550 450 700 400 Q 800 300 700 150 C 450 200 500 200 350 200 Q 300 250 350 350\"");
-    } else if (territoryName.equals("L")) {
+    } else if (territoryName.equals("Mountains")) {
+      sb.append("-fx-shape: \"M 350 450 C 450 500 450 450 550 450 Q 500 300 600 200 C 450 200 500 200 350 200 C 400 300 200 350 350 450\"");
+    } else if (territoryName.equals("Swamp")) {
       sb.append(
-          "-fx-shape: \"M 350 450 C 450 500 450 450 550 450 Q 500 300 600 200 C 450 200 500 200 350 200 C 400 300 200 350 350 450\"");
+        "-fx-shape: \"M 350 450 C 450 500 450 450 550 450 Q 500 300 600 200 C 450 200 500 200 350 200 C 400 300 200 350 350 450\"");
+    } else if (territoryName.equals("Beach")) {
+      sb.append(
+        "-fx-shape: \"M 350 350 C 450 350 450 350 600 350 Q 650 250 600 150 Q 500 150 350 200 Q 350 200 350 350\"");
+    } else if (territoryName.equals("Savanna")) {
+      sb.append(
+        "-fx-shape: \"M 350 400 Q 500 450 700 400 Q 800 300 800 200 C 450 200 500 200 350 200 Q 300 250 350 400\"");
+    } else if (territoryName.equals("Jungle")) {
+      sb.append(
+        "-fx-shape: \"M 350 350 C 450 350 450 350 600 350 Q 650 250 600 150 Q 500 150 350 200 Q 350 200 350 350\"");
+    } else if (territoryName.equals("Bamboo Forest")) {
+      sb.append(
+        "-fx-shape: \"M 350 450 C 500 400 550 425 700 400 Q 650 250 700 100 L 350 100 Q 300 250 350 450\"");
+    } else if (territoryName.equals("Dark Forest")) {
+      sb.append(
+        "-fx-shape: \"M 350 350 C 450 350 450 350 600 350 Q 650 250 600 150 Q 500 150 350 200 Q 350 200 350 350\"");
+    } else if (territoryName.equals("Lukas Tundra")) {
+      sb.append(
+        "-fx-shape: \"M 550 350 Q 600 400 700 400 Q 800 250 750 100 L 550 100 Q 500 200 550 350\"");
+    } else if (territoryName.equals("Frozen Ocean")) {
+      sb.append(
+        "-fx-shape: \"M 350 350 C 500 350 550 450 700 400 Q 800 300 700 150 C 450 200 500 200 350 200 Q 300 250 350 350\"");
+    } else if (territoryName.equals("Plateau")) {
+      sb.append(
+        "-fx-shape: \"M 350 450 C 450 500 450 450 550 450 Q 500 300 600 200 C 450 200 500 200 350 200 C 400 300 200 350 350 450\"");
+    } else if (territoryName.equals("Desert Hills")) {
+      sb.append(
+        "-fx-shape: \"M 550 350 Q 600 400 700 400 Q 800 250 750 100 L 550 100 Q 500 200 550 350\"");
+    }
+    else if (territoryName.equals("Plains")) {
+      sb.append(
+          "-fx-shape: \"M 350 300 C 425 300 475 300 600 300 Q 650 200 600 100 Q 450 50 350 150 Q 350 200 350 300\"");
+    } else if (territoryName.equals("Rocky Cliffs")) {
+      sb.append("-fx-shape: \"M 400 150 Q 450 400 350 400 Q 200 400 50 400 Q 50 200 250 200 Q 350 200 400 150\"");
+    } else if (territoryName.equals("Forest")) {
+      sb.append(
+        "-fx-shape: \"M 350 300 C 425 300 475 300 600 300 Q 650 200 600 100 Q 450 50 350 150 Q 350 200 350 300\"");
+    } else if (territoryName.equals("Mesa")) {
+      sb.append(
+        "-fx-shape: \"M 350 350 C 450 350 450 350 550 350 Q 600 200 600 100 Q 450 0 350 100 Q 350 200 350 350\"");
+    } else if (territoryName.equals("Lake")) {
+      sb.append(
+        "-fx-shape: \"M 350 300 C 425 300 475 300 550 300 Q 650 200 600 50 L 350 50 Q 350 200 350 300\"");
+    } else if (territoryName.equals("River")) {
+      sb.append(
+        "-fx-shape: \"M 350 350 C 450 350 450 350 550 350 Q 600 200 600 100 Q 450 0 350 100 Q 350 200 350 350\"");
+    } else if (territoryName.equals("Jincheng Taiga")) {
+      sb.append(
+        "-fx-shape: \"M 400 200 Q 450 300 550 300 Q 650 300 750 250 Q 750 0 450 50 Q 450 100 400 200\"");
+    } else if (territoryName.equals("Badlands")) {
+      sb.append(
+        "-fx-shape: \"M 350 300 C 425 300 475 300 600 300 Q 650 200 600 100 Q 450 50 350 150 Q 350 200 350 300\"");
+    } else if (territoryName.equals("Russ Mushroom Fields")) {
+      sb.append(
+        "-fx-shape: \"M 400 150 Q 450 400 350 400 Q 200 400 50 400 Q 50 200 250 200 Q 350 200 400 150\"");
+    } else if (territoryName.equals("Xinmeng Ocean")) {
+      sb.append(
+        "-fx-shape: \"M 400 300 Q 450 300 600 300 L 600 100 L 400 100 Q 350 200 400 300\"");
+    } else if (territoryName.equals("Snowy Beach")) {
+      sb.append(
+        "-fx-shape: \"M 350 300 C 425 300 475 300 600 300 Q 650 200 600 100 Q 450 50 350 150 Q 350 200 350 300\"");
+    } else if (territoryName.equals("Zhou Caves")) {
+      sb.append(
+        "-fx-shape: \"M 400 200 Q 450 300 550 300 Q 650 300 750 250 Q 750 0 450 50 Q 450 100 400 200\"");
     }
 
     sb.append(";");
