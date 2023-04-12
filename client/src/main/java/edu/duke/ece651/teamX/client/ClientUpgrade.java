@@ -20,6 +20,7 @@ public class ClientUpgrade {
   private Communicate communicate;
   protected Map map;
   protected Player player;
+  protected ArrayList<UpgradeSender> actions;
 
   public ClientUpgrade(Socket s, PrintStream o, UserInReader uir, TextPrompt tp, Map m, Player ply) {
     this.socket = s;
@@ -29,6 +30,7 @@ public class ClientUpgrade {
     this.communicate = new Communicate();
     this.map = m;
     this.player = ply;
+    this.actions = new ArrayList<UpgradeSender>();
   }
 
   /**
@@ -47,17 +49,25 @@ public class ClientUpgrade {
     return terrs.get(choice);
   }
 
-  public UpgradeSender perform() throws IOException {
+  public void perform() throws IOException {
     Territory source = chooseOneTerritory(this.map.getTerritories(this.player), true);
     if (source == null) {
-      return null;
+      return;
     }
     int unitIndex = inputReader.enterNum(source.getUnitsNumber(), "Please input the index of the unit you want upgrade",
         "index invalid, please input again");
     int toLevel = inputReader.enterLevel(this.player.getTechLevel(), this.player.getTechResource(),
         source.getUnits().get(unitIndex));
+    if (toLevel < 0) {
+      return;
+    }
     this.player.consumeTech(source.getUnits().get(unitIndex).getCost(toLevel));
-    return new UpgradeSender(source, unitIndex, toLevel);
+    this.actions.add(new UpgradeSender(source, unitIndex, toLevel));
+  }
+
+  public void commit() throws IOException {
+    communicate.sendObject(socket, this.actions);
+    this.actions.clear();
   }
 
 }

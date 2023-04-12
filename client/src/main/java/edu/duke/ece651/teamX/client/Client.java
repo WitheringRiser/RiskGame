@@ -36,7 +36,8 @@ public class Client {
   }
 
   /**
-   * Initialze the game settings for client Receive player to get player properties (name, num of
+   * Initialze the game settings for client Receive player to get player
+   * properties (name, num of
    * units) Choose a territory group to sart Set Units
    */
   public void init() throws IOException, ClassNotFoundException {
@@ -98,12 +99,14 @@ public class Client {
    * @param actions
    * @throws IOException
    */
-  public void performCommit(ClientAction... actions) throws IOException {
+  public void performCommit(ClientResearch research, ClientUpgrade upgrade, ClientAction... actions)
+      throws IOException {
     for (ClientAction act : actions) {
       act.commit();
     }
+    research.commit();
+    upgrade.commit();
   }
-
 
   private GameResult receiveGameResult() throws IOException, ClassNotFoundException {
     return communicate.receiveGameResult(socket);
@@ -125,7 +128,7 @@ public class Client {
     foodResource = f;
   }
 
-  //ability to increment tech resources at the end of each turn
+  // ability to increment tech resources at the end of each turn
   public void AddTechResource(Map TerrMap, Pair<Integer, String> PlayerInfo) {
 
     TerritoryProduce AddResource = new TerritoryProduce();
@@ -139,7 +142,7 @@ public class Client {
     }
   }
 
-  //ability to increment food resources at the end of each turn
+  // ability to increment food resources at the end of each turn
   public void AddFoodResource(Map TerrMap, Pair<Integer, String> PlayerInfo) {
 
     TerritoryProduce AddResource = new TerritoryProduce();
@@ -153,7 +156,6 @@ public class Client {
     }
   }
 
-
   /**
    * Let client to player one turn
    *
@@ -162,6 +164,8 @@ public class Client {
   public void playOneTurn() throws IOException {
     ClientAttack attack = new ClientAttack(socket, out, inputReader, prompt, map, player);
     ClientMove move = new ClientMove(socket, out, inputReader, prompt, map, player);
+    ClientResearch research = new ClientResearch(player);
+    ClientUpgrade upgrade = new ClientUpgrade(socket, out, inputReader, prompt, map, player);
     while (true) {
       displayMap();
       out.print(prompt.oneTurnPrompt());
@@ -174,8 +178,14 @@ public class Client {
         case "A":
           attack.perform();
           break;
+        case "R":
+          research.perform();
+          break;
+        case "U":
+          upgrade.perform();
+          break;
         case "D":
-          performCommit(move, attack);
+          performCommit(research, upgrade, move, attack);
           out.print(prompt.commitMessage());
           return;
         default:
@@ -184,7 +194,6 @@ public class Client {
       }
     }
   }
-
 
   public void playTurns() throws IOException, ClassNotFoundException {
     while (true) {
