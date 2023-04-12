@@ -1,8 +1,10 @@
 package edu.duke.ece651.teamX.client.controller;
 
+import edu.duke.ece651.teamX.shared.BasicUnit;
 import edu.duke.ece651.teamX.shared.Map;
 import edu.duke.ece651.teamX.shared.Player;
 import edu.duke.ece651.teamX.shared.Territory;
+import edu.duke.ece651.teamX.shared.Unit;
 import java.io.IOException;
 
 import edu.duke.ece651.teamX.client.view.GeneralScreen;
@@ -72,7 +74,17 @@ public class CreateGameController implements Controller {
     getSendNumber(ae);
 
     // TODO: only for test
+    Unit unit1 = new BasicUnit();
+    Unit unit2 = new BasicUnit();
+    unit1.upgradeLevel(1);
+    unit2.upgradeLevel(2);
+
+    ArrayList<Unit> units = new ArrayList<>();
+    units.add(unit1);
+    units.add(unit2);
+
     Territory desert = new Territory("Desert");
+    desert.addUnits(units);
     Territory mountains = new Territory("Mountains");
     Territory swamp = new Territory("Swamp");
     Territory beach = new Territory("Beach");
@@ -88,7 +100,8 @@ public class CreateGameController implements Controller {
     map.addTerritory(mountains, p1);
     map.addTerritory(swamp, p1);
     map.addTerritory(beach, p1);
-    TerritoryInfoController territoryInfoController = new TerritoryInfoController(stage, clientSocket, map);
+    TerritoryInfoController territoryInfoController = new TerritoryInfoController(stage,
+        clientSocket, map);
     GeneralScreen<TerritoryInfoController> displayMapScreen = new GeneralScreen<>(
         territoryInfoController);
   }

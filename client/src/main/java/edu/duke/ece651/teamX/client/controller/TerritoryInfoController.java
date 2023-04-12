@@ -3,8 +3,10 @@ package edu.duke.ece651.teamX.client.controller;
 import edu.duke.ece651.teamX.shared.Map;
 import edu.duke.ece651.teamX.shared.Player;
 import edu.duke.ece651.teamX.shared.Territory;
+import edu.duke.ece651.teamX.shared.Unit;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Spliterator;
 import java.util.Spliterators;
@@ -91,6 +93,9 @@ public class TerritoryInfoController implements Controller {
     Label neighborList = new Label("Neighbors: " + neighbors);
     contentBox.getChildren().add(neighborList);
 
+    Label unitInfo = new Label(getUnitInfo(territory));
+    contentBox.getChildren().add(unitInfo);
+
     territoryDialog.getDialogPane().setContent(contentBox);
 
     ButtonType moreInfoButtonType = new ButtonType("Player info", ButtonBar.ButtonData.LEFT);
@@ -104,8 +109,24 @@ public class TerritoryInfoController implements Controller {
     });
 
     territoryDialog.showAndWait();
+  }
 
-
+  private String getUnitInfo(Territory territory) {
+    Iterable<Unit> allUnits = territory.getUnits();
+    HashMap<String, Integer> unitInfo = new HashMap<>();
+    for (Unit unit : allUnits) {
+      String unitName = unit.getName();
+      if (unitInfo.containsKey(unitName)) {
+        unitInfo.put(unitName, unitInfo.get(unitName) + 1);
+      } else {
+        unitInfo.put(unitName, 1);
+      }
+    }
+    String info = "Units Info: \n";
+    for (String unitName : unitInfo.keySet()) {
+      info += unitName + ": " + unitInfo.get(unitName) + "\n";
+    }
+    return info;
   }
 
   private void displayPlayerInfo(Player player) {
