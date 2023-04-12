@@ -48,18 +48,27 @@ public class CreateGameController implements Controller {
         // RoomScreen rs = new RoomScreen(rc);
         GeneralScreen<RoomController> rs = new GeneralScreen<>(rc);
     } 
+    protected int getSendNumber(ActionEvent ae){
+        try{
+            Object source = ae.getSource();
+            if (source instanceof Button) {
+              Button btn = (Button)source;
+              int playerNum = Integer.parseInt(btn.getText());
+              Communicate.sendInt(clientSocket, playerNum);
+              return playerNum;
+            }
+            else {
+              throw new IllegalArgumentException("Invalid source " + source + " for ActionEvent");
+            }
+        }
+        catch(Exception e){
+            throw new IllegalArgumentException("Error input event");
+        }
+    }
 
     @FXML
-    public void onNumberButton(ActionEvent ae) throws IOException, ClassNotFoundException, NumberFormatException {
-      Object source = ae.getSource();
-      if (source instanceof Button) {
-        Button btn = (Button)source;
-        int playerNum = Integer.parseInt(btn.getText());
-        Communicate.sendInt(clientSocket, playerNum);
-      }
-      else {
-        throw new IllegalArgumentException("Invalid source " + source + " for ActionEvent");
-      }
+    public void onNumberButton(ActionEvent ae) {
+        getSendNumber(ae);
     }
 
 }

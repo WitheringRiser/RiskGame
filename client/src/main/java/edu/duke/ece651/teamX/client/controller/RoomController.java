@@ -78,14 +78,16 @@ public class RoomController implements Controller {
     @FXML
     public void JoinNewGame(ActionEvent ae) throws IOException, ClassNotFoundException {
         Communicate.sendInt(clientSocket, 1);
-        resultText.setText("Join a new Game");
+        EnterGameController ec = new EnterGameController(stage, clientSocket, namePassword);
+        GeneralScreen<EnterGameController> gs = new GeneralScreen<EnterGameController>(ec);
 
     }
 
     @FXML
     public void EnterMyGame(ActionEvent ae) throws IOException, ClassNotFoundException {
         Communicate.sendInt(clientSocket, 2);
-        resultText.setText("Enter my Games");
+        EnterGameController ec = new EnterGameController(stage, clientSocket, namePassword);
+        GeneralScreen<EnterGameController> gs = new GeneralScreen<EnterGameController>(ec);
 
     }
 
