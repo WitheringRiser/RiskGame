@@ -115,7 +115,7 @@ public class TerritoryInfoController implements Controller {
 
     String content = "Tech Resources: " + player.getTechResource() + "\n";
     content += "Tech Level: " + player.getTechLevel() + "\n";
-    // Add other player information as needed
+    content += "Food Resources: " + player.getFoodResource() + "\n";
 
     alert.setContentText(content);
     alert.showAndWait();
