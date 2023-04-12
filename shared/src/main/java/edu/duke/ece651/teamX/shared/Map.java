@@ -50,29 +50,54 @@ public class Map implements Serializable {
   private Label AllianceInfo;
 
   @FXML
-  private Button ButtonA;
+  private Button ButtonDesert;
   @FXML
-  private Button ButtonB;
+  private Button ButtonMountains;
   @FXML
-  private Button ButtonC;
+  private Button ButtonSwamp;
   @FXML
-  private Button ButtonD;
+  private Button ButtonBeach;
   @FXML
-  private Button ButtonE;
+  private Button ButtonSavanna;
   @FXML
-  private Button ButtonF;
+  private Button ButtonJungle;
   @FXML
-  private Button ButtonG;
+  private Button ButtonBambooForest;
   @FXML
-  private Button ButtonH;
+  private Button ButtonDarkForest;
   @FXML
-  private Button ButtonI;
+  private Button ButtonLukasTundra;
   @FXML
-  private Button ButtonJ;
+  private Button ButtonFrozenOcean;
   @FXML
-  private Button ButtonK;
+  private Button ButtonPlateau;
   @FXML
-  private Button ButtonL;
+  private Button ButtonDesertHills;
+
+  @FXML
+  private Button ButtonPlains;
+  @FXML
+  private Button ButtonRockyCliffs;
+  @FXML
+  private Button ButtonForest;
+  @FXML
+  private Button ButtonMesa;
+  @FXML
+  private Button ButtonLake;
+  @FXML
+  private Button ButtonRiver;
+  @FXML
+  private Button ButtonJinchengTaiga;
+  @FXML
+  private Button ButtonBadlands;
+  @FXML
+  private Button ButtonRussMushroomFields;
+  @FXML
+  private Button ButtonXinmengOcean;
+  @FXML
+  private Button ButtonSnowyBeach;
+  @FXML
+  private Button ButtonZhouCaves;
 
   @FXML
   private TreeView<String> Detail;
@@ -91,18 +116,31 @@ public class Map implements Serializable {
 
   private void InitButtonMap() {
     ButtonMap = new HashMap<>();
-    ButtonMap.put("A", ButtonA);
-    ButtonMap.put("B", ButtonB);
-    ButtonMap.put("C", ButtonC);
-    ButtonMap.put("D", ButtonD);
-    ButtonMap.put("E", ButtonE);
-    ButtonMap.put("F", ButtonF);
-    ButtonMap.put("G", ButtonG);
-    ButtonMap.put("H", ButtonH);
-    ButtonMap.put("I", ButtonI);
-    ButtonMap.put("J", ButtonJ);
-    ButtonMap.put("K", ButtonK);
-    ButtonMap.put("L", ButtonL);
+    ButtonMap.put("Desert", ButtonDesert);
+    ButtonMap.put("Mountains", ButtonMountains);
+    ButtonMap.put("Swamp", ButtonSwamp);
+    ButtonMap.put("Beach", ButtonBeach);
+    ButtonMap.put("Savanna", ButtonSavanna);
+    ButtonMap.put("Jungle", ButtonJungle);
+    ButtonMap.put("Bamboo Forest", ButtonBambooForest);
+    ButtonMap.put("Dark Forest", ButtonDarkForest);
+    ButtonMap.put("Lukas Tundra", ButtonLukasTundra);
+    ButtonMap.put("Frozen Ocean", ButtonFrozenOcean);
+    ButtonMap.put("Plateau", ButtonPlateau);
+    ButtonMap.put("Desert Hills", ButtonDesertHills);
+
+    ButtonMap.put("Plains", ButtonPlains);
+    ButtonMap.put("Rocky Cliffs", ButtonRockyCliffs);
+    ButtonMap.put("Forest", ButtonForest);
+    ButtonMap.put("Mesa", ButtonMesa);
+    ButtonMap.put("Lake", ButtonLake);
+    ButtonMap.put("River", ButtonRiver);
+    ButtonMap.put("Jincheng Taiga", ButtonJinchengTaiga);
+    ButtonMap.put("Badlands", ButtonBadlands);
+    ButtonMap.put("Russ Mushroom Fields", ButtonRussMushroomFields);
+    ButtonMap.put("Xinmeng Ocean", ButtonXinmengOcean);
+    ButtonMap.put("Snowy Beach", ButtonSnowyBeach);
+    ButtonMap.put("Zhou Caves", ButtonZhouCaves);
   }
 
   /**
