@@ -26,6 +26,7 @@ public class EnterGameController extends CreateGameController {
     @FXML
     private GridPane gridPane;
     private ArrayList<RoomSender> roomList;
+
     public EnterGameController(Stage st, Socket cs, ArrayList<String> np) {
         super(st, cs, np);
         gridPane = new GridPane();
@@ -45,7 +46,12 @@ public class EnterGameController extends CreateGameController {
         for (int i = 0; i < roomList.size(); i++) {
             Button indButton = new Button(String.valueOf(i));
 
-            indButton.setOnAction(event -> {try{chooseRoom(event);}catch(Exception e){}});
+            indButton.setOnAction(event -> {
+                try {
+                    chooseRoom(event);
+                } catch (Exception e) {
+                }
+            });
 
             Label tpLable = new Label(String.valueOf(roomList.get(i).getTotalNum()));
             Label jpLable = new Label(String.valueOf(roomList.get(i).getJointedNum()));
@@ -60,7 +66,12 @@ public class EnterGameController extends CreateGameController {
         }
         gridPane.getRowConstraints().add(rowcons);
         Button backButton = new Button("Back");
-        backButton.setOnAction(event -> {try{back();}catch(Exception e){}});
+        backButton.setOnAction(event -> {
+            try {
+                back();
+            } catch (Exception e) {
+            }
+        });
         gridPane.add(backButton, 4, roomList.size() + 1);
 
     }
@@ -77,24 +88,23 @@ public class EnterGameController extends CreateGameController {
 
     }
 
-
     @FXML
-    public void chooseRoom(ActionEvent ae) throws IOException, ClassNotFoundException{
+    public void chooseRoom(ActionEvent ae) throws IOException, ClassNotFoundException {
         int choice = getSendNumber(ae);
         String mes = (String) Communicate.receiveObject(clientSocket);
-        if(mes.length() == 0){
-            System.out.println("enter room");
+        if (mes.length() == 0) {
+            // System.out.println("enter room");
+            // WaitController wc = new WaitController(stage, clientSocket, namePassword);
+            // GeneralScreen<WaitController> wcs = new GeneralScreen<>(wc);
             Client client = new Client(clientSocket, stage, namePassword);
             RoomSender rs = roomList.get(choice);
-            if(rs.getIsBegin()){
+            if (rs.getIsBegin()) {
                 client.continuePlay();
-            }
-            else{
+            } else {
                 client.init();
-            }            
+            }
 
-        }
-        else{
+        } else {
             back();
         }
     }
