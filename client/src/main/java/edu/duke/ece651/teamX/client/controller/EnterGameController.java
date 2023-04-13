@@ -2,6 +2,7 @@ package edu.duke.ece651.teamX.client.controller;
 
 import java.io.IOException;
 
+import edu.duke.ece651.teamX.client.*;
 import edu.duke.ece651.teamX.client.view.GeneralScreen;
 import edu.duke.ece651.teamX.shared.*;
 
@@ -82,7 +83,16 @@ public class EnterGameController extends CreateGameController {
         int choice = getSendNumber(ae);
         String mes = (String) Communicate.receiveObject(clientSocket);
         if(mes.length() == 0){
-            System.out.println("Entered the room");
+            System.out.println("enter room");
+            Client client = new Client(clientSocket, stage, namePassword);
+            RoomSender rs = roomList.get(choice);
+            if(rs.getIsBegin()){
+                client.continuePlay();
+            }
+            else{
+                client.init();
+            }            
+
         }
         else{
             back();
@@ -98,7 +108,6 @@ public class EnterGameController extends CreateGameController {
         displayRooms();
         // URL cssResource = getClass().getResource("/style/roomButton.css");
         Scene scene = new Scene(root, 640, 480);
-        // scene.getStylesheets().add(cssResource.toString());
         stage.setTitle("Enter a Game");
         stage.setScene(scene);
         stage.show();

@@ -7,6 +7,7 @@ import edu.duke.ece651.teamX.shared.Territory;
 import edu.duke.ece651.teamX.shared.Unit;
 import java.io.IOException;
 
+import edu.duke.ece651.teamX.client.Client;
 import edu.duke.ece651.teamX.client.view.GeneralScreen;
 import edu.duke.ece651.teamX.shared.Communicate;
 import java.net.Socket;
@@ -70,40 +71,31 @@ public class CreateGameController implements Controller {
   }
 
   @FXML
-  public void onNumberButton(ActionEvent ae) throws IOException {
+  public void onNumberButton(ActionEvent ae) throws IOException, ClassNotFoundException {
     getSendNumber(ae);
+    Client client = new Client(clientSocket, stage, namePassword);
+    client.init();
 
-    // TODO: only for test
-    Unit unit1 = new BasicUnit();
-    Unit unit2 = new BasicUnit();
-    unit1.upgradeLevel(1);
-    unit2.upgradeLevel(2);
-
-    ArrayList<Unit> units = new ArrayList<>();
-    units.add(unit1);
-    units.add(unit2);
-
-    Territory desert = new Territory("Desert");
-    desert.addUnits(units);
-    Territory mountains = new Territory("Mountains");
-    Territory swamp = new Territory("Swamp");
-    Territory beach = new Territory("Beach");
-    desert.addNeighbors(mountains);
-    desert.addNeighbors(swamp);
-    mountains.addNeighbors(desert);
-    mountains.addNeighbors(beach);
-    swamp.addNeighbors(desert);
-    swamp.addNeighbors(beach);
-    Player p1 = new Player("p1", 10);
-    Map map = new Map();
-    map.addTerritory(desert, p1);
-    map.addTerritory(mountains, p1);
-    map.addTerritory(swamp, p1);
-    map.addTerritory(beach, p1);
-    TerritoryInfoController territoryInfoController = new TerritoryInfoController(stage,
-        clientSocket, map);
-    GeneralScreen<TerritoryInfoController> displayMapScreen = new GeneralScreen<>(
-        territoryInfoController);
+    // // TODO: only for test
+    // Territory desert = new Territory("Desert");
+    // Territory mountains = new Territory("Mountains");
+    // Territory swamp = new Territory("Swamp");
+    // Territory beach = new Territory("Beach");
+    // desert.addNeighbors(mountains);
+    // desert.addNeighbors(swamp);
+    // mountains.addNeighbors(desert);
+    // mountains.addNeighbors(beach);
+    // swamp.addNeighbors(desert);
+    // swamp.addNeighbors(beach);
+    // Player p1 = new Player("p1", 10);
+    // Map map = new Map();
+    // map.addTerritory(desert, p1);
+    // map.addTerritory(mountains, p1);
+    // map.addTerritory(swamp, p1);
+    // map.addTerritory(beach, p1);
+    // DisplayMapController displayMapController = new DisplayMapController(stage, clientSocket, map);
+    // GeneralScreen<DisplayMapController> displayMapScreen = new GeneralScreen<>(
+    //     displayMapController);
   }
 
 }
