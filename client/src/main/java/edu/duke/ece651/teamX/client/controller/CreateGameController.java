@@ -73,29 +73,10 @@ public class CreateGameController implements Controller {
   @FXML
   public void onNumberButton(ActionEvent ae) throws IOException, ClassNotFoundException {
     getSendNumber(ae);
+    // WaitController wc = new WaitController(stage, clientSocket, namePassword);
+    // GeneralScreen<WaitController> wcs = new GeneralScreen<>(wc);
     Client client = new Client(clientSocket, stage, namePassword);
     client.init();
-
-    // // TODO: only for test
-    // Territory desert = new Territory("Desert");
-    // Territory mountains = new Territory("Mountains");
-    // Territory swamp = new Territory("Swamp");
-    // Territory beach = new Territory("Beach");
-    // desert.addNeighbors(mountains);
-    // desert.addNeighbors(swamp);
-    // mountains.addNeighbors(desert);
-    // mountains.addNeighbors(beach);
-    // swamp.addNeighbors(desert);
-    // swamp.addNeighbors(beach);
-    // Player p1 = new Player("p1", 10);
-    // Map map = new Map();
-    // map.addTerritory(desert, p1);
-    // map.addTerritory(mountains, p1);
-    // map.addTerritory(swamp, p1);
-    // map.addTerritory(beach, p1);
-    // DisplayMapController displayMapController = new DisplayMapController(stage, clientSocket, map);
-    // GeneralScreen<DisplayMapController> displayMapScreen = new GeneralScreen<>(
-    //     displayMapController);
   }
 
 }

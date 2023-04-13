@@ -12,40 +12,38 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
-
+import javafx.util.Pair;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import javafx.util.Pair;
 
 public class ClientTest {
-
   private void test_displayMap(Client client,
-      Communicate communicate,
-      Socket serverSocket,
-      Map my_map,
-      ByteArrayOutputStream bytes)
+                               Communicate communicate,
+                               Socket serverSocket,
+                               Map my_map,
+                               ByteArrayOutputStream bytes)
       throws IOException, ClassNotFoundException {
     communicate.sendMap(serverSocket, my_map);
     bytes.reset();
     client.receiveMap();
     client.displayMap();
     String expected = "Red player:\n"
-        + "-----------\n"
-        + "2 units in A (next to: B, C)\n"
-        + "3 units in B (next to: A, D)\n\n"
-        + "Blue player:\n"
-        + "-----------\n"
-        + "1 units in C (next to: A, D)\n"
-        + "0 units in D (next to: B, C)\n\n";
+                      + "-----------\n"
+                      + "2 units in A (next to: B, C)\n"
+                      + "3 units in B (next to: A, D)\n\n"
+                      + "Blue player:\n"
+                      + "-----------\n"
+                      + "1 units in C (next to: A, D)\n"
+                      + "0 units in D (next to: B, C)\n\n";
     assertEquals(expected, bytes.toString());
   }
 
   private void test_init(Client client,
-      Communicate communicate,
-      Socket serverSocket,
-      Player player,
-      HashMap<Integer, ArrayList<Territory>> free_groups,
-      ByteArrayOutputStream bytes)
+                         Communicate communicate,
+                         Socket serverSocket,
+                         Player player,
+                         HashMap<Integer, ArrayList<Territory> > free_groups,
+                         ByteArrayOutputStream bytes)
       throws IOException, ClassNotFoundException {
     communicate.sendObject(serverSocket, player);
     communicate.sendObject(serverSocket, free_groups);
@@ -53,7 +51,8 @@ public class ClientTest {
 
     int res = communicate.receiveInt(serverSocket);
     assertEquals(0, res);
-    ArrayList<Territory> territories = (ArrayList<Territory>) communicate.receiveObject(serverSocket);
+    ArrayList<Territory> territories =
+        (ArrayList<Territory>)communicate.receiveObject(serverSocket);
     assertEquals(new Territory("A"), territories.get(0));
     assertEquals(new Territory("B"), territories.get(1));
     assertEquals(0, territories.get(0).getUnitsNumber());
@@ -77,6 +76,7 @@ public class ClientTest {
   // assertEquals(new Territory("B"), mv_neigs.get(0));
   // }
   // private void test_action(Client client) {}
+  /*
   @Disabled
   @Test
   public void test_Client() throws IOException, ClassNotFoundException {
@@ -189,5 +189,5 @@ public class ClientTest {
     client.AddFoodResource(TerritoryMap, playerInfo);
     client.setFoodResource(15);
     assert (15 == client.getFoodResource());
-  }
+    }*/
 }
