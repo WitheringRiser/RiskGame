@@ -235,12 +235,23 @@
     GridPane.columnIndex="0"
     GridPane.rowSpan="1"
     GridPane.columnSpan="1"
-    text="Attack"/>
+    text="Attack"
+    onAction="#onAttackButtonClick"
+  />
   <Button fx:id="moveButton"
     GridPane.rowIndex="7"
     GridPane.columnIndex="1"
     GridPane.rowSpan="1"
     GridPane.columnSpan="1"
-    text="Move"/>
-
+    text="Move"
+    onAction="#onMoveButtonClick"
+  />
+  <Button fx:id="defaultButton"
+    GridPane.rowIndex="7"
+    GridPane.columnIndex="2"
+    GridPane.rowSpan="1"
+    GridPane.columnSpan="1"
+    text="Cancel"
+    onAction="#defaultButtonClick"
+  />
 </GridPane>

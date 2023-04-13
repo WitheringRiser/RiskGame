@@ -20,7 +20,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -30,6 +29,10 @@ public class PlayTurnController implements Controller {
   private enum GameMode {
     DEFAULT, ATTACK, MOVE
   }
+
+  private GameMode currentMode = GameMode.DEFAULT;
+  private Territory sourceTerritory = null;
+  private Territory destinationTerritory = null;
 
 
   TextField textField;
@@ -78,15 +81,20 @@ public class PlayTurnController implements Controller {
   }
 
 
-  public void displayTerr() {
+  public void setTerrButtons() {
     textField = new TextField();
     textField.setId("numText");
     gridPane.add(textField, 5, 7);
-    for (Territory t : map.getTerritoriesByPlayerName(namePassword.get(0))) {
+
+    for (Territory t : map.getAllTerritories()) {
       Button button = (Button) scene.lookup("#" + t.getName());
-      button.setStyle("-fx-background-color: blue ;");
+      if (map.getTerritoriesByPlayerName(namePassword.get(0)).contains(t)) {
+        button.setStyle("-fx-background-color: blue ;");
+      }
       displayTerritoryInfo(button, t);
+      button.setOnAction(event -> handleTerritoryClick(button, t));
     }
+
   }
 
   @Override
@@ -102,8 +110,53 @@ public class PlayTurnController implements Controller {
     scene.getStylesheets().add(cssResource.toString());
     stage.setTitle("Set Units");
     stage.setScene(scene);
-    displayTerr();
+    setTerrButtons();
     stage.show();
 
   }
+
+  private void handleTerritoryClick(Button button, Territory territory) {
+    switch (currentMode) {
+      case ATTACK:
+      case MOVE:
+        if (sourceTerritory == null) {
+          sourceTerritory = territory;
+          System.out.println("sourceTerritory is " + sourceTerritory.getName());
+//          button.setStyle("-fx-background-color: yellow;");
+        } else {
+          destinationTerritory = territory;
+          System.out.println("destinationTerritory is " + destinationTerritory.getName());
+          if (currentMode == GameMode.ATTACK) {
+            System.out.println("attack");
+          } else if (currentMode == GameMode.MOVE) {
+            System.out.println("move");
+          }
+//          reset
+          currentMode = GameMode.DEFAULT;
+          sourceTerritory = null;
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+  @FXML
+  private void onAttackButtonClick(ActionEvent event) {
+    currentMode = GameMode.ATTACK;
+    sourceTerritory = null;
+  }
+
+  @FXML
+  private void onMoveButtonClick(ActionEvent event) {
+    currentMode = GameMode.MOVE;
+    sourceTerritory = null;
+  }
+
+  @FXML
+  private void defaultButtonClick(ActionEvent event) {
+    currentMode = GameMode.DEFAULT;
+    sourceTerritory = null;
+  }
+
 }
