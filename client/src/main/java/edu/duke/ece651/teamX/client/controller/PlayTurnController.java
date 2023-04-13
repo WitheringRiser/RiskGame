@@ -144,6 +144,8 @@ public class PlayTurnController implements Controller {
       Button button = (Button) scene.lookup("#" + t.getName());
       if (map.getTerritoriesByPlayerName(namePassword.get(0)).contains(t)) {
         button.setStyle("-fx-background-color: blue ;");
+      } else {
+        button.setStyle("-fx-background-color: grey ;");
       }
       if (!isReset) {
         displayTerritoryInfo(button, t);
@@ -191,12 +193,18 @@ public class PlayTurnController implements Controller {
           sourceTerritory = territory;
           System.out.println("sourceTerritory is " + sourceTerritory.getName());
           button.setStyle("-fx-background-color: yellow;");
-          filterClickableButtons(clientMove.findDestTerrs(sourceTerritory));
+          if (currentMode == GameMode.ATTACK) {
+            filterClickableButtons(clientAttack.findDestTerrs(sourceTerritory));
+          } else if (currentMode == GameMode.MOVE) {
+            filterClickableButtons(clientMove.findDestTerrs(sourceTerritory));
+          }
         } else {
           destinationTerritory = territory;
           System.out.println("destinationTerritory is " + destinationTerritory.getName());
           if (currentMode == GameMode.ATTACK) {
             System.out.println("attack");
+            clientAttack.perform_res(
+                new ActionSender(sourceTerritory, destinationTerritory, getIndexList()));
           } else if (currentMode == GameMode.MOVE) {
             System.out.println("move");
             clientMove.perform_res(

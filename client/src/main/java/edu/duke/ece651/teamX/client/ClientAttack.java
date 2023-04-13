@@ -34,14 +34,19 @@ public class ClientAttack extends ClientTurnAction<AttackSender> {
     return dests;
   }
 
-  public void perform() throws IOException {
-    ActionSender res = generateAction();
+  public void perform_res(ActionSender res) {
     if (res != null) {
-      AttackSender atts = new AttackSender(res.getSource(), res.getDestination(), res.getIndexList());
+      AttackSender atts = new AttackSender(res.getSource(), res.getDestination(),
+          res.getIndexList());
       this.actions.add(atts);
       res.getSource().removeUnitsFromList(res.getIndexList());
       Player p = map.getOwner(res.getSource());
       p.consumeFood(res.getIndexList().size());
     }
+  }
+
+  public void perform() throws IOException {
+    ActionSender res = generateAction();
+    perform_res(res);
   }
 }
