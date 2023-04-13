@@ -15,6 +15,8 @@ public class Player implements Serializable {
   private int tech_level;
   private HashMap<Integer, Integer> researchRule;
 
+  public int numPlayers = 0;
+
   /**
    * Construct a Player Object for passing player related information
    *
