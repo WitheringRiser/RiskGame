@@ -270,4 +270,12 @@
     text="Done"
     onAction="#doneButtonClick"
   />
+  <Button fx:id="infoButton"
+    GridPane.rowIndex="7"
+    GridPane.columnIndex="5"
+    GridPane.rowSpan="1"
+    GridPane.columnSpan="1"
+    text="Info"
+    onAction="#displayPlayerInfo"
+  />
 </GridPane>

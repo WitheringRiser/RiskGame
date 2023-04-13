@@ -9,6 +9,7 @@ import edu.duke.ece651.teamX.shared.ActionSender;
 import edu.duke.ece651.teamX.shared.Communicate;
 import edu.duke.ece651.teamX.shared.GameResult;
 import edu.duke.ece651.teamX.shared.Map;
+import edu.duke.ece651.teamX.shared.Player;
 import edu.duke.ece651.teamX.shared.Territory;
 import edu.duke.ece651.teamX.shared.Unit;
 import java.io.IOException;
@@ -25,6 +26,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
@@ -138,7 +140,7 @@ public class PlayTurnController implements Controller {
   public void setTerrButtons(boolean isReset) {
     textField = new TextField();
     textField.setId("numText");
-    gridPane.add(textField, 5, 7);
+    gridPane.add(textField, 6, 7);
 
     for (Territory t : map.getAllTerritories()) {
       Button button = (Button) scene.lookup("#" + t.getName());
@@ -257,6 +259,21 @@ public class PlayTurnController implements Controller {
     clientResearch.commit();
     clientUpgrade.commit();
     refresh();
+  }
+
+  @FXML
+  private void displayPlayerInfo() {
+    Player player = map.getPlayerByName(namePassword.get(0));
+    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    alert.setTitle("Player Information");
+    alert.setHeaderText("Player: " + player.getName());
+
+    String content = "Tech Resources: " + player.getTechResource() + "\n";
+    content += "Tech Level: " + player.getTechLevel() + "\n";
+    content += "Food Resources: " + player.getFoodResource() + "\n";
+
+    alert.setContentText(content);
+    alert.showAndWait();
   }
 
 }
