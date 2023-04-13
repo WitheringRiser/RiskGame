@@ -1,0 +1,7 @@
+.expandable {
+    -fx-max-width: infinity;
+    -fx-max-height: infinity;
+    -fx-background-radius: 10, 10;
+    -fx-background-insets: 2, 5;
+    }
+    
