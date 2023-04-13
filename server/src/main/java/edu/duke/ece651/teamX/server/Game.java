@@ -412,6 +412,13 @@ public class Game implements Runnable {
     }
   }
 
+  public void increaseALlPlayerResources(int num) {
+    Set<Player> players = new HashSet<Player>(map.getMap().values());
+    for (Player player : players) {
+      player.increaseAllResource(num);
+    }
+  }
+
   /**
    * isolate for testing
    */
@@ -431,6 +438,7 @@ public class Game implements Runnable {
       }
       playOneTurn(num_player);
       incrementAllTerritoryByOneUnit();
+      increaseALlPlayerResources(40);
     }
   }
 

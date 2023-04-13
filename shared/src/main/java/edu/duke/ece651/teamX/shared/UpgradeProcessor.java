@@ -14,11 +14,13 @@ public class UpgradeProcessor {
 
   public void resolveAllUpgrade() {
     for (UpgradeSender u : allUpgrade) {
-      Territory source = map.getTerritoryByName(u.getSource().getName());
-      Player p = map.getOwner(source);
-      String result = p.upgradeUnit(source, u.getIndex(), u.getToLevel());
-      if (result != null) {
-        throw new IllegalArgumentException(result);
+      if (u != null) {
+        Territory source = map.getTerritoryByName(u.getSource().getName());
+        Player p = map.getOwner(source);
+        String result = p.upgradeUnit(source, u.getIndex(), u.getToLevel());
+        if (result != null) {
+          throw new IllegalArgumentException(result);
+        }
       }
     }
   }

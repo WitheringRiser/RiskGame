@@ -63,5 +63,8 @@ public class PlayerTest {
     assertEquals(p1.getTechResource(), 100);
     assertEquals(p1.getResearchNeedCost(), 20);
     assertFalse(p1.consumeFood(50));
+    p1.increaseAllResource(40);
+    assertEquals(p1.getFoodResource(), 40);
+    assertEquals(p1.getTechResource(), 140);
   }
 }
