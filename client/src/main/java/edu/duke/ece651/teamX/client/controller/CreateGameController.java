@@ -1,8 +1,10 @@
 package edu.duke.ece651.teamX.client.controller;
 
+import edu.duke.ece651.teamX.shared.BasicUnit;
 import edu.duke.ece651.teamX.shared.Map;
 import edu.duke.ece651.teamX.shared.Player;
 import edu.duke.ece651.teamX.shared.Territory;
+import edu.duke.ece651.teamX.shared.Unit;
 import java.io.IOException;
 
 import edu.duke.ece651.teamX.client.Client;
@@ -18,7 +20,6 @@ import javafx.fxml.*;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class CreateGameController implements Controller {

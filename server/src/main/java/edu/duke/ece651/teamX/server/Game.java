@@ -164,12 +164,12 @@ public class Game implements Runnable {
         choice = Communicate.receiveInt(getPlayerSocket(p));
         status_dict.put(p, getPlayerSocket(p));
 
-      } catch (Exception ioe) {//if the client loses connection -> choose the first
+      } catch (Exception ioe) {// if the client loses connection -> choose the first
         choice = terr_groups.keySet().stream().findFirst().get();
         status_dict.put(p, null);
       }
       setGroupOwner(terr_groups.get(choice), p); // Set owner of the group
-      terr_groups.remove(choice); // remove this option     
+      terr_groups.remove(choice); // remove this option
     }
   }
 
@@ -265,7 +265,9 @@ public class Game implements Runnable {
   }
 
   // print all actionsenders content, only for testing and debugging
-  public void printActions(Iterable<ActionSender> allActions) {
+  public void printActions(Iterable<ActionSender> allActions, ArrayList<UpgradeSender> allUpgrades,
+      ArrayList<ResearchSender> allResearch) {
+    System.out.println("---------------------\n");
     System.out.println("Attack:");
     for (AttackSender a : getAttackSenders(allActions)) {
       System.out.println("From " + a.getSource().getName() + " to " +
@@ -277,6 +279,17 @@ public class Game implements Runnable {
       System.out.println("From " + a.getSource().getName() + " to " +
           a.getDestination().getName() +
           " units: " + Integer.toString(a.getUnitsNum()));
+    }
+    System.out.println("Upgrade:");
+    for (UpgradeSender a : allUpgrades) {
+      System.out.println("Upgrade " + a.getSource().getName() + "'s" +
+          Integer.toString(a.getIndex()) +
+          "th units to level " + Integer.toString(a.getToLevel()));
+    }
+    System.out.println("Research:");
+    for (ResearchSender a : allResearch) {
+      System.out.println("Player " + a.getPlayer() +
+          "want to improve his technology level");
     }
     System.out.println("---------------------\n");
   }
@@ -352,11 +365,20 @@ public class Game implements Runnable {
     }
   }
 
+  private void handleResearchUpgrade(ArrayList<ResearchSender> allResearh, ArrayList<UpgradeSender> allUpgrades) {
+    UpgradeProcessor up = new UpgradeProcessor(allUpgrades, map);
+    ResearchProcessor rp = new ResearchProcessor(allResearh, map);
+    up.resolveAllUpgrade();
+    rp.resovleAllResearch();
+  }
+
   private void playOneTurn(int try_num)
       throws IOException, ClassNotFoundException {
     GameResult gameResult = getGameResult();
     // collect all the moves and attacks from players
     ArrayList<ActionSender> allActions = new ArrayList<>();
+    ArrayList<ResearchSender> allResearchs = new ArrayList<>();
+    ArrayList<UpgradeSender> allUpgrades = new ArrayList<>();
     for (Player player : getAllPlayers()) {
       // if this player has lost, skip
       if (gameResult.loserContains(player)) {
@@ -371,15 +393,20 @@ public class Game implements Runnable {
       try {
         ArrayList<MoveSender> moves = (ArrayList<MoveSender>) Communicate.receiveObject(s);
         ArrayList<AttackSender> attacks = (ArrayList<AttackSender>) Communicate.receiveObject(s);
+        ResearchSender research = (ResearchSender) Communicate.receiveObject(s);
+        ArrayList<UpgradeSender> upgrades = (ArrayList<UpgradeSender>) Communicate.receiveObject(s);
         allActions.addAll(moves);
         allActions.addAll(attacks);
+        allResearchs.add(research);
+        allUpgrades.addAll(upgrades);
       } catch (IOException ioe) { // if lose connection when receive --> skip
         continue;
       }
     }
-    printActions(allActions);
+    printActions(allActions, allUpgrades, allResearchs);
     try {
       handleActionSenders(allActions);
+      handleResearchUpgrade(allResearchs, allUpgrades);
     } catch (IllegalArgumentException e) {
       // TODO: send back to client
     }

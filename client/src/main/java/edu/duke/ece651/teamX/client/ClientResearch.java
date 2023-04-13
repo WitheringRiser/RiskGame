@@ -1,5 +1,6 @@
 package edu.duke.ece651.teamX.client;
 
+import java.io.IOException;
 import java.net.Socket;
 
 import edu.duke.ece651.teamX.shared.Communicate;
@@ -10,18 +11,24 @@ public class ClientResearch {
   private Socket socket;
   private Player player;
   private Communicate communicate;
+  private ResearchSender sender;
 
   public ClientResearch(Player _player) {
     this.player = _player;
+    this.sender = null;
   }
 
-  public ResearchSender perform() {
+  public void perform() {
     int cost = player.getResearchNeedCost();
-    if (cost > player.getTechResource()) {
-      return null;
+    if (cost > player.getTechResource() || sender != null) {
+      System.out.println("you can not do research any more!");
     } else {
       player.consumeTech(cost);
-      return new ResearchSender(player);
+      sender = new ResearchSender(player);
     }
+  }
+
+  public void commit() throws IOException {
+    communicate.sendObject(socket, this.sender);
   }
 }
