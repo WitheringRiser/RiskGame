@@ -15,7 +15,7 @@ public class ResearchProcessorTest {
     ArrayList<ResearchSender> all = new ArrayList<>();
     all.add(r1);
     all.add(r2);
-
+    all.add(null);
     Map map = new Map();
     map.addTerritory(new Territory("t1"), new Player("a", 10));
     map.addTerritory(new Territory("t2"), new Player("b", 10));

@@ -24,6 +24,7 @@ public class UpgradeProcessorTest {
     assertThrows(IllegalArgumentException.class, () -> p.resolveAllUpgrade());
     all.remove(u2);
     all.add(u1);
+    all.add(null);
     UpgradeProcessor p2 = new UpgradeProcessor(all, map);
     p2.resolveAllUpgrade();
     assertEquals(map.getTerritoryByName("a").getUnits().get(0).getName(), "level_1_unit");
