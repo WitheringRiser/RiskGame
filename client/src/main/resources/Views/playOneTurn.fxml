@@ -254,9 +254,17 @@
     text="Cancel"
     onAction="#defaultButtonClick"
   />
-  <Button fx:id="doneButton"
+  <Button fx:id="researchButton"
     GridPane.rowIndex="7"
     GridPane.columnIndex="3"
+    GridPane.rowSpan="1"
+    GridPane.columnSpan="1"
+    text="Research"
+    onAction="#onResearchButtonClick"
+  />
+  <Button fx:id="doneButton"
+    GridPane.rowIndex="7"
+    GridPane.columnIndex="4"
     GridPane.rowSpan="1"
     GridPane.columnSpan="1"
     text="Done"

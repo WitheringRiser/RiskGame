@@ -234,6 +234,14 @@ public class PlayTurnController implements Controller {
   }
 
   @FXML
+  private void onResearchButtonClick(ActionEvent event) {
+    currentMode = GameMode.DEFAULT;
+    sourceTerritory = null;
+    setTerrButtons(true);
+    clientResearch.perform();
+  }
+
+  @FXML
   private void doneButtonClick(ActionEvent event) throws IOException, ClassNotFoundException {
     currentMode = GameMode.DEFAULT;
     clientMove.commit();
