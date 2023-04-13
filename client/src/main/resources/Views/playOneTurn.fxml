@@ -226,7 +226,7 @@
 
   <Text fx:id="resultText"
     GridPane.columnIndex="0"
-    GridPane.rowIndex="7"
+    GridPane.rowIndex="8"
     GridPane.rowSpan="1"
     GridPane.columnSpan="7"/>
 
@@ -253,5 +253,13 @@
     GridPane.columnSpan="1"
     text="Cancel"
     onAction="#defaultButtonClick"
+  />
+  <Button fx:id="doneButton"
+    GridPane.rowIndex="7"
+    GridPane.columnIndex="3"
+    GridPane.rowSpan="1"
+    GridPane.columnSpan="1"
+    text="Done"
+    onAction="#doneButtonClick"
   />
 </GridPane>

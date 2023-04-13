@@ -1,8 +1,16 @@
 package edu.duke.ece651.teamX.client.controller;
 
+import edu.duke.ece651.teamX.client.ClientAction;
+import edu.duke.ece651.teamX.client.ClientAttack;
+import edu.duke.ece651.teamX.client.ClientMove;
+import edu.duke.ece651.teamX.client.ClientResearch;
+import edu.duke.ece651.teamX.client.ClientUpgrade;
+import edu.duke.ece651.teamX.shared.ActionSender;
 import edu.duke.ece651.teamX.shared.Communicate;
+import edu.duke.ece651.teamX.shared.GameResult;
 import edu.duke.ece651.teamX.shared.Map;
 import edu.duke.ece651.teamX.shared.Territory;
+import edu.duke.ece651.teamX.shared.Unit;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.URL;
@@ -49,13 +57,45 @@ public class PlayTurnController implements Controller {
   protected Scene scene;
 
   private Map map;
+  private ClientAttack clientAttack;
+  private ClientMove clientMove;
+  private ClientResearch clientResearch;
+  private ClientUpgrade clientUpgrade;
+  GameResult gameResult;
 
-  public PlayTurnController(Stage stage, Socket socket, ArrayList<String> namepassword) {
+  public PlayTurnController(Stage stage, Socket socket, ArrayList<String> namepassword)
+      throws IOException, ClassNotFoundException {
+
     this.namePassword = namepassword;
     this.stage = stage;
     this.clientSocket = socket;
+    refresh();
   }
 
+  private void refresh() throws IOException, ClassNotFoundException {
+    map = Communicate.receiveMap(clientSocket);
+    gameResult = Communicate.receiveGameResult(clientSocket);
+
+    this.clientAttack = new ClientAttack(clientSocket, null, null, null, map,
+        map.getPlayerByName(namePassword.get(0)));
+    this.clientMove = new ClientMove(clientSocket, null, null, null, map,
+        map.getPlayerByName(namePassword.get(0)));
+    this.clientResearch = new ClientResearch(clientSocket,
+        map.getPlayerByName(namePassword.get(0)));
+    this.clientUpgrade = new ClientUpgrade(clientSocket, null, null, null, map,
+        map.getPlayerByName(namePassword.get(0)));
+    setNewLayout();
+  }
+
+  private ArrayList<Integer> getIndexList() {
+    String indexString = textField.getText();
+    String[] indexArray = indexString.split(" ");
+    ArrayList<Integer> indexList = new ArrayList<>();
+    for (String index : indexArray) {
+      indexList.add(Integer.parseInt(index));
+    }
+    return indexList;
+  }
 
   @FXML
   private void displayTerritoryInfo(Button button, Territory territory) {
@@ -66,7 +106,15 @@ public class PlayTurnController implements Controller {
         .collect(Collectors.joining(", "));
     String content = "Territory: " + territory.getName() + "\n"
         + "Owner: " + map.getOwner(territory).getName() + "\n"
-        + "Neighbors: " + neighbors;
+        + "Neighbors: " + neighbors + "\n";
+
+//    Get units information
+    StringBuilder units_info = new StringBuilder();
+    Iterable<Unit> allUnits = territory.getUnits();
+    for (Unit unit : allUnits) {
+      units_info.append(unit.getName()).append(" ");
+    }
+    content += "Units: " + units_info.toString() + "\n";
 
     Tooltip territoryTooltip = new Tooltip(content);
     territoryTooltip.setStyle("-fx-font-size: 14;");
@@ -81,7 +129,7 @@ public class PlayTurnController implements Controller {
   }
 
 
-  public void setTerrButtons() {
+  public void setTerrButtons(boolean isReset) {
     textField = new TextField();
     textField.setId("numText");
     gridPane.add(textField, 5, 7);
@@ -91,7 +139,9 @@ public class PlayTurnController implements Controller {
       if (map.getTerritoriesByPlayerName(namePassword.get(0)).contains(t)) {
         button.setStyle("-fx-background-color: blue ;");
       }
-      displayTerritoryInfo(button, t);
+      if (!isReset) {
+        displayTerritoryInfo(button, t);
+      }
       button.setOnAction(event -> handleTerritoryClick(button, t));
     }
 
@@ -99,7 +149,6 @@ public class PlayTurnController implements Controller {
 
   @Override
   public void setNewLayout() throws IOException, ClassNotFoundException {
-    map = Communicate.receiveMap(clientSocket);
     System.out.println("maps num is " + map.getTerritoryNum());
 
     FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/playOneTurn.fxml"));
@@ -110,9 +159,22 @@ public class PlayTurnController implements Controller {
     scene.getStylesheets().add(cssResource.toString());
     stage.setTitle("Set Units");
     stage.setScene(scene);
-    setTerrButtons();
+    setTerrButtons(false);
     stage.show();
+  }
 
+  private void filterClickableButtons(ArrayList<Territory> territories) {
+    for (Territory t : map.getAllTerritories()) {
+      Button button = (Button) scene.lookup("#" + t.getName());
+      if (territories.contains(t)) {
+        button.setStyle("-fx-background-color: green;");
+        button.setOnAction(event -> handleTerritoryClick(button, t));
+      } else {
+        button.setStyle("-fx-background-color: grey;");
+        button.setOnAction(event -> {
+        });
+      }
+    }
   }
 
   private void handleTerritoryClick(Button button, Territory territory) {
@@ -122,7 +184,8 @@ public class PlayTurnController implements Controller {
         if (sourceTerritory == null) {
           sourceTerritory = territory;
           System.out.println("sourceTerritory is " + sourceTerritory.getName());
-//          button.setStyle("-fx-background-color: yellow;");
+          button.setStyle("-fx-background-color: yellow;");
+          filterClickableButtons(clientMove.findDestTerrs(sourceTerritory));
         } else {
           destinationTerritory = territory;
           System.out.println("destinationTerritory is " + destinationTerritory.getName());
@@ -130,13 +193,17 @@ public class PlayTurnController implements Controller {
             System.out.println("attack");
           } else if (currentMode == GameMode.MOVE) {
             System.out.println("move");
+            clientMove.perform_res(
+                new ActionSender(sourceTerritory, destinationTerritory, getIndexList()));
           }
 //          reset
           currentMode = GameMode.DEFAULT;
           sourceTerritory = null;
+          setTerrButtons(true);
         }
         break;
       default:
+        setTerrButtons(true);
         break;
     }
   }
@@ -157,6 +224,17 @@ public class PlayTurnController implements Controller {
   private void defaultButtonClick(ActionEvent event) {
     currentMode = GameMode.DEFAULT;
     sourceTerritory = null;
+    setTerrButtons(true);
+  }
+
+  @FXML
+  private void doneButtonClick(ActionEvent event) throws IOException, ClassNotFoundException {
+    currentMode = GameMode.DEFAULT;
+    clientMove.commit();
+    clientAttack.commit();
+    clientResearch.commit();
+    clientUpgrade.commit();
+    refresh();
   }
 
 }

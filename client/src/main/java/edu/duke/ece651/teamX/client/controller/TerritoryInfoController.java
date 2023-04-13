@@ -25,6 +25,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
+@Deprecated
 public class TerritoryInfoController implements Controller {
 
   private class TerritoryButton extends Circle {
