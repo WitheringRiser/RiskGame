@@ -76,6 +76,8 @@ public class PlayTurnController implements Controller {
     map = Communicate.receiveMap(clientSocket);
     gameResult = Communicate.receiveGameResult(clientSocket);
 
+    System.out.println("player name = " + namePassword.get(0));
+
     this.clientAttack = new ClientAttack(clientSocket, null, null, null, map,
         map.getPlayerByName(namePassword.get(0)));
     this.clientMove = new ClientMove(clientSocket, null, null, null, map,
@@ -112,7 +114,11 @@ public class PlayTurnController implements Controller {
     StringBuilder units_info = new StringBuilder();
     Iterable<Unit> allUnits = territory.getUnits();
     for (Unit unit : allUnits) {
-      units_info.append(unit.getName()).append(" ");
+      if (unit == null) {
+        units_info.append("null ");
+      } else {
+        units_info.append(unit.getName()).append(" ");
+      }
     }
     content += "Units: " + units_info.toString() + "\n";
 
@@ -157,7 +163,7 @@ public class PlayTurnController implements Controller {
     URL cssResource = getClass().getResource("/style/mapButton.css");
     scene = new Scene(root, 900, 600);
     scene.getStylesheets().add(cssResource.toString());
-    stage.setTitle("Set Units");
+    stage.setTitle("Play Game");
     stage.setScene(scene);
     setTerrButtons(false);
     stage.show();

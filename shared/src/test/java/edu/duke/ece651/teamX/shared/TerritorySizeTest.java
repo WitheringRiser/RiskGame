@@ -11,7 +11,7 @@ public class TerritorySizeTest {
   @Test
   public void test_size() throws IOException {
     TerritorySize test = new TerritorySize();
-    int size = test.getTerritorySize("Jincheng Taiga");
+    int size = test.getTerritorySize("JinchengTaiga");
     assertEquals(size, 6);
   }
 }

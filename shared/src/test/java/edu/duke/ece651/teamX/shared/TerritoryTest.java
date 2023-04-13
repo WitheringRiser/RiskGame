@@ -58,7 +58,7 @@ public class TerritoryTest {
 
   @Test
   void getTerritorySize() {
-    Territory t1 = new Territory("Rocky Cliffs", 3);
+    Territory t1 = new Territory("RockyCliffs", 3);
     Territory t2 = new Territory("invalid name", 3);
     assertEquals(t1.getTerritorySize(), 7);
     assertEquals(t2.getTerritorySize(), -1);

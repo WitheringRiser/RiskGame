@@ -287,10 +287,10 @@ public class Game implements Runnable {
           "th units to level " + Integer.toString(a.getToLevel()));
     }
     System.out.println("Research:");
-    for (ResearchSender a : allResearch) {
-      System.out.println("Player " + a.getPlayer() +
-          "want to improve his technology level");
-    }
+//    for (ResearchSender a : allResearch) {
+//      System.out.println("Player " + a.getPlayer() +
+//          "want to improve his technology level");
+//    }
     System.out.println("---------------------\n");
   }
 
