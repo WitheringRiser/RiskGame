@@ -1,6 +1,8 @@
 package edu.duke.ece651.teamX.shared;
 
-public class ResearchSender {
+import java.io.Serializable;
+
+public class ResearchSender implements Serializable {
 
   private Player player;
 

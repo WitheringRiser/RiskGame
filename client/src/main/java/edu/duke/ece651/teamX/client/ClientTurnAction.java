@@ -101,8 +101,7 @@ public abstract class ClientTurnAction<T extends ActionSender> implements Client
      * }
      */
 
-    ArrayList<Integer> indexList = chooseIndex(source,
-        map.getOwner(source).getFoodResource());
+    ArrayList<Integer> indexList = chooseIndex(source, map.getOwner(source).getFoodResource());
 
     return new ActionSender(source, dest, indexList);
   }

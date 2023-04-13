@@ -13,9 +13,10 @@ public class ClientResearch {
   private Communicate communicate;
   private ResearchSender sender;
 
-  public ClientResearch(Player _player) {
+  public ClientResearch(Socket socket, Player _player) {
     this.player = _player;
     this.sender = null;
+    this.socket = socket;
   }
 
   public void perform() {

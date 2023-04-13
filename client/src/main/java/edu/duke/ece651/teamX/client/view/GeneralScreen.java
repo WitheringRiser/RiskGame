@@ -6,7 +6,7 @@ import javafx.scene.layout.GridPane;
 import java.io.IOException;
 public class GeneralScreen <T extends Controller> extends GridPane{
 
-    public GeneralScreen(T controller) throws IOException {
+    public GeneralScreen(T controller) throws IOException, ClassNotFoundException {
         controller.setNewLayout();
       }
     
