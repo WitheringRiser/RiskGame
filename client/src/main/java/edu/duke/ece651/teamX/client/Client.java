@@ -41,17 +41,16 @@ public class Client {
   }
 
   /**
-   * Initialze the game settings for client Receive player to get player
-   * properties (name, num of
+   * Initialze the game settings for client Receive player to get player properties (name, num of
    * units) Choose a territory group to sart Set Units
    */
   public void init() throws IOException, ClassNotFoundException {
     player = communicate.receivePlayer(socket);
     HashMap<Integer, ArrayList<Territory>> ts = (HashMap<Integer, ArrayList<Territory>>) Communicate
-        .receiveObject(socket);  
-        SelectGroupController sgc = new SelectGroupController(stage, socket, namePassword, ts);
-        GeneralScreen<SelectGroupController> sgs = new GeneralScreen<>(sgc);
-        
+        .receiveObject(socket);
+    SelectGroupController sgc = new SelectGroupController(stage, socket, namePassword, ts);
+    GeneralScreen<SelectGroupController> sgs = new GeneralScreen<>(sgc);
+
     // prompt = new TextPrompt(player);
     // out.print(prompt.startPrompt());
 
@@ -141,33 +140,6 @@ public class Client {
     foodResource = f;
   }
 
-  // ability to increment tech resources at the end of each turn
-  public void AddTechResource(Map TerrMap, Pair<Integer, String> PlayerInfo) {
-
-    TerritoryProduce AddResource = new TerritoryProduce();
-    HashMap<Territory, Player> HM_Terr = new HashMap<Territory, Player>();
-    HM_Terr = TerrMap.getMap();
-    ArrayList<Territory> MyTerr = new ArrayList<>();
-
-    for (int i = 0; i < HM_Terr.size(); i++) {
-      int CurrAdd = AddResource.getTech(HM_Terr.get(i).getName());
-      this.techResource += CurrAdd;
-    }
-  }
-
-  // ability to increment food resources at the end of each turn
-  public void AddFoodResource(Map TerrMap, Pair<Integer, String> PlayerInfo) {
-
-    TerritoryProduce AddResource = new TerritoryProduce();
-    HashMap<Territory, Player> HM_Terr = new HashMap<Territory, Player>();
-    HM_Terr = TerrMap.getMap();
-    ArrayList<Territory> MyTerr = new ArrayList<>();
-
-    for (int i = 0; i < HM_Terr.size(); i++) {
-      int CurrAdd = AddResource.getFood(HM_Terr.get(i).getName());
-      this.foodResource += CurrAdd;
-    }
-  }
 
   /**
    * Let client to player one turn
@@ -208,6 +180,7 @@ public class Client {
     // }
   }
 
+  @Deprecated
   public void playTurns() throws IOException, ClassNotFoundException {
     while (true) {
       receiveMap();
@@ -231,6 +204,7 @@ public class Client {
    * @throws IOException
    * @throws ClassNotFoundException
    */
+  @Deprecated
   public void start() throws IOException, ClassNotFoundException {
     init();
     playTurns();
@@ -248,7 +222,7 @@ public class Client {
   //   // out.println("Welcome back, player " + player.getName());
   //   playTurns();
   // }
-  public void receivePlayer() throws IOException, ClassNotFoundException{
+  public void receivePlayer() throws IOException, ClassNotFoundException {
     player = communicate.receivePlayer(socket);
   }
 }
