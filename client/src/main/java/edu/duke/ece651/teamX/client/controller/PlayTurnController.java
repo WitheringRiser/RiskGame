@@ -124,6 +124,7 @@ public class PlayTurnController implements Controller {
 
     Tooltip territoryTooltip = new Tooltip(content);
     territoryTooltip.setStyle("-fx-font-size: 14;");
+    territoryTooltip.setStyle("-fx-wrap-text: true;");
 
     button.setOnMouseEntered(event -> {
       territoryTooltip.show(button, event.getScreenX(), event.getScreenY() + 15);
