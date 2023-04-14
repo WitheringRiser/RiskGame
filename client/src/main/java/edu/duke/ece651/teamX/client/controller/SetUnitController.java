@@ -66,6 +66,7 @@ public class SetUnitController implements Controller {
             remainUnit -= number;
             resultText.setText("Success");
             if (remainUnit == 0) {
+                resultText.setText("Set units done! Please wait...");
                 Communicate.sendObject(clientSocket, territories);
                 PlayTurnController playTurnController = new PlayTurnController(stage, clientSocket, namePassword);
                 GeneralScreen<PlayTurnController> generalScreen = new GeneralScreen<>(playTurnController);

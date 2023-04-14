@@ -29,6 +29,7 @@
     <RowConstraints percentHeight="20"/>
     <RowConstraints percentHeight="20"/>
     <RowConstraints percentHeight="30"/>
+    <RowConstraints percentHeight="20"/>
   </rowConstraints>
 
   <Button
@@ -225,7 +226,7 @@
     styleClass="expandable"/>
 
   <Text fx:id="resultText"
-    GridPane.columnIndex="0"
+    GridPane.columnIndex="1"
     GridPane.rowIndex="8"
     GridPane.rowSpan="1"
     GridPane.columnSpan="7"/>
@@ -278,4 +279,8 @@
     text="Info"
     onAction="#displayPlayerInfo"
   />
+  <Button text="Exit"
+        GridPane.rowIndex="8"
+        GridPane.columnIndex="5"
+        onAction="#back" />
 </GridPane>

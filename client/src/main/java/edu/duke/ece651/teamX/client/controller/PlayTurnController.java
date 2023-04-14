@@ -1,17 +1,8 @@
 package edu.duke.ece651.teamX.client.controller;
 
-import edu.duke.ece651.teamX.client.ClientAction;
-import edu.duke.ece651.teamX.client.ClientAttack;
-import edu.duke.ece651.teamX.client.ClientMove;
-import edu.duke.ece651.teamX.client.ClientResearch;
-import edu.duke.ece651.teamX.client.ClientUpgrade;
-import edu.duke.ece651.teamX.shared.ActionSender;
-import edu.duke.ece651.teamX.shared.Communicate;
-import edu.duke.ece651.teamX.shared.GameResult;
-import edu.duke.ece651.teamX.shared.Map;
-import edu.duke.ece651.teamX.shared.Player;
-import edu.duke.ece651.teamX.shared.Territory;
-import edu.duke.ece651.teamX.shared.Unit;
+import edu.duke.ece651.teamX.client.*;
+import edu.duke.ece651.teamX.client.view.*;
+import edu.duke.ece651.teamX.shared.*;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.URL;
@@ -96,7 +87,14 @@ public class PlayTurnController implements Controller {
     String[] indexArray = indexString.split(" ");
     ArrayList<Integer> indexList = new ArrayList<>();
     for (String index : indexArray) {
-      indexList.add(Integer.parseInt(index));
+      try{
+        indexList.add(Integer.parseInt(index));
+        resultText.setText("Added");
+      }
+      catch(Exception e){
+        resultText.setText("Invalid input number: "+index);
+      }
+      
     }
     return indexList;
   }
@@ -126,6 +124,7 @@ public class PlayTurnController implements Controller {
 
     Tooltip territoryTooltip = new Tooltip(content);
     territoryTooltip.setStyle("-fx-font-size: 14;");
+    territoryTooltip.setStyle("-fx-wrap-text: true;");
 
     button.setOnMouseEntered(event -> {
       territoryTooltip.show(button, event.getScreenX(), event.getScreenY() + 15);
@@ -274,6 +273,13 @@ public class PlayTurnController implements Controller {
 
     alert.setContentText(content);
     alert.showAndWait();
+  }
+
+  @FXML
+  public void back() throws IOException, ClassNotFoundException {
+    RoomController rc = new RoomController(stage, clientSocket, namePassword);
+    rc.resetConnection();
+    GeneralScreen<RoomController> rs = new GeneralScreen<>(rc);
   }
 
 }
