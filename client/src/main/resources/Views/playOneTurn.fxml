@@ -263,9 +263,17 @@
     text="Research"
     onAction="#onResearchButtonClick"
   />
-  <Button fx:id="doneButton"
+  <Button fx:id="upgradeButton"
     GridPane.rowIndex="7"
     GridPane.columnIndex="4"
+    GridPane.rowSpan="1"
+    GridPane.columnSpan="1"
+    text="Upgrade"
+    onAction="#onUpgradeButtonClick"
+  />
+  <Button fx:id="doneButton"
+    GridPane.rowIndex="7"
+    GridPane.columnIndex="5"
     GridPane.rowSpan="1"
     GridPane.columnSpan="1"
     text="Done"
@@ -273,7 +281,7 @@
   />
   <Button fx:id="infoButton"
     GridPane.rowIndex="7"
-    GridPane.columnIndex="5"
+    GridPane.columnIndex="6"
     GridPane.rowSpan="1"
     GridPane.columnSpan="1"
     text="Info"
