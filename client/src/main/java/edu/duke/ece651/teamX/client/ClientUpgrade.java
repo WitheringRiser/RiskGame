@@ -22,7 +22,8 @@ public class ClientUpgrade {
   protected Player player;
   protected ArrayList<UpgradeSender> actions;
 
-  public ClientUpgrade(Socket s, PrintStream o, UserInReader uir, TextPrompt tp, Map m, Player ply) {
+  public ClientUpgrade(Socket s, PrintStream o, UserInReader uir, TextPrompt tp, Map m,
+      Player ply) {
     this.socket = s;
     this.out = o;
     this.inputReader = uir;
@@ -54,13 +55,18 @@ public class ClientUpgrade {
     if (source == null) {
       return;
     }
-    int unitIndex = inputReader.enterNum(source.getUnitsNumber(), "Please input the index of the unit you want upgrade",
+    int unitIndex = inputReader.enterNum(source.getUnitsNumber(),
+        "Please input the index of the unit you want upgrade",
         "index invalid, please input again");
     int toLevel = inputReader.enterLevel(this.player.getTechLevel(), this.player.getTechResource(),
         source.getUnits().get(unitIndex));
     if (toLevel < 0) {
       return;
     }
+    perform_res(unitIndex, toLevel, source);
+  }
+
+  public void perform_res(int unitIndex, int toLevel, Territory source) {
     this.player.consumeTech(source.getUnits().get(unitIndex).getCost(toLevel));
     this.actions.add(new UpgradeSender(source, unitIndex, toLevel));
   }

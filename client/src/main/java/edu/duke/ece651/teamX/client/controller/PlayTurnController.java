@@ -28,7 +28,7 @@ import javafx.stage.Stage;
 public class PlayTurnController implements Controller {
 
   private enum GameMode {
-    DEFAULT, ATTACK, MOVE
+    DEFAULT, ATTACK, MOVE, UPGRADE
   }
 
   private GameMode currentMode = GameMode.DEFAULT;
@@ -37,6 +37,7 @@ public class PlayTurnController implements Controller {
 
 
   TextField textField;
+  TextField textField_toLevel;
 
   @FXML
   Text resultText;
@@ -87,14 +88,13 @@ public class PlayTurnController implements Controller {
     String[] indexArray = indexString.split(" ");
     ArrayList<Integer> indexList = new ArrayList<>();
     for (String index : indexArray) {
-      try{
+      try {
         indexList.add(Integer.parseInt(index));
         resultText.setText("Added");
+      } catch (Exception e) {
+        resultText.setText("Invalid input number: " + index);
       }
-      catch(Exception e){
-        resultText.setText("Invalid input number: "+index);
-      }
-      
+
     }
     return indexList;
   }
@@ -139,7 +139,10 @@ public class PlayTurnController implements Controller {
   public void setTerrButtons(boolean isReset) {
     textField = new TextField();
     textField.setId("numText");
-    gridPane.add(textField, 6, 7);
+    textField_toLevel = new TextField();
+    textField_toLevel.setId("numText");
+    gridPane.add(textField, 7, 7);
+    gridPane.add(textField_toLevel, 7, 8);
 
     for (Territory t : map.getAllTerritories()) {
       Button button = (Button) scene.lookup("#" + t.getName());
@@ -188,6 +191,10 @@ public class PlayTurnController implements Controller {
 
   private void handleTerritoryClick(Button button, Territory territory) {
     switch (currentMode) {
+      case UPGRADE:
+        clientUpgrade.perform_res(Integer.parseInt(textField.getText()),
+            Integer.parseInt(textField_toLevel.getText()), territory);
+        break;
       case ATTACK:
       case MOVE:
         if (sourceTerritory == null) {
@@ -248,6 +255,12 @@ public class PlayTurnController implements Controller {
     sourceTerritory = null;
     setTerrButtons(true);
     clientResearch.perform();
+  }
+
+  @FXML
+  private void onUpgradeButtonClick(ActionEvent event) {
+    currentMode = GameMode.UPGRADE;
+    sourceTerritory = null;
   }
 
   @FXML
