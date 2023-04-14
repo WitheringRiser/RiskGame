@@ -99,7 +99,9 @@ public class EnterGameController extends CreateGameController {
             Client client = new Client(clientSocket, stage, namePassword);
             RoomSender rs = roomList.get(choice);
             if (rs.getIsBegin()) {
-                client.continuePlay();
+                client.receivePlayer();
+                PlayTurnController playTurnController = new PlayTurnController(stage, clientSocket, namePassword);
+                GeneralScreen<PlayTurnController> generalScreen = new GeneralScreen<>(playTurnController);
             } else {
                 client.init();
             }

@@ -242,10 +242,13 @@ public class Client {
    * @throws IOException
    * @throws ClassNotFoundException
    */
-  public void continuePlay() throws IOException, ClassNotFoundException {
+  // public void continuePlay() throws IOException, ClassNotFoundException {
+  //   player = communicate.receivePlayer(socket);
+  //   // prompt = new TextPrompt(player);
+  //   // out.println("Welcome back, player " + player.getName());
+  //   playTurns();
+  // }
+  public void receivePlayer() throws IOException, ClassNotFoundException{
     player = communicate.receivePlayer(socket);
-    // prompt = new TextPrompt(player);
-    // out.println("Welcome back, player " + player.getName());
-    playTurns();
   }
 }
