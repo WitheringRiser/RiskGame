@@ -154,9 +154,14 @@ public class PlayTurnController implements Controller {
       if (!isReset) {
         displayTerritoryInfo(button, t);
       }
-      button.setOnAction(event -> handleTerritoryClick(button, t));
+      button.setOnAction(event -> {
+        try {
+          handleTerritoryClick(button, t);
+        } catch (IOException | ClassNotFoundException e) {
+          throw new RuntimeException(e);
+        }
+      });
     }
-
   }
 
   @Override
@@ -180,7 +185,13 @@ public class PlayTurnController implements Controller {
       Button button = (Button) scene.lookup("#" + t.getName());
       if (territories.contains(t)) {
         button.setStyle("-fx-background-color: green;");
-        button.setOnAction(event -> handleTerritoryClick(button, t));
+        button.setOnAction(event -> {
+          try {
+            handleTerritoryClick(button, t);
+          } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+          }
+        });
       } else {
         button.setStyle("-fx-background-color: grey;");
         button.setOnAction(event -> {
@@ -189,11 +200,13 @@ public class PlayTurnController implements Controller {
     }
   }
 
-  private void handleTerritoryClick(Button button, Territory territory) {
+  private void handleTerritoryClick(Button button, Territory territory)
+      throws IOException, ClassNotFoundException {
     switch (currentMode) {
       case UPGRADE:
         clientUpgrade.perform_res(Integer.parseInt(textField.getText()),
             Integer.parseInt(textField_toLevel.getText()), territory);
+        setNewLayout();
         break;
       case ATTACK:
       case MOVE:
@@ -218,10 +231,11 @@ public class PlayTurnController implements Controller {
             clientMove.perform_res(
                 new ActionSender(sourceTerritory, destinationTerritory, getIndexList()));
           }
-//          reset
+//          reset and get new temporary map
           currentMode = GameMode.DEFAULT;
           sourceTerritory = null;
-          setTerrButtons(true);
+//          setTerrButtons(true);
+          setNewLayout();
         }
         break;
       default:
