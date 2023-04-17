@@ -108,7 +108,8 @@ public class PlayTurnController implements Controller {
         .collect(Collectors.joining(", "));
     String content = "Territory: " + territory.getName() + "\n"
         + "Owner: " + map.getOwner(territory).getName() + "\n"
-        + "Neighbors: " + neighbors + "\n";
+        + "Neighbors: " + neighbors + "\n"
+        + "Size: " + territory.getTerritorySize() + "\n";
 
 //    Get units information
     StringBuilder units_info = new StringBuilder();
