@@ -7,7 +7,7 @@ import edu.duke.ece651.teamX.shared.Territory;
 import edu.duke.ece651.teamX.shared.Unit;
 import java.io.IOException;
 
-import edu.duke.ece651.teamX.client.Client;
+// import edu.duke.ece651.teamX.client.Client;
 import edu.duke.ece651.teamX.client.view.GeneralScreen;
 import edu.duke.ece651.teamX.shared.Communicate;
 import java.net.Socket;
