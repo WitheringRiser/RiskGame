@@ -96,14 +96,15 @@ public class EnterGameController extends CreateGameController {
             // System.out.println("enter room");
             // WaitController wc = new WaitController(stage, clientSocket, namePassword);
             // GeneralScreen<WaitController> wcs = new GeneralScreen<>(wc);
-            Client client = new Client(clientSocket, stage, namePassword);
+            // Client client = new Client(clientSocket, stage, namePassword);
             RoomSender rs = roomList.get(choice);
             if (rs.getIsBegin()) {
-                client.receivePlayer();
+                Communicate.receivePlayer(clientSocket);
                 PlayTurnController playTurnController = new PlayTurnController(stage, clientSocket, namePassword);
                 GeneralScreen<PlayTurnController> generalScreen = new GeneralScreen<>(playTurnController);
             } else {
-                client.init();
+                WaitController wc = new WaitController(stage, clientSocket, namePassword);
+                GeneralScreen<WaitController> wcs = new GeneralScreen<>(wc);
             }
 
         } else {
