@@ -73,10 +73,10 @@ public class CreateGameController implements Controller {
   @FXML
   public void onNumberButton(ActionEvent ae) throws IOException, ClassNotFoundException {
     getSendNumber(ae);
-    // WaitController wc = new WaitController(stage, clientSocket, namePassword);
-    // GeneralScreen<WaitController> wcs = new GeneralScreen<>(wc);
-    Client client = new Client(clientSocket, stage, namePassword);
-    client.init();
+    WaitController wc = new WaitController(stage, clientSocket, namePassword);
+    GeneralScreen<WaitController> wcs = new GeneralScreen<>(wc);
+  //   Client client = new Client(clientSocket, stage, namePassword);
+  //   client.init();
   }
 
 }

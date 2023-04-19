@@ -30,8 +30,7 @@ public class SelectGroupController implements Controller {
     @FXML
     Text resultText;
 
-    public SelectGroupController(Stage st, Socket cs, ArrayList<String> np,
-            HashMap<Integer, ArrayList<Territory>> tsm) {
+    public SelectGroupController(Stage st, Socket cs, ArrayList<String> np, HashMap<Integer, ArrayList<Territory>> tsm) {
         namePassword = np;
         clientSocket = cs;
         stage = st;

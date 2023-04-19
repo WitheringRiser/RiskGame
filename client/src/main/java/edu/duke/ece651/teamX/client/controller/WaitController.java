@@ -1,12 +1,15 @@
 package edu.duke.ece651.teamX.client.controller;
 
-import edu.duke.ece651.teamX.shared.Communicate;
+import edu.duke.ece651.teamX.shared.*;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
-import edu.duke.ece651.teamX.client.view.GeneralScreen;
-import java.net.URL;
+import java.util.HashMap;
 
+import edu.duke.ece651.teamX.client.view.GeneralScreen;
+import edu.duke.ece651.teamX.client.*;
+import java.net.URL;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.Parent;
@@ -26,7 +29,7 @@ public class WaitController implements Controller {
         namePassword = np;
     }
 
-    public void setNewLayout() throws IOException {
+    public void setNewLayout() throws IOException, ClassNotFoundException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/waitingpage.fxml"));
         loader.setController(this);
         Parent root = loader.load();
@@ -35,6 +38,24 @@ public class WaitController implements Controller {
         stage.setTitle("Waiting");
         stage.setScene(scene);
         stage.show();
+
+        // A seperate thread to receive information from socket
+        new Thread(() -> {
+            try {
+                Player player = Communicate.receivePlayer(clientSocket);
+                HashMap<Integer, ArrayList<Territory>> ts = (HashMap<Integer, ArrayList<Territory>>) Communicate
+                        .receiveObject(clientSocket);
+                Platform.runLater(() -> {// to update the UI in event thread
+                    try {
+                        SelectGroupController sgc = new SelectGroupController(stage, clientSocket, namePassword, ts);
+                        GeneralScreen<SelectGroupController> sgs = new GeneralScreen<>(sgc);
+                    } catch (Exception e) {
+                    }
+                });
+
+            } catch (Exception e) {
+            }
+        }).start();
 
     }
 
