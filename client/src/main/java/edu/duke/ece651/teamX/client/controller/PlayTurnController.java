@@ -35,7 +35,6 @@ public class PlayTurnController implements Controller {
   private Territory sourceTerritory = null;
   private Territory destinationTerritory = null;
 
-
   TextField textField;
   TextField textField_toLevel;
 
@@ -103,7 +102,7 @@ public class PlayTurnController implements Controller {
   private void displayTerritoryInfo(Button button, Territory territory) {
     Iterator<Territory> iterator = territory.getNeighbours();
     String neighbors = StreamSupport.stream(
-            Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), false)
+        Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), false)
         .map(Territory::getName)
         .collect(Collectors.joining(", "));
     String content = "Territory: " + territory.getName() + "\n"
@@ -111,7 +110,7 @@ public class PlayTurnController implements Controller {
         + "Neighbors: " + neighbors + "\n"
         + "Size: " + territory.getTerritorySize() + "\n";
 
-//    Get units information
+    // Get units information
     StringBuilder units_info = new StringBuilder();
     Iterable<Unit> allUnits = territory.getUnits();
     for (Unit unit : allUnits) {
@@ -136,7 +135,6 @@ public class PlayTurnController implements Controller {
     });
   }
 
-
   public void setTerrButtons(boolean isReset) {
     textField = new TextField();
     textField.setId("numText");
@@ -149,6 +147,9 @@ public class PlayTurnController implements Controller {
       Button button = (Button) scene.lookup("#" + t.getName());
       if (map.getTerritoriesByPlayerName(namePassword.get(0)).contains(t)) {
         button.setStyle("-fx-background-color: blue ;");
+        // Change color when pressed
+        button.setOnMousePressed(e -> button.setStyle("-fx-background-color: darkblue;"));
+
       } else {
         button.setStyle("-fx-background-color: grey ;");
       }
@@ -232,10 +233,10 @@ public class PlayTurnController implements Controller {
             clientMove.perform_res(
                 new ActionSender(sourceTerritory, destinationTerritory, getIndexList()));
           }
-//          reset and get new temporary map
+          // reset and get new temporary map
           currentMode = GameMode.DEFAULT;
           sourceTerritory = null;
-//          setTerrButtons(true);
+          // setTerrButtons(true);
           setNewLayout();
         }
         break;

@@ -68,6 +68,7 @@ public class ClientUpgrade {
 
   public void perform_res(int unitIndex, int toLevel, Territory source) {
     this.player.consumeTech(source.getUnits().get(unitIndex).getCost(toLevel));
+    source.getUnits().get(unitIndex).upgradeLevel(toLevel);
     this.actions.add(new UpgradeSender(source, unitIndex, toLevel));
   }
 
