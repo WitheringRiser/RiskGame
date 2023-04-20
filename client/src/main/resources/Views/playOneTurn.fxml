@@ -39,7 +39,7 @@
     GridPane.columnIndex="0"
     GridPane.rowSpan="2"
     GridPane.columnSpan="2"
-    styleClass="expandable"/>
+    styleClass="expandable,terrbtn"/>
 
   <Button text="Badlands"
     fx:id="Badlands"
@@ -47,7 +47,7 @@
     GridPane.columnIndex="2"
     GridPane.rowSpan="2"
     GridPane.columnSpan="1"
-    styleClass="expandable"/>
+    styleClass="expandable,terrbtn"/>
 
   <Button text="Jincheng Taiga"
     fx:id="JinchengTaiga"
@@ -55,7 +55,7 @@
     GridPane.columnIndex="3"
     GridPane.rowSpan="2"
     GridPane.columnSpan="1"
-    styleClass="expandable"/>
+    styleClass="expandable,terrbtn"/>
 
   <Button text="Bamboo Forest"
     fx:id="BambooForest"
@@ -63,7 +63,7 @@
     GridPane.columnIndex="4"
     GridPane.rowSpan="1"
     GridPane.columnSpan="2"
-    styleClass="expandable"/>
+    styleClass="expandable,terrbtn"/>
 
   <Button text="Dark Forest"
     fx:id="DarkForest"
@@ -71,7 +71,7 @@
     GridPane.columnIndex="4"
     GridPane.rowSpan="1"
     GridPane.columnSpan="2"
-    styleClass="expandable"/>
+    styleClass="expandable,terrbtn"/>
 
   <Button text="Lukas Tundra"
     fx:id="LukasTundra"
@@ -79,7 +79,7 @@
     GridPane.columnIndex="6"
     GridPane.rowSpan="2"
     GridPane.columnSpan="2"
-    styleClass="expandable"/>
+    styleClass="expandable,terrbtn"/>
 
   <Button text="Xinmeng Ocean"
     fx:id="XinmengOcean"
@@ -87,7 +87,7 @@
     GridPane.columnIndex="0"
     GridPane.rowSpan="3"
     GridPane.columnSpan="1"
-    styleClass="expandable"/>
+    styleClass="expandable,terrbtn"/>
 
   <Button text="Lake"
     fx:id="Lake"
@@ -95,7 +95,7 @@
     GridPane.columnIndex="1"
     GridPane.rowSpan="3"
     GridPane.columnSpan="1"
-    styleClass="expandable"/>
+    styleClass="expandable,terrbtn"/>
 
   <Button text="River"
     fx:id="River"
@@ -103,7 +103,7 @@
     GridPane.columnIndex="2"
     GridPane.rowSpan="1"
     GridPane.columnSpan="2"
-    styleClass="expandable"/>
+    styleClass="expandable,terrbtn"/>
 
   <Button text="Mountains"
     fx:id="Mountains"
@@ -111,7 +111,7 @@
     GridPane.columnIndex="4"
     GridPane.rowSpan="1"
     GridPane.columnSpan="2"
-    styleClass="expandable"/>
+    styleClass="expandable,terrbtn"/>
 
   <Button text="Mesa"
     fx:id="Mesa"
@@ -119,7 +119,7 @@
     GridPane.columnIndex="2"
     GridPane.rowSpan="1"
     GridPane.columnSpan="2"
-    styleClass="expandable"/>
+    styleClass="expandable,terrbtn"/>
 
   <Button text="Swamp"
     fx:id="Swamp"
@@ -127,7 +127,7 @@
     GridPane.columnIndex="4"
     GridPane.rowSpan="1"
     GridPane.columnSpan="2"
-    styleClass="expandable"/>
+    styleClass="expandable,terrbtn"/>
 
   <Button text="Desert"
     fx:id="Desert"
@@ -135,7 +135,7 @@
     GridPane.columnIndex="6"
     GridPane.rowSpan="3"
     GridPane.columnSpan="1"
-    styleClass="expandable"/>
+    styleClass="expandable,terrbtn"/>
 
   <Button text="Frozen Ocean"
     fx:id="FrozenOcean"
@@ -143,7 +143,7 @@
     GridPane.columnIndex="7"
     GridPane.rowSpan="3"
     GridPane.columnSpan="1"
-    styleClass="expandable"/>
+    styleClass="expandable,terrbtn"/>
 
   <Button text="Forest"
     fx:id="Forest"
@@ -151,7 +151,7 @@
     GridPane.columnIndex="2"
     GridPane.rowSpan="2"
     GridPane.columnSpan="2"
-    styleClass="expandable"/>
+    styleClass="expandable,terrbtn"/>
 
   <Button text="Jungle"
     fx:id="Jungle"
@@ -159,7 +159,7 @@
     GridPane.columnIndex="4"
     GridPane.rowSpan="2"
     GridPane.columnSpan="1"
-    styleClass="expandable"/>
+    styleClass="expandable,terrbtn"/>
 
   <Button text="Beach"
     fx:id="Beach"
@@ -167,7 +167,7 @@
     GridPane.columnIndex="5"
     GridPane.rowSpan="2"
     GridPane.columnSpan="1"
-    styleClass="expandable"/>
+    styleClass="expandable,terrbtn"/>
 
   <Button text="Snowy Beach"
     fx:id="SnowyBeach"
@@ -175,7 +175,7 @@
     GridPane.columnIndex="0"
     GridPane.rowSpan="2"
     GridPane.columnSpan="1"
-    styleClass="expandable"/>
+    styleClass="expandable,terrbtn"/>
 
   <Button text="Zhou Caves"
     fx:id="ZhouCaves"
@@ -183,7 +183,7 @@
     GridPane.columnIndex="1"
     GridPane.rowSpan="2"
     GridPane.columnSpan="1"
-    styleClass="expandable"/>
+    styleClass="expandable,terrbtn"/>
 
   <Button text="Rocky Cliffs"
     fx:id="RockyCliffs"
@@ -191,7 +191,7 @@
     GridPane.columnIndex="2"
     GridPane.rowSpan="1"
     GridPane.columnSpan="1"
-    styleClass="expandable"/>
+    styleClass="expandable,terrbtn"/>
 
   <Button text="Plains"
     fx:id="Plains"
@@ -199,7 +199,7 @@
     GridPane.columnIndex="3"
     GridPane.rowSpan="1"
     GridPane.columnSpan="1"
-    styleClass="expandable"/>
+    styleClass="expandable,terrbtn"/>
 
   <Button text="Savanna"
     fx:id="Savanna"
@@ -207,7 +207,7 @@
     GridPane.columnIndex="4"
     GridPane.rowSpan="1"
     GridPane.columnSpan="2"
-    styleClass="expandable"/>
+    styleClass="expandable,terrbtn"/>
 
   <Button text="Plateau"
     fx:id="Plateau"
@@ -215,7 +215,7 @@
     GridPane.columnIndex="6"
     GridPane.rowSpan="2"
     GridPane.columnSpan="1"
-    styleClass="expandable"/>
+    styleClass="expandable,terrbtn"/>
 
   <Button text="Desert Hills"
     fx:id="DesertHills"
@@ -223,7 +223,7 @@
     GridPane.columnIndex="7"
     GridPane.rowSpan="2"
     GridPane.columnSpan="1"
-    styleClass="expandable"/>
+    styleClass="expandable,terrbtn"/>
 
   <Text fx:id="resultText"
     GridPane.columnIndex="1"
