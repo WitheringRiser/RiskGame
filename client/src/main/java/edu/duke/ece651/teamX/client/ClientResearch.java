@@ -22,7 +22,7 @@ public class ClientResearch {
   public void perform() {
     int cost = player.getResearchNeedCost();
     if (cost > player.getTechResource() || sender != null) {
-      System.out.println("you can not do research any more!");
+      throw new IllegalArgumentException("you can not do research any more!");
     } else {
       player.consumeTech(cost);
       sender = new ResearchSender(player);

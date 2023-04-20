@@ -33,7 +33,7 @@ public class MoveProcessor {
     }
   }
 
-  public int getMinCostPathBetweenSourceDest(Territory source, Territory destination, Map map) {
+  public static int getMinCostPathBetweenSourceDest(Territory source, Territory destination, Map map) {
     Player owner = map.getOwner(source);
 
     PriorityQueue<TerritoryWrapper> queue = new PriorityQueue<>(
