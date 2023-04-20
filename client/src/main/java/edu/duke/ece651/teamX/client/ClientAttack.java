@@ -41,7 +41,8 @@ public class ClientAttack extends ClientTurnAction<AttackSender> {
       this.actions.add(atts);
       res.getSource().removeUnitsFromList(res.getIndexList());
       Player p = map.getOwner(res.getSource());
-      p.consumeFood(res.getIndexList().size());
+      p.consumeFood(
+          res.getIndexList().size() * (res.getSource().getTerritorySize() + res.getDestination().getTerritorySize()));
     }
   }
 
