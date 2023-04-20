@@ -32,6 +32,8 @@ public class ClientUpgrade {
       throw new IllegalArgumentException(mes);
     }
     
+    // this.player.consumeTech(source.getUnits().get(unitIndex).getCost(toLevel));
+    // source.getUnits().get(unitIndex).upgradeLevel(toLevel);
     this.actions.add(new UpgradeSender(source, unitIndex, toLevel));
   }
 

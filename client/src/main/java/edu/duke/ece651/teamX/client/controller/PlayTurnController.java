@@ -146,6 +146,9 @@ public class PlayTurnController implements Controller {
       Button button = (Button) scene.lookup("#" + t.getName());
       if (map.getTerritoriesByPlayerName(namePassword.get(0)).contains(t)) {
         button.setStyle("-fx-background-color: blue ;");
+        // Change color when pressed
+        button.setOnMousePressed(e -> button.setStyle("-fx-background-color: darkblue;"));
+
       } else {
         button.setStyle("-fx-background-color: grey ;");
       }

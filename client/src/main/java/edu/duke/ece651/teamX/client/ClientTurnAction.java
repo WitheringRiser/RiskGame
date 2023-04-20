@@ -38,6 +38,54 @@ public abstract class ClientTurnAction<T extends ActionSender> implements Client
    */
   public abstract ArrayList<Territory> findDestTerrs(Territory source);
 
+  /**
+   * get the index of units
+   * 
+   * @param source: source territory
+   * @param maxNum: max number of units the user can select(food resource is
+   *                limited)
+   * @return: arraylist of index
+   * @throws IOException
+   */
+  // public ArrayList<Integer> chooseIndex(Territory source, int maxNum) throws IOException {
+  //   int max = source.getUnitsNumber();
+  //   ArrayList<Integer> indexes = inputReader.readIndexList(0, max - 1, maxNum);
+  //   return indexes;
+  // }
+
+  /**
+   * @return an ActionSender object with action information
+   * @throws IOException
+   */
+  // public ActionSender generateAction()
+  //     throws IOException {
+  //   Territory source = chooseOneTerritory(findOwnTerr(), true);
+  //   if (source == null) {
+  //     return null;
+  //   }
+  //   Territory dest = chooseOneTerritory(findDestTerrs(source), false);
+  //   if (dest == null) {
+  //     return null;
+  //   }
+    /*
+     * int unit_num = inputReader.enterNum(source.getUnitsNumber(),
+     * prompt.enterNumPrompt(),
+     * prompt.enterAgainPrompt());
+     * 
+     * if (unit_num < 0) {
+     * return null;
+     * }
+     */
+  //   int distance = source.getTerritorySize() + dest.getTerritorySize();
+  //   int canChooseMax = map.getOwner(source).getFoodResource() / distance;
+  //   ArrayList<Integer> indexList = chooseIndex(source, canChooseMax);
+
+  //   return new ActionSender(source, dest, indexList);
+  // }
+
+  // public void perform()throws IOException, ClassNotFoundException{
+
+  // }
   public void commit() throws IOException {
     communicate.sendObject(socket, this.actions);
     this.actions.clear();
