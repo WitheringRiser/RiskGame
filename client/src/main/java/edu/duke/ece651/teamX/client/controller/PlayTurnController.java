@@ -12,6 +12,9 @@ import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
+import com.google.common.cache.Cache;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -34,7 +37,6 @@ public class PlayTurnController implements Controller {
   private GameMode currentMode = GameMode.DEFAULT;
   private Territory sourceTerritory = null;
   private Territory destinationTerritory = null;
-
 
   TextField textField;
   TextField textField_toLevel;
@@ -72,14 +74,10 @@ public class PlayTurnController implements Controller {
 
     System.out.println("player name = " + namePassword.get(0));
 
-    this.clientAttack = new ClientAttack(clientSocket, null, null, null, map,
-        map.getPlayerByName(namePassword.get(0)));
-    this.clientMove = new ClientMove(clientSocket, null, null, null, map,
-        map.getPlayerByName(namePassword.get(0)));
-    this.clientResearch = new ClientResearch(clientSocket,
-        map.getPlayerByName(namePassword.get(0)));
-    this.clientUpgrade = new ClientUpgrade(clientSocket, null, null, null, map,
-        map.getPlayerByName(namePassword.get(0)));
+    this.clientAttack = new ClientAttack(clientSocket, map, map.getPlayerByName(namePassword.get(0)));
+    this.clientMove = new ClientMove(clientSocket, map, map.getPlayerByName(namePassword.get(0)));
+    this.clientResearch = new ClientResearch(clientSocket, map.getPlayerByName(namePassword.get(0)));
+    this.clientUpgrade = new ClientUpgrade(clientSocket, map, map.getPlayerByName(namePassword.get(0)));
     setNewLayout();
   }
 
@@ -103,7 +101,7 @@ public class PlayTurnController implements Controller {
   private void displayTerritoryInfo(Button button, Territory territory) {
     Iterator<Territory> iterator = territory.getNeighbours();
     String neighbors = StreamSupport.stream(
-            Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), false)
+        Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), false)
         .map(Territory::getName)
         .collect(Collectors.joining(", "));
     String content = "Territory: " + territory.getName() + "\n"
@@ -111,7 +109,7 @@ public class PlayTurnController implements Controller {
         + "Neighbors: " + neighbors + "\n"
         + "Size: " + territory.getTerritorySize() + "\n";
 
-//    Get units information
+    // Get units information
     StringBuilder units_info = new StringBuilder();
     Iterable<Unit> allUnits = territory.getUnits();
     for (Unit unit : allUnits) {
@@ -135,7 +133,6 @@ public class PlayTurnController implements Controller {
       territoryTooltip.hide();
     });
   }
-
 
   public void setTerrButtons(boolean isReset) {
     textField = new TextField();
@@ -203,46 +200,51 @@ public class PlayTurnController implements Controller {
 
   private void handleTerritoryClick(Button button, Territory territory)
       throws IOException, ClassNotFoundException {
-    switch (currentMode) {
-      case UPGRADE:
-        clientUpgrade.perform_res(Integer.parseInt(textField.getText()),
-            Integer.parseInt(textField_toLevel.getText()), territory);
-        setNewLayout();
-        break;
-      case ATTACK:
-      case MOVE:
-        if (sourceTerritory == null) {
-          sourceTerritory = territory;
-          System.out.println("sourceTerritory is " + sourceTerritory.getName());
-          button.setStyle("-fx-background-color: yellow;");
-          if (currentMode == GameMode.ATTACK) {
-            filterClickableButtons(clientAttack.findDestTerrs(sourceTerritory));
-          } else if (currentMode == GameMode.MOVE) {
-            filterClickableButtons(clientMove.findDestTerrs(sourceTerritory));
-          }
-        } else {
-          destinationTerritory = territory;
-          System.out.println("destinationTerritory is " + destinationTerritory.getName());
-          if (currentMode == GameMode.ATTACK) {
-            System.out.println("attack");
-            clientAttack.perform_res(
-                new ActionSender(sourceTerritory, destinationTerritory, getIndexList()));
-          } else if (currentMode == GameMode.MOVE) {
-            System.out.println("move");
-            clientMove.perform_res(
-                new ActionSender(sourceTerritory, destinationTerritory, getIndexList()));
-          }
-//          reset and get new temporary map
-          currentMode = GameMode.DEFAULT;
-          sourceTerritory = null;
-//          setTerrButtons(true);
+    try{
+      switch (currentMode) {
+        case UPGRADE:
+          clientUpgrade.perform_res(Integer.parseInt(textField.getText()),
+              Integer.parseInt(textField_toLevel.getText()), territory);
           setNewLayout();
-        }
-        break;
-      default:
-        setTerrButtons(true);
-        break;
+          break;
+        case ATTACK:
+        case MOVE:
+          if (sourceTerritory == null) {
+            sourceTerritory = territory;
+            System.out.println("sourceTerritory is " + sourceTerritory.getName());
+            button.setStyle("-fx-background-color: yellow;");
+            if (currentMode == GameMode.ATTACK) {
+              filterClickableButtons(clientAttack.findDestTerrs(sourceTerritory));
+            } else if (currentMode == GameMode.MOVE) {
+              filterClickableButtons(clientMove.findDestTerrs(sourceTerritory));
+            }
+          } else {
+            destinationTerritory = territory;
+            System.out.println("destinationTerritory is " + destinationTerritory.getName());
+            if (currentMode == GameMode.ATTACK) {
+              System.out.println("attack");
+              clientAttack.perform_res(sourceTerritory, destinationTerritory, getIndexList());
+            } else if (currentMode == GameMode.MOVE) {
+              System.out.println("move");
+              clientMove.perform_res(sourceTerritory, destinationTerritory, getIndexList());
+            }
+            // reset and get new temporary map
+            currentMode = GameMode.DEFAULT;
+            sourceTerritory = null;
+            // setTerrButtons(true);
+            setNewLayout();
+          }
+          break;
+        default:
+          setTerrButtons(true);
+          break;
+      }
+      
     }
+    catch(IllegalArgumentException iae){
+      resultText.setText(iae.getMessage());
+    }
+    
   }
 
   @FXML
@@ -269,7 +271,13 @@ public class PlayTurnController implements Controller {
     currentMode = GameMode.DEFAULT;
     sourceTerritory = null;
     setTerrButtons(true);
-    clientResearch.perform();
+    try{
+      clientResearch.perform();
+    }
+    catch(IllegalArgumentException iae){
+      resultText.setText(iae.getMessage());
+    }
+    
   }
 
   @FXML

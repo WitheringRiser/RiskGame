@@ -4,7 +4,7 @@ Swamp-5
 Beach-3
 Savanna-4
 Jungle-6
-Bamboo Forest-6
+BambooForest-6
 DarkForest-4
 LukasTundra-5
 FrozenOcean-3

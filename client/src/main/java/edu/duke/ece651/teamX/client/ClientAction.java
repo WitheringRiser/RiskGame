@@ -7,7 +7,7 @@ public interface ClientAction {
   /**
    * Perfom an action of this action type
    */
-  public void perform() throws IOException, ClassNotFoundException;
+  // public void perform() throws IOException, ClassNotFoundException;
 
   /**
    * Complete a sequence of action and send to server
