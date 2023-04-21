@@ -112,6 +112,28 @@ public class Territory implements Serializable {
     return units;
   }
 
+  /**
+   * Map from unit name to index
+   * Will be used in client side to display unit info
+   * @return the resulted map from name to index
+   */
+  public HashMap<String,ArrayList<Integer>> getUnitsDit(){
+    HashMap<String,ArrayList<Integer>> resDic = new HashMap<>();
+    for(int i=0;i<units.size();i++){
+      Unit u = units.get(i);
+      ArrayList<Integer> inds;
+      if(resDic.containsKey(u.getName())){
+        inds= resDic.get(u.getName());
+      }
+      else{
+        inds=new ArrayList<>();        
+      }
+      inds.add(i);
+      resDic.put(u.getName(), inds);
+    }
+    return resDic;
+  }
+
   public int getTerritorySize() {
     TerritorySize ts = new TerritorySize();
     try {

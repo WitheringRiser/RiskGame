@@ -14,10 +14,12 @@ public class ResearchProcessor {
 
   public void resovleAllResearch() {
     for (ResearchSender r : allResearch) {
-      Player p = map.getPlayerByName(r.getPlayer().getName());
-      if (!p.upgradeLevel()) {
-        throw new IllegalArgumentException(
-            "technology resources are not enough to upgrade technology level");
+      if (r != null) {
+        Player p = map.getPlayerByName(r.getPlayer().getName());
+        if (!p.upgradeLevel()) {
+          throw new IllegalArgumentException(
+              "technology resources are not enough to upgrade technology level");
+        }
       }
     }
   }

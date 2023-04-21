@@ -287,10 +287,10 @@ public class Game implements Runnable {
           "th units to level " + Integer.toString(a.getToLevel()));
     }
     System.out.println("Research:");
-    for (ResearchSender a : allResearch) {
-      System.out.println("Player " + a.getPlayer() +
-          "want to improve his technology level");
-    }
+//    for (ResearchSender a : allResearch) {
+//      System.out.println("Player " + a.getPlayer() +
+//          "want to improve his technology level");
+//    }
     System.out.println("---------------------\n");
   }
 
@@ -361,7 +361,7 @@ public class Game implements Runnable {
 
   private void incrementAllTerritoryByOneUnit() {
     for (Territory terr : map.getAllTerritories()) {
-      terr.addUnits(null, 1);
+      terr.addUnits(1);
     }
   }
 
@@ -412,6 +412,20 @@ public class Game implements Runnable {
     }
   }
 
+  // public void increaseALlPlayerResources(int num) {
+  //   Set<Player> players = new HashSet<Player>(map.getMap().values());
+  //   for (Player player : players) {
+  //     player.increaseAllResource(num);
+  //   }
+  // }
+
+  //New version: increase resources based on num of territories
+  public void increaseALlPlayerResources(int num) {
+    for (Player player : map.getMap().values()) {
+      player.increaseAllResource(num);
+    }
+  }
+
   /**
    * isolate for testing
    */
@@ -431,6 +445,7 @@ public class Game implements Runnable {
       }
       playOneTurn(num_player);
       incrementAllTerritoryByOneUnit();
+      increaseALlPlayerResources(5);
     }
   }
 

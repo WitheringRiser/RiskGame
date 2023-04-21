@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import java.lang.Double?>
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<GridPane fx:id="gridPane" xmlns:fx="http://javafx.com/fxml">
+  <padding>
+    <Insets top="25" right="25" bottom="10" left="25"/>
+  </padding>
+  <columnConstraints>
+    <ColumnConstraints percentWidth="20"/>
+    <ColumnConstraints percentWidth="20"/>
+    <ColumnConstraints percentWidth="20"/>
+    <ColumnConstraints percentWidth="20"/>
+    <ColumnConstraints percentWidth="20"/>
+    <ColumnConstraints percentWidth="20"/>
+    <ColumnConstraints percentWidth="20"/>
+    <ColumnConstraints percentWidth="20"/>
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints percentHeight="20"/>
+    <RowConstraints percentHeight="20"/>
+    <RowConstraints percentHeight="20"/>
+    <RowConstraints percentHeight="20"/>
+    <RowConstraints percentHeight="20"/>
+    <RowConstraints percentHeight="20"/>
+    <RowConstraints percentHeight="20"/>
+    <RowConstraints percentHeight="30"/>
+    <RowConstraints percentHeight="20"/>
+  </rowConstraints>
+
+  <Button
+    text="Russ Mushroom Fields"
+    fx:id="RussMushroomFields"
+    GridPane.rowIndex="0"
+    GridPane.columnIndex="0"
+    GridPane.rowSpan="2"
+    GridPane.columnSpan="2"
+    styleClass="expandable,terrbtn"/>
+
+  <Button text="Badlands"
+    fx:id="Badlands"
+    GridPane.rowIndex="0"
+    GridPane.columnIndex="2"
+    GridPane.rowSpan="2"
+    GridPane.columnSpan="1"
+    styleClass="expandable,terrbtn"/>
+
+  <Button text="Jincheng Taiga"
+    fx:id="JinchengTaiga"
+    GridPane.rowIndex="0"
+    GridPane.columnIndex="3"
+    GridPane.rowSpan="2"
+    GridPane.columnSpan="1"
+    styleClass="expandable,terrbtn"/>
+
+  <Button text="Bamboo Forest"
+    fx:id="BambooForest"
+    GridPane.rowIndex="0"
+    GridPane.columnIndex="4"
+    GridPane.rowSpan="1"
+    GridPane.columnSpan="2"
+    styleClass="expandable,terrbtn"/>
+
+  <Button text="Dark Forest"
+    fx:id="DarkForest"
+    GridPane.rowIndex="1"
+    GridPane.columnIndex="4"
+    GridPane.rowSpan="1"
+    GridPane.columnSpan="2"
+    styleClass="expandable,terrbtn"/>
+
+  <Button text="Lukas Tundra"
+    fx:id="LukasTundra"
+    GridPane.rowIndex="0"
+    GridPane.columnIndex="6"
+    GridPane.rowSpan="2"
+    GridPane.columnSpan="2"
+    styleClass="expandable,terrbtn"/>
+
+  <Button text="Xinmeng Ocean"
+    fx:id="XinmengOcean"
+    GridPane.rowIndex="2"
+    GridPane.columnIndex="0"
+    GridPane.rowSpan="3"
+    GridPane.columnSpan="1"
+    styleClass="expandable,terrbtn"/>
+
+  <Button text="Lake"
+    fx:id="Lake"
+    GridPane.rowIndex="2"
+    GridPane.columnIndex="1"
+    GridPane.rowSpan="3"
+    GridPane.columnSpan="1"
+    styleClass="expandable,terrbtn"/>
+
+  <Button text="River"
+    fx:id="River"
+    GridPane.rowIndex="2"
+    GridPane.columnIndex="2"
+    GridPane.rowSpan="1"
+    GridPane.columnSpan="2"
+    styleClass="expandable,terrbtn"/>
+
+  <Button text="Mountains"
+    fx:id="Mountains"
+    GridPane.rowIndex="2"
+    GridPane.columnIndex="4"
+    GridPane.rowSpan="1"
+    GridPane.columnSpan="2"
+    styleClass="expandable,terrbtn"/>
+
+  <Button text="Mesa"
+    fx:id="Mesa"
+    GridPane.rowIndex="3"
+    GridPane.columnIndex="2"
+    GridPane.rowSpan="1"
+    GridPane.columnSpan="2"
+    styleClass="expandable,terrbtn"/>
+
+  <Button text="Swamp"
+    fx:id="Swamp"
+    GridPane.rowIndex="3"
+    GridPane.columnIndex="4"
+    GridPane.rowSpan="1"
+    GridPane.columnSpan="2"
+    styleClass="expandable,terrbtn"/>
+
+  <Button text="Desert"
+    fx:id="Desert"
+    GridPane.rowIndex="2"
+    GridPane.columnIndex="6"
+    GridPane.rowSpan="3"
+    GridPane.columnSpan="1"
+    styleClass="expandable,terrbtn"/>
+
+  <Button text="Frozen Ocean"
+    fx:id="FrozenOcean"
+    GridPane.rowIndex="2"
+    GridPane.columnIndex="7"
+    GridPane.rowSpan="3"
+    GridPane.columnSpan="1"
+    styleClass="expandable,terrbtn"/>
+
+  <Button text="Forest"
+    fx:id="Forest"
+    GridPane.rowIndex="4"
+    GridPane.columnIndex="2"
+    GridPane.rowSpan="2"
+    GridPane.columnSpan="2"
+    styleClass="expandable,terrbtn"/>
+
+  <Button text="Jungle"
+    fx:id="Jungle"
+    GridPane.rowIndex="4"
+    GridPane.columnIndex="4"
+    GridPane.rowSpan="2"
+    GridPane.columnSpan="1"
+    styleClass="expandable,terrbtn"/>
+
+  <Button text="Beach"
+    fx:id="Beach"
+    GridPane.rowIndex="4"
+    GridPane.columnIndex="5"
+    GridPane.rowSpan="2"
+    GridPane.columnSpan="1"
+    styleClass="expandable,terrbtn"/>
+
+  <Button text="Snowy Beach"
+    fx:id="SnowyBeach"
+    GridPane.rowIndex="5"
+    GridPane.columnIndex="0"
+    GridPane.rowSpan="2"
+    GridPane.columnSpan="1"
+    styleClass="expandable,terrbtn"/>
+
+  <Button text="Zhou Caves"
+    fx:id="ZhouCaves"
+    GridPane.rowIndex="5"
+    GridPane.columnIndex="1"
+    GridPane.rowSpan="2"
+    GridPane.columnSpan="1"
+    styleClass="expandable,terrbtn"/>
+
+  <Button text="Rocky Cliffs"
+    fx:id="RockyCliffs"
+    GridPane.rowIndex="6"
+    GridPane.columnIndex="2"
+    GridPane.rowSpan="1"
+    GridPane.columnSpan="1"
+    styleClass="expandable,terrbtn"/>
+
+  <Button text="Plains"
+    fx:id="Plains"
+    GridPane.rowIndex="6"
+    GridPane.columnIndex="3"
+    GridPane.rowSpan="1"
+    GridPane.columnSpan="1"
+    styleClass="expandable,terrbtn"/>
+
+  <Button text="Savanna"
+    fx:id="Savanna"
+    GridPane.rowIndex="6"
+    GridPane.columnIndex="4"
+    GridPane.rowSpan="1"
+    GridPane.columnSpan="2"
+    styleClass="expandable,terrbtn"/>
+
+  <Button text="Plateau"
+    fx:id="Plateau"
+    GridPane.rowIndex="5"
+    GridPane.columnIndex="6"
+    GridPane.rowSpan="2"
+    GridPane.columnSpan="1"
+    styleClass="expandable,terrbtn"/>
+
+  <Button text="Desert Hills"
+    fx:id="DesertHills"
+    GridPane.rowIndex="5"
+    GridPane.columnIndex="7"
+    GridPane.rowSpan="2"
+    GridPane.columnSpan="1"
+    styleClass="expandable,terrbtn"/>
+
+  <Text fx:id="resultText"
+    GridPane.columnIndex="1"
+    GridPane.rowIndex="8"
+    GridPane.rowSpan="1"
+    GridPane.columnSpan="7"/>
+
+  <Button fx:id="attackButton"
+    GridPane.rowIndex="7"
+    GridPane.columnIndex="0"
+    GridPane.rowSpan="1"
+    GridPane.columnSpan="1"
+    text="Attack"
+    onAction="#onAttackButtonClick"
+  />
+  <Button fx:id="moveButton"
+    GridPane.rowIndex="7"
+    GridPane.columnIndex="1"
+    GridPane.rowSpan="1"
+    GridPane.columnSpan="1"
+    text="Move"
+    onAction="#onMoveButtonClick"
+  />
+  <Button fx:id="defaultButton"
+    GridPane.rowIndex="7"
+    GridPane.columnIndex="2"
+    GridPane.rowSpan="1"
+    GridPane.columnSpan="1"
+    text="Cancel"
+    onAction="#defaultButtonClick"
+  />
+  <Button fx:id="researchButton"
+    GridPane.rowIndex="7"
+    GridPane.columnIndex="3"
+    GridPane.rowSpan="1"
+    GridPane.columnSpan="1"
+    text="Research"
+    onAction="#onResearchButtonClick"
+  />
+  <Button fx:id="upgradeButton"
+    GridPane.rowIndex="7"
+    GridPane.columnIndex="4"
+    GridPane.rowSpan="1"
+    GridPane.columnSpan="1"
+    text="Upgrade"
+    onAction="#onUpgradeButtonClick"
+  />
+  <Button fx:id="doneButton"
+    GridPane.rowIndex="7"
+    GridPane.columnIndex="5"
+    GridPane.rowSpan="1"
+    GridPane.columnSpan="1"
+    text="Done"
+    onAction="#doneButtonClick"
+  />
+  <Button fx:id="infoButton"
+    GridPane.rowIndex="7"
+    GridPane.columnIndex="6"
+    GridPane.rowSpan="1"
+    GridPane.columnSpan="1"
+    text="Info"
+    onAction="#displayPlayerInfo"
+  />
+  <Button text="Exit"
+        GridPane.rowIndex="8"
+        GridPane.columnIndex="5"
+        onAction="#back" />
+</GridPane>

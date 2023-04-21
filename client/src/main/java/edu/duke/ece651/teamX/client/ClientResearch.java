@@ -13,15 +13,16 @@ public class ClientResearch {
   private Communicate communicate;
   private ResearchSender sender;
 
-  public ClientResearch(Player _player) {
+  public ClientResearch(Socket socket, Player _player) {
     this.player = _player;
     this.sender = null;
+    this.socket = socket;
   }
 
   public void perform() {
     int cost = player.getResearchNeedCost();
     if (cost > player.getTechResource() || sender != null) {
-      System.out.println("you can not do research any more!");
+      throw new IllegalArgumentException("you can not do research any more!");
     } else {
       player.consumeTech(cost);
       sender = new ResearchSender(player);

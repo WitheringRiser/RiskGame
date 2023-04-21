@@ -1,19 +1,20 @@
 package edu.duke.ece651.teamX.client;
 
 import edu.duke.ece651.teamX.shared.MoveSender;
-import java.io.IOException;
 import java.util.ArrayList;
 import edu.duke.ece651.teamX.shared.*;
 import java.net.Socket;
-import java.io.PrintStream;
 import java.util.Iterator;
 
 public class ClientMove extends ClientTurnAction<MoveSender> {
 
-  public ClientMove(Socket s, PrintStream o, UserInReader uir, TextPrompt tp, Map m, Player ply) {
-    super(s, o, uir, tp, m, ply);
+  public ClientMove(Socket s, Map m, Player ply) {
+    super(s, m, ply);
   }
 
+  /**
+   * Find destination the units can move to 
+   */
   public ArrayList<Territory> findDestTerrs(Territory source) {
     if (!map.getOwner(source).equals(this.player)) {
       throw new IllegalArgumentException("The territory does not belong to this player");
@@ -42,14 +43,23 @@ public class ClientMove extends ClientTurnAction<MoveSender> {
     return dests;
   }
 
-  public void perform() throws IOException {
-    ActionSender res = generateAction();
-    if (res != null) {
-      MoveSender mvs = new MoveSender(res.getSource(), res.getDestination(), res.getIndexList());
-      this.actions.add(mvs);
-      res.getDestination().addUnits(res.getSource().removeUnitsFromList(res.getIndexList()));
-      // TODO: still need to consume right food resources
-      map.getOwner(res.getSource()).consumeFood(res.getIndexList().size());
+  /**
+   * 
+   * @param source
+   * @param dest
+   * @param indList
+   * @throws IllegalArgumentException to indicate invalid movement
+   */
+  public void perform_res(Territory source, Territory dest, ArrayList<Integer> indList) {
+
+    int distance = MoveProcessor.getMinCostPathBetweenSourceDest(source, dest, map);
+    int cost = indList.size()*distance;
+    if(cost>player.getFoodResource()){
+      throw new IllegalArgumentException("Food resource is not enough for the moving cost "+cost);
     }
+    dest.addUnits(source.removeUnitsFromList(indList));
+    player.consumeFood(cost);
+    MoveSender ms = new MoveSender(source,dest,indList);
+    actions.add(ms);
   }
 }

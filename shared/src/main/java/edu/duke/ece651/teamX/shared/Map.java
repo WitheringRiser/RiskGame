@@ -257,6 +257,16 @@ public class Map implements Serializable {
     return territories;
   }
 
+  public ArrayList<Territory> getTerritoriesByPlayerName(String playerName) {
+    ArrayList<Territory> territories = new ArrayList<Territory>();
+    for (Territory t : map_dict.keySet()) {
+      if (map_dict.get(t).getName().equals(playerName)) {
+        territories.add(t);
+      }
+    }
+    return territories;
+  }
+
   /**
    * Set the units of a territory
    *

@@ -142,6 +142,11 @@ public class Player implements Serializable {
     return null;
   }
 
+  public void increaseAllResource(int num){
+    this.food_resources += num;
+    this.tech_resources += num;
+  }
+  
   /**
    * Check if two Player equals Compare name, number of units, and number of
    * territories

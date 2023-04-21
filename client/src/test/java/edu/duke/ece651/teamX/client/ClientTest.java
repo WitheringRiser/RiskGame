@@ -1,82 +1,82 @@
-package edu.duke.ece651.teamX.client;
+// package edu.duke.ece651.teamX.client;
 
-import static org.junit.jupiter.api.Assertions.*;
+// import static org.junit.jupiter.api.Assertions.*;
 
-import edu.duke.ece651.teamX.shared.*;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.io.StringReader;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
+// import edu.duke.ece651.teamX.shared.*;
+// import java.io.BufferedReader;
+// import java.io.ByteArrayOutputStream;
+// import java.io.IOException;
+// import java.io.PrintStream;
+// import java.io.StringReader;
+// import java.net.ServerSocket;
+// import java.net.Socket;
+// import java.util.ArrayList;
+// import java.util.HashMap;
+// import javafx.util.Pair;
+// import org.junit.jupiter.api.Disabled;
+// import org.junit.jupiter.api.Test;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-import javafx.util.Pair;
+// public class ClientTest {
+//   private void test_displayMap(Client client,
+//                                Communicate communicate,
+//                                Socket serverSocket,
+//                                Map my_map,
+//                                ByteArrayOutputStream bytes)
+//       throws IOException, ClassNotFoundException {
+//     communicate.sendMap(serverSocket, my_map);
+//     bytes.reset();
+//     client.receiveMap();
+//     client.displayMap();
+//     String expected = "Red player:\n"
+//                       + "-----------\n"
+//                       + "2 units in A (next to: B, C)\n"
+//                       + "3 units in B (next to: A, D)\n\n"
+//                       + "Blue player:\n"
+//                       + "-----------\n"
+//                       + "1 units in C (next to: A, D)\n"
+//                       + "0 units in D (next to: B, C)\n\n";
+//     assertEquals(expected, bytes.toString());
+//   }
 
-public class ClientTest {
+//   private void test_init(Client client,
+//                          Communicate communicate,
+//                          Socket serverSocket,
+//                          Player player,
+//                          HashMap<Integer, ArrayList<Territory> > free_groups,
+//                          ByteArrayOutputStream bytes)
+//       throws IOException, ClassNotFoundException {
+//     communicate.sendObject(serverSocket, player);
+//     communicate.sendObject(serverSocket, free_groups);
+//     client.init();
 
-  private void test_displayMap(Client client,
-      Communicate communicate,
-      Socket serverSocket,
-      Map my_map,
-      ByteArrayOutputStream bytes)
-      throws IOException, ClassNotFoundException {
-    communicate.sendMap(serverSocket, my_map);
-    bytes.reset();
-    client.receiveMap();
-    client.displayMap();
-    String expected = "Red player:\n"
-        + "-----------\n"
-        + "2 units in A (next to: B, C)\n"
-        + "3 units in B (next to: A, D)\n\n"
-        + "Blue player:\n"
-        + "-----------\n"
-        + "1 units in C (next to: A, D)\n"
-        + "0 units in D (next to: B, C)\n\n";
-    assertEquals(expected, bytes.toString());
-  }
+//     int res = communicate.receiveInt(serverSocket);
+//     assertEquals(0, res);
+//     ArrayList<Territory> territories =
+//         (ArrayList<Territory>)communicate.receiveObject(serverSocket);
+//     assertEquals(new Territory("A"), territories.get(0));
+//     assertEquals(new Territory("B"), territories.get(1));
+//     assertEquals(0, territories.get(0).getUnitsNumber());
+//     assertEquals(20, territories.get(1).getUnitsNumber());
+//   }
 
-  private void test_init(Client client,
-      Communicate communicate,
-      Socket serverSocket,
-      Player player,
-      HashMap<Integer, ArrayList<Territory>> free_groups,
-      ByteArrayOutputStream bytes)
-      throws IOException, ClassNotFoundException {
-    communicate.sendObject(serverSocket, player);
-    communicate.sendObject(serverSocket, free_groups);
-    client.init();
-
-    int res = communicate.receiveInt(serverSocket);
-    assertEquals(0, res);
-    ArrayList<Territory> territories = (ArrayList<Territory>) communicate.receiveObject(serverSocket);
-    assertEquals(new Territory("A"), territories.get(0));
-    assertEquals(new Territory("B"), territories.get(1));
-    assertEquals(0, territories.get(0).getUnitsNumber());
-    assertEquals(20, territories.get(1).getUnitsNumber());
-  }
-
-  // private void test_findTerr(Client client, Territory t1) {
-  // assertThrows(IllegalArgumentException.class,
-  // () -> client.findAttackTerr(new Territory("C")));
-  // assertThrows(IllegalArgumentException.class,
-  // () -> client.findMoveTerr(new Territory("C")));
-  // ArrayList<Territory> terrs = client.findOwnTerr();
-  // assertEquals(2, terrs.size());
-  // assertEquals(true, terrs.contains(new Territory("A")));
-  // assertEquals(true, terrs.contains(new Territory("B")));
-  // ArrayList<Territory> att_neigs = client.findAttackTerr(t1);
-  // assertEquals(1, att_neigs.size());
-  // assertEquals(new Territory("C"), att_neigs.get(0));
-  // ArrayList<Territory> mv_neigs = client.findMoveTerr(t1);
-  // assertEquals(1, mv_neigs.size());
-  // assertEquals(new Territory("B"), mv_neigs.get(0));
-  // }
-  // private void test_action(Client client) {}
+// private void test_findTerr(Client client, Territory t1) {
+// assertThrows(IllegalArgumentException.class,
+// () -> client.findAttackTerr(new Territory("C")));
+// assertThrows(IllegalArgumentException.class,
+// () -> client.findMoveTerr(new Territory("C")));
+// ArrayList<Territory> terrs = client.findOwnTerr();
+// assertEquals(2, terrs.size());
+// assertEquals(true, terrs.contains(new Territory("A")));
+// assertEquals(true, terrs.contains(new Territory("B")));
+// ArrayList<Territory> att_neigs = client.findAttackTerr(t1);
+// assertEquals(1, att_neigs.size());
+// assertEquals(new Territory("C"), att_neigs.get(0));
+// ArrayList<Territory> mv_neigs = client.findMoveTerr(t1);
+// assertEquals(1, mv_neigs.size());
+// assertEquals(new Territory("B"), mv_neigs.get(0));
+// }
+// private void test_action(Client client) {}
+/*
   @Disabled
   @Test
   public void test_Client() throws IOException, ClassNotFoundException {
@@ -189,5 +189,5 @@ public class ClientTest {
     client.AddFoodResource(TerritoryMap, playerInfo);
     client.setFoodResource(15);
     assert (15 == client.getFoodResource());
-  }
-}
+    }*/
+//}

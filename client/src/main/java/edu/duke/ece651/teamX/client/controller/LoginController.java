@@ -53,8 +53,6 @@ public class LoginController implements Controller {
       resultText.setText("Login success");
       RoomController rc = new RoomController(stage,clientSocket,namePassword);
       GeneralScreen<RoomController> rs = new GeneralScreen<>(rc);
-      // GameController gc = new GameController(stage);
-      // GameScreen gs = new GameScreen(gc);
     } else {
       resultText.setText(mes);
     }

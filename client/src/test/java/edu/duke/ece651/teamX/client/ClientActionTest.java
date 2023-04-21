@@ -9,11 +9,11 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.StringReader;
 import java.util.ArrayList;
-
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class ClientActionTest {
+  /*
   @Disabled
   @Test
   public void test_FindTerr() throws IOException, ClassNotFoundException {
@@ -88,4 +88,5 @@ public class ClientActionTest {
     att2.perform();
     assertEquals(10, d.getUnitsNumber());
   }
+  */
 }

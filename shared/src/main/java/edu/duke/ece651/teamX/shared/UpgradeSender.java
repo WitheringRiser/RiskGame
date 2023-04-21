@@ -1,6 +1,8 @@
 package edu.duke.ece651.teamX.shared;
 
-public class UpgradeSender {
+import java.io.Serializable;
+
+public class UpgradeSender implements Serializable {
 
   private Territory source;
   private int index;
