@@ -87,6 +87,7 @@ public class Map implements Serializable {
       return false;
     }
     map_dict.put(terr, player);
+    terr.resetCloak();//reset cloaking status for new owner
     return true;
   }
 
