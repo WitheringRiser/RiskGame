@@ -115,6 +115,23 @@ public class Territory implements Serializable {
     units.removeAll(unitList);
     return unitList;
   }
+  
+  public ArrayList<Unit> removeLevelUnits(String unitTypeName, int num){
+    HashMap<String,ArrayList<Integer>> unitDic=getUnitsDit();
+    if(!unitDic.containsKey(unitTypeName)){
+      throw new IllegalArgumentException(name+" does not have "+unitTypeName);
+    }
+    ArrayList<Integer>indexs = unitDic.get(unitTypeName);
+    if(indexs.size()<num){
+      throw new IllegalArgumentException(name+" does not have enough "+unitTypeName);
+    }
+    ArrayList<Integer> indexList= new ArrayList<Integer>();
+    for(int i=0;i<num;i++){
+      indexList.add(indexs.get(i));
+    }
+    return removeUnitsFromList(indexList);
+  }
+
 
   public ArrayList<Unit> getUnits() {
     return units;
