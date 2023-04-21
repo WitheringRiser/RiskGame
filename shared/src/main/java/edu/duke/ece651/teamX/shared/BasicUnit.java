@@ -4,9 +4,9 @@ import java.util.HashMap;
 
 public class BasicUnit extends Unit {
 
-  private HashMap<Integer, String> nameMap;
-  private HashMap<Integer, Integer> bonusMap;
-  private HashMap<Integer, Integer> costMap;
+  protected HashMap<Integer, String> nameMap;
+  protected HashMap<Integer, Integer> bonusMap;
+  protected HashMap<Integer, Integer> costMap;
 
   public BasicUnit() {
     level = 0;
@@ -18,7 +18,7 @@ public class BasicUnit extends Unit {
     getCostMap();
   }
 
-  private void getNameMap() {
+  protected void getNameMap() {
     nameMap.put(0, "level_0_unit");
     nameMap.put(1, "level_1_unit");
     nameMap.put(2, "level_2_unit");
@@ -28,7 +28,7 @@ public class BasicUnit extends Unit {
     nameMap.put(6, "level_6_unit");
   }
 
-  private void getBonusMap() {
+  protected void getBonusMap() {
     bonusMap.put(0, 0);
     bonusMap.put(1, 1);
     bonusMap.put(2, 3);
@@ -38,7 +38,7 @@ public class BasicUnit extends Unit {
     bonusMap.put(6, 15);
   }
 
-  private void getCostMap() {
+  protected void getCostMap() {
     costMap.put(0, 0);
     costMap.put(1, 3);
     costMap.put(2, 11);

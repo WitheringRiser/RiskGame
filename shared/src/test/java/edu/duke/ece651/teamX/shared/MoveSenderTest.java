@@ -2,10 +2,9 @@ package edu.duke.ece651.teamX.shared;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
-
 public class MoveSenderTest {
-
   @Test
   public void test_moveSender() {
     Territory source = new Territory("A", 10);
@@ -18,6 +17,8 @@ public class MoveSenderTest {
     assertEquals(ms, ms);
     assertNotEquals(ms, null);
     MoveSender ms2 = new MoveSender(new Territory("A"), new Territory("B"), 5);
+    ArrayList<Integer> idexList = new ArrayList<Integer>();
+    MoveSender ms3 = new MoveSender(source, dest, idexList);
     assertEquals(ms, ms2);
     assertEquals(ms.hashCode(), ms2.hashCode());
   }

@@ -7,7 +7,6 @@ import java.util.HashMap;
 import org.junit.jupiter.api.Test;
 
 public class MapTest {
-
   @Test
   public void test_MapBasics() {
     //Set up the map
@@ -43,7 +42,7 @@ public class MapTest {
     assertThrows(IllegalArgumentException.class, () -> my_map.getOwner(null));
     //Should not get non-exist territory's owner
     assertThrows(IllegalArgumentException.class,
-        () -> my_map.getOwner(new Territory("bTerritory")));
+                 () -> my_map.getOwner(new Territory("bTerritory")));
     //Test add more territories
     assertEquals(true, my_map.addTerritory(new Territory("bTerritory"), null));
     assertEquals(2, my_map.getTerritoryNum());
@@ -82,6 +81,7 @@ public class MapTest {
     assertEquals(true, terrs.contains(new Territory("bTerritory")));
     assertEquals(true, terrs.contains(new Territory("cTerritory")));
     assertEquals(false, terrs.contains(new Territory("aTerritory")));
+    assertEquals(2, my_map.getTerritoriesByPlayerName("Red").size());
   }
 
   @Test
@@ -98,6 +98,9 @@ public class MapTest {
     assertFalse(map.setTerritoryUnits(t1, units));
 
     map.addTerritory(t1, p1);
-    map.setTerritoryUnits(t1, units);
+    map.addTerritory(t2, p2);
+    assertTrue(map.setTerritoryUnits(t1, units));
+    assertTrue(map.setTerritoryUnits(t2, units));
+    map.printMap();
   }
 }
