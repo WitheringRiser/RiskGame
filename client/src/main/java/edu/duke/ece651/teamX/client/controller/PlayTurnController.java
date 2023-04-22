@@ -343,13 +343,17 @@ public class PlayTurnController implements Controller {
     unitsStage.initModality(Modality.APPLICATION_MODAL);
     unitsStage.setTitle("Set Units");
 
-    VBox comboBoxContainer = new VBox();
-    comboBoxContainer.setSpacing(5);
-    comboBoxContainer.setPadding(new Insets(10, 10, 10, 10));
+//    VBox comboBoxContainer = new VBox();
+//    comboBoxContainer.setSpacing(5);
+//    comboBoxContainer.setPadding(new Insets(10, 10, 10, 10));
+
+    GridPane gridPane = new GridPane();
+    gridPane.setVgap(10);
+    gridPane.setHgap(10);
+    gridPane.setPadding(new Insets(10, 10, 10, 10));
 
     for (int level = 0; level <= 6; level++) {
       Label levelLabel = new Label("Level " + level + ":");
-      comboBoxContainer.getChildren().add(levelLabel);
 
       ComboBox<Integer> comboBox = new ComboBox<>();
       ObservableList<Integer> options = FXCollections.observableArrayList();
@@ -363,15 +367,16 @@ public class PlayTurnController implements Controller {
       comboBox.setItems(options);
       comboBox.setValue(0);
       comboBox.setId("unitLevel" + level);
-      comboBoxContainer.getChildren().add(comboBox);
+      gridPane.add(levelLabel, 0, level);
+      gridPane.add(comboBox, 1, level);
     }
 
     Button saveButton = new Button("Save");
-    comboBoxContainer.getChildren().add(saveButton);
+    gridPane.add(saveButton, 1, 7);
     saveButton.setOnAction(event -> {
       unitSetting.clear();
       for (int level = 0; level < 6; level++) {
-        ComboBox<Integer> comboBox = (ComboBox<Integer>) comboBoxContainer.lookup(
+        ComboBox<Integer> comboBox = (ComboBox<Integer>) gridPane.lookup(
             "#unitLevel" + level);
         int selectedUnits = comboBox.getValue();
         unitSetting.put("level_" + level + "_unit", selectedUnits);
@@ -379,7 +384,7 @@ public class PlayTurnController implements Controller {
       unitsStage.close();
     });
 
-    Scene unitsScene = new Scene(comboBoxContainer);
+    Scene unitsScene = new Scene(gridPane);
     unitsStage.setScene(unitsScene);
     unitsStage.showAndWait();
   }
