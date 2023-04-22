@@ -125,22 +125,16 @@ public class PlayTurnController implements Controller {
         .map(Territory::getName)
         .collect(Collectors.joining(", "));
     String content = "Territory: " + territory.getName() + "\n"
-        + "Owner: " + map.getOwner(territory).getName() + "\n"
         + "Neighbors: " + neighbors + "\n"
         + "Size: " + territory.getTerritorySize() + "\n";
 
-    // Get units information
-    StringBuilder units_info = new StringBuilder();
-    Iterable<Unit> allUnits = territory.getUnits();
-    for (Unit unit : allUnits) {
-      if (unit == null) {
-        units_info.append("null ");
-      } else {
-        units_info.append(unit.getName()).append(" ");
-      }
+    //TODO: change to frogView
+    content+= "Owner: " + map.getOwner(territory).getName() + "\n";
+    content += "Units:\n";
+    HashMap<String, ArrayList<Integer>> unitDic = territory.getUnitsDit();
+    for(String typeName: unitDic.keySet()){
+      content+="  - "+typeName+": "+unitDic.get(typeName).size()+"\n";
     }
-    content += "Units: " + units_info.toString() + "\n";
-
     Tooltip territoryTooltip = new Tooltip(content);
     territoryTooltip.setStyle("-fx-font-size: 14;");
     territoryTooltip.setStyle("-fx-wrap-text: true;");
@@ -230,6 +224,7 @@ public class PlayTurnController implements Controller {
             sourceTerritory = territory;
             System.out.println("sourceTerritory is " + sourceTerritory.getName());
             button.setStyle("-fx-background-color: yellow;");
+            openUnitsWindow();
             if (currentMode == GameMode.ATTACK) {
               filterClickableButtons(clientAttack.findDestTerrs(sourceTerritory));
             } else if (currentMode == GameMode.MOVE) {

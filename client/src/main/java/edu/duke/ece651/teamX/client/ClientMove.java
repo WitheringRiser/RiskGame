@@ -63,6 +63,7 @@ public class ClientMove extends ClientTurnAction<MoveSender> {
     if (cost > player.getFoodResource()) {
       throw new IllegalArgumentException("Food resource is not enough for the moving cost " + cost);
     }
+    System.out.println(name);
     dest.addUnits(source.removeLevelUnits(name, num));
     player.consumeFood(cost);
     MoveSender ms = new MoveSender(source, dest, num, name);

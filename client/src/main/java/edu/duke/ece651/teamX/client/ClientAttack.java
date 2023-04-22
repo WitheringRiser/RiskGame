@@ -51,7 +51,5 @@ public class ClientAttack extends ClientTurnAction<AttackSender> {
     player.consumeFood(cost);
     AttackSender atts = new AttackSender(source, dest, num, name);
     this.actions.add(atts);
-  }
-
-  
+  }  
 }

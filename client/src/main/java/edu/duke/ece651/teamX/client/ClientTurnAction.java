@@ -53,7 +53,10 @@ public abstract class ClientTurnAction<T extends ActionSender> implements Client
       throw new IllegalArgumentException("The food resource is not enough for the total cost " + totalCost);
     }
     for(String typeName : unitSetting.keySet()){
-      perform_res(source, dest, typeName,unitSetting.get(typeName));
+      int num = unitSetting.get(typeName);
+      if(num>0){
+        perform_res(source, dest, typeName,num);
+      }      
     }
   }
 
