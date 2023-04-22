@@ -32,5 +32,9 @@ public class Spy implements Serializable{
     public String getOwner(){
         return owner;
     }
+
+    public static int getSpyCost(){
+        return 10;
+    }
 }
 

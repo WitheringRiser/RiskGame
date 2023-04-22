@@ -28,6 +28,11 @@ public class UpgradeSender implements Serializable {
     return num;
   }
 
+  /**
+   * 0-6 is the normal level
+   * -1 indicates update to spy
+   * @return
+   */
   public int getToLevel() {
     return toLevel;
   }
