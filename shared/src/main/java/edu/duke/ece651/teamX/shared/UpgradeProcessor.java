@@ -17,9 +17,15 @@ public class UpgradeProcessor {
       if (u != null) {
         Territory source = map.getTerritoryByName(u.getSource().getName());
         Player p = map.getOwner(source);
-        String result = p.upgradeUnit(source, u.getIndex(), u.getToLevel());
-        if (result != null) {
-          throw new IllegalArgumentException(result);
+        ArrayList<Integer> indexList = source.getUnitsDit().get(u.getName());
+        if (indexList.size() < u.getNum()) {
+          throw new IllegalArgumentException("Territory has no enough units to complete upgrade!");
+        }
+        for (int i = 0; i < u.getNum(); ++i) {
+          String result = p.upgradeUnit(source, indexList.get(i), u.getToLevel());
+          if (result != null) {
+            throw new IllegalArgumentException(result);
+          }
         }
       }
     }

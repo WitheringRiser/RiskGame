@@ -65,7 +65,7 @@ public class AttackProcessorTest {
     map.addTerritory(t1, p1);
     map.addTerritory(t2, p1);
 
-    allAttack.add(new AttackSender(t1, t2, 11));
+    allAttack.add(new AttackSender(t1, t2, 11,t1.getUnits().get(0).getName()));
     allAttack.add(new AttackSender(t2, t1, 50));
 
     assertThrows(IllegalArgumentException.class, () -> new AttackProcessor(allAttack, map));
@@ -106,7 +106,7 @@ public class AttackProcessorTest {
     map.addTerritory(t2, p2);
 
     allAttack.add(new AttackSender(t1, t2, 11));
-    allAttack.add(new AttackSender(t2, t1, indexList));
+    allAttack.add(new AttackSender(t2, t1, 2, "wrong"));
 
     assertThrows(IllegalArgumentException.class, () -> new AttackProcessor(allAttack, map, 0));
   }
@@ -188,7 +188,7 @@ public class AttackProcessorTest {
     System.out.println(displayer.display());
 
     allAttack.add(new AttackSender(t1, t2, 100));
-    allAttack.add(new AttackSender(t2, t1, indexList));
+    allAttack.add(new AttackSender(t2, t1, 80));
 
     AttackProcessor ap = new AttackProcessor(allAttack, map);
     ap.resovleAllAttack();
@@ -218,7 +218,7 @@ public class AttackProcessorTest {
     System.out.println(displayer.display());
 
     allAttack.add(new AttackSender(t1, t2, 100));
-    allAttack.add(new AttackSender(t2, t1, indexList));
+    allAttack.add(new AttackSender(t2, t1, 80));
 
     AttackProcessor ap = new AttackProcessor(allAttack, map, 0);
     ap.resovleAllAttack();

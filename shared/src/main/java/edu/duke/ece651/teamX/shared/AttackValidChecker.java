@@ -19,11 +19,9 @@ public class AttackValidChecker {
   public void checkIndex() {
     for (AttackSender attack : allAttack) {
       Territory source = map.getTerritoryByName(attack.getSource().getName());
-      ArrayList<Integer> indexList = attack.getIndexList();
-      for (Integer i : indexList) {
-        if (i < 0 || i >= source.getUnitsNumber()) {
-          throw new IllegalArgumentException("index is invalid");
-        }
+      ArrayList<Integer> indexList = source.getUnitsDit().get(attack.getName());
+      if (indexList == null || indexList.size() < attack.getUnitsNum()) {
+        throw new IllegalArgumentException("units are not enough to attack");
       }
     }
   }

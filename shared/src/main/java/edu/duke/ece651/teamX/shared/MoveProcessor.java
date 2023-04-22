@@ -24,12 +24,11 @@ public class MoveProcessor {
     for (MoveSender m : allMove) {
       Territory source = map.getTerritoryByName(m.getSource().getName());
       Territory destination = map.getTerritoryByName(m.getDestination().getName());
-      ArrayList<Integer> indexList = m.getIndexList();
       // set the arraylist of units with certain number
-      destination.addUnits(source.removeUnitsFromList(indexList));
-      TextDisplayer.displayMove(source, destination, indexList.size(), map.getOwner(source));
+      destination.addUnits(source.removeLevelUnits(m.getName(), m.getUnitsNum()));
+      TextDisplayer.displayMove(source, destination, m.getUnitsNum(), map.getOwner(source));
       Player p = map.getOwner(source);
-      p.consumeFood(consumeFood(source, destination, map, indexList.size(), 1));
+      p.consumeFood(consumeFood(source, destination, map, m.getUnitsNum(), 1));
     }
   }
 
