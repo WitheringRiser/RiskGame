@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import edu.duke.ece651.teamX.shared.*;
 import java.net.Socket;
 import java.util.Iterator;
-
+import java.util.HashMap;
 public class ClientAttack extends ClientTurnAction<AttackSender> {
 
-  public ClientAttack(Socket s,  Map m, Player ply) {
+  public ClientAttack(Socket s, Map m, Player ply) {
     super(s, m, ply);
   }
 
@@ -32,6 +32,9 @@ public class ClientAttack extends ClientTurnAction<AttackSender> {
     return dests;
   }
 
+  public int calculateCost(Territory source, Territory dest, int num){
+    return num * (source.getTerritorySize() + dest.getTerritorySize());
+  }
   /**
    * 
    * @param source
@@ -39,16 +42,14 @@ public class ClientAttack extends ClientTurnAction<AttackSender> {
    * @param indList
    * @throw IllegalArgumentException to indicate the invalid action
    */
-  public void perform_res(Territory source, Territory dest, ArrayList<Integer> indList) {
-    int cost = indList.size()*(source.getTerritorySize()+dest.getTerritorySize());
-    if(cost>player.getFoodResource()){
-      throw new IllegalArgumentException("The food resource is not enough for the attacking cost "+cost);
+  public void perform_res(Territory source, Territory dest, String name, int num) {
+    int cost = calculateCost(source,dest,num);
+    if (cost > player.getFoodResource()) {
+      throw new IllegalArgumentException("The food resource is not enough for the attacking cost " + cost);
     }
-    source.removeUnitsFromList(indList);
+    source.removeLevelUnits(name, num);
     player.consumeFood(cost);
-      AttackSender atts = new AttackSender(source,dest,indList);
-      this.actions.add(atts);
-    
-  }
-
+    AttackSender atts = new AttackSender(source, dest, num, name);
+    this.actions.add(atts);
+  }  
 }

@@ -72,6 +72,9 @@ public class Player implements Serializable {
   }
 
   public int getResearchNeedCost() {
+    if(!this.researchRule.containsKey(tech_level)){
+      throw new IllegalArgumentException("You are already in the hightest level "+tech_level);
+    }
     return this.researchRule.get(tech_level);
   }
 

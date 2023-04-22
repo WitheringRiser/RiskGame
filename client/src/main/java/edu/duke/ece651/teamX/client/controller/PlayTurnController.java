@@ -7,25 +7,33 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import com.google.common.cache.Cache;
+import javax.swing.text.LabelView;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class PlayTurnController implements Controller {
@@ -37,6 +45,8 @@ public class PlayTurnController implements Controller {
   private GameMode currentMode = GameMode.DEFAULT;
   private Territory sourceTerritory = null;
   private Territory destinationTerritory = null;
+  private HashMap<String, Integer> unitSetting = new HashMap<>();
+  private HashMap<String, ArrayList<Integer>> unitUpgradeDic = new HashMap<>();
 
   TextField textField;
   TextField textField_toLevel;
@@ -74,10 +84,13 @@ public class PlayTurnController implements Controller {
 
     System.out.println("player name = " + namePassword.get(0));
 
-    this.clientAttack = new ClientAttack(clientSocket, map, map.getPlayerByName(namePassword.get(0)));
+    this.clientAttack = new ClientAttack(clientSocket, map,
+        map.getPlayerByName(namePassword.get(0)));
     this.clientMove = new ClientMove(clientSocket, map, map.getPlayerByName(namePassword.get(0)));
-    this.clientResearch = new ClientResearch(clientSocket, map.getPlayerByName(namePassword.get(0)));
-    this.clientUpgrade = new ClientUpgrade(clientSocket, map, map.getPlayerByName(namePassword.get(0)));
+    this.clientResearch = new ClientResearch(clientSocket,
+        map.getPlayerByName(namePassword.get(0)));
+    this.clientUpgrade = new ClientUpgrade(clientSocket, map,
+        map.getPlayerByName(namePassword.get(0)));
     setNewLayout();
   }
 
@@ -92,9 +105,20 @@ public class PlayTurnController implements Controller {
       } catch (Exception e) {
         resultText.setText("Invalid input number: " + index);
       }
-
     }
     return indexList;
+  }
+
+  // TODO:just stub function
+  private String getUnitName() {
+    String name = "level_0_unit";
+    return name;
+  }
+
+  // TODO:just stub function
+  private int getUnitNum() {
+    int num = 1;
+    return num;
   }
 
   @FXML
@@ -105,22 +129,16 @@ public class PlayTurnController implements Controller {
         .map(Territory::getName)
         .collect(Collectors.joining(", "));
     String content = "Territory: " + territory.getName() + "\n"
-        + "Owner: " + map.getOwner(territory).getName() + "\n"
         + "Neighbors: " + neighbors + "\n"
         + "Size: " + territory.getTerritorySize() + "\n";
 
-    // Get units information
-    StringBuilder units_info = new StringBuilder();
-    Iterable<Unit> allUnits = territory.getUnits();
-    for (Unit unit : allUnits) {
-      if (unit == null) {
-        units_info.append("null ");
-      } else {
-        units_info.append(unit.getName()).append(" ");
-      }
+    // TODO: change to frogView
+    content += "Owner: " + map.getOwner(territory).getName() + "\n";
+    content += "Units:\n";
+    HashMap<String, ArrayList<Integer>> unitDic = territory.getUnitsDit();
+    for (String typeName : unitDic.keySet()) {
+      content += "  - " + typeName + ": " + unitDic.get(typeName).size() + "\n";
     }
-    content += "Units: " + units_info.toString() + "\n";
-
     Tooltip territoryTooltip = new Tooltip(content);
     territoryTooltip.setStyle("-fx-font-size: 14;");
     territoryTooltip.setStyle("-fx-wrap-text: true;");
@@ -135,13 +153,6 @@ public class PlayTurnController implements Controller {
   }
 
   public void setTerrButtons(boolean isReset) {
-    textField = new TextField();
-    textField.setId("numText");
-    textField_toLevel = new TextField();
-    textField_toLevel.setId("numText");
-    gridPane.add(textField, 7, 7);
-    gridPane.add(textField_toLevel, 7, 8);
-
     for (Territory t : map.getAllTerritories()) {
       Button button = (Button) scene.lookup("#" + t.getName());
       if (map.getTerritoriesByPlayerName(namePassword.get(0)).contains(t)) {
@@ -203,11 +214,14 @@ public class PlayTurnController implements Controller {
 
   private void handleTerritoryClick(Button button, Territory territory)
       throws IOException, ClassNotFoundException {
-    try{
+    try {
       switch (currentMode) {
         case UPGRADE:
-          clientUpgrade.perform_res(Integer.parseInt(textField.getText()),
-              Integer.parseInt(textField_toLevel.getText()), territory);
+        sourceTerritory=territory;
+          openUnitsWindow();
+          clientUpgrade.perform(territory, unitUpgradeDic);
+          unitUpgradeDic.clear();
+          sourceTerritory=null;
           setNewLayout();
           break;
         case ATTACK:
@@ -216,6 +230,7 @@ public class PlayTurnController implements Controller {
             sourceTerritory = territory;
             System.out.println("sourceTerritory is " + sourceTerritory.getName());
             button.setStyle("-fx-background-color: yellow;");
+            openUnitsWindow();
             if (currentMode == GameMode.ATTACK) {
               filterClickableButtons(clientAttack.findDestTerrs(sourceTerritory));
             } else if (currentMode == GameMode.MOVE) {
@@ -225,11 +240,11 @@ public class PlayTurnController implements Controller {
             destinationTerritory = territory;
             System.out.println("destinationTerritory is " + destinationTerritory.getName());
             if (currentMode == GameMode.ATTACK) {
-              System.out.println("attack");
-              clientAttack.perform_res(sourceTerritory, destinationTerritory, getIndexList());
+              clientAttack.perform(sourceTerritory, destinationTerritory, unitSetting);
+              unitSetting.clear();
             } else if (currentMode == GameMode.MOVE) {
-              System.out.println("move");
-              clientMove.perform_res(sourceTerritory, destinationTerritory, getIndexList());
+              clientMove.perform(sourceTerritory, destinationTerritory, unitSetting);
+              unitSetting.clear();
             }
             // reset and get new temporary map
             currentMode = GameMode.DEFAULT;
@@ -242,12 +257,11 @@ public class PlayTurnController implements Controller {
           setTerrButtons(true);
           break;
       }
-      
-    }
-    catch(IllegalArgumentException iae){
+
+    } catch (IllegalArgumentException iae) {
       resultText.setText(iae.getMessage());
     }
-    
+
   }
 
   @FXML
@@ -274,13 +288,12 @@ public class PlayTurnController implements Controller {
     currentMode = GameMode.DEFAULT;
     sourceTerritory = null;
     setTerrButtons(true);
-    try{
+    try {
       clientResearch.perform();
-    }
-    catch(IllegalArgumentException iae){
+    } catch (IllegalArgumentException iae) {
       resultText.setText(iae.getMessage());
     }
-    
+
   }
 
   @FXML
@@ -321,4 +334,87 @@ public class PlayTurnController implements Controller {
     GeneralScreen<RoomController> rs = new GeneralScreen<>(rc);
   }
 
+  private ComboBox<Integer> getComboBox(int minV, int maxV, int defaultV) {
+    ComboBox<Integer> comboBox = new ComboBox<>();
+    ObservableList<Integer> options = FXCollections.observableArrayList();
+    if (sourceTerritory == null) {
+      options.add(0);
+    } else {
+      for (int i = minV; i <= maxV; i++) {
+        options.add(i);
+      }
+    }
+    comboBox.setItems(options);
+    comboBox.setValue(defaultV);
+    return comboBox;
+  }
+
+  private void addUnitSetter(GridPane gridPane) {
+    Label nameTitle = new Label("Type");
+    Label amountTitle = new Label("Amount");
+    gridPane.add(nameTitle, 0, 0);
+    gridPane.add(amountTitle, 1, 0);
+    for (int level = 0; level <= 6; level++) {
+      Label levelLabel = new Label("Level " + level + ":");
+      ComboBox<Integer> comboBox = getComboBox(0, sourceTerritory.getUnitCountByLevel(level), 0);
+      comboBox.setId("unitLevel" + level);
+      gridPane.add(levelLabel, 0, level + 1);
+      gridPane.add(comboBox, 1, level + 1);
+    }
+  }
+
+  private void addToLevelSetter(GridPane gridPane) {
+    Label levelTitle = new Label("To Level");
+    gridPane.add(levelTitle, 2, 0);
+    for (int level = 0; level <= 6; level++) {
+      ComboBox<Integer> comboBox = getComboBox(level, 6, level);
+      comboBox.setId("toLevel" + level);
+      gridPane.add(comboBox, 2, level + 1);
+    }
+  }
+
+  private void addSaveButton(Stage unitsStage, GridPane gridPane) {
+    Button saveButton = new Button("Save");
+    gridPane.add(saveButton, 1, 9);
+    saveButton.setOnAction(event -> {
+      unitSetting.clear();
+      for (int level = 0; level <= 6; level++) {
+
+        ComboBox<Integer> comboBox = (ComboBox<Integer>) gridPane.lookup(
+            "#unitLevel" + level);
+        int selectedUnits = comboBox.getValue();
+        if (currentMode == GameMode.ATTACK || currentMode == GameMode.MOVE) {
+          unitSetting.put("level_" + level + "_unit", selectedUnits);
+        } else if (currentMode == GameMode.UPGRADE) {
+          ComboBox<Integer> comboBox2 = (ComboBox<Integer>) gridPane.lookup(
+              "#toLevel" + level);
+          int toLevel = comboBox2.getValue();
+          ArrayList<Integer> upInfo = new ArrayList<>();
+          upInfo.add(selectedUnits);
+          upInfo.add(toLevel);
+          unitUpgradeDic.put("level_" + level + "_unit", upInfo);
+        }
+      }
+      unitsStage.close();
+    });
+  }
+
+  private void openUnitsWindow() {
+    Stage unitsStage = new Stage();
+    unitsStage.initModality(Modality.APPLICATION_MODAL);
+    unitsStage.setTitle("Set Units");
+    GridPane gridPane = new GridPane();
+    gridPane.setVgap(10);
+    gridPane.setHgap(10);
+    gridPane.setPadding(new Insets(10, 10, 10, 10));
+    addUnitSetter(gridPane);
+    if (currentMode == GameMode.UPGRADE) {
+      addToLevelSetter(gridPane);
+    }
+    addSaveButton(unitsStage, gridPane);
+
+    Scene unitsScene = new Scene(gridPane);
+    unitsStage.setScene(unitsScene);
+    unitsStage.showAndWait();
+  }
 }

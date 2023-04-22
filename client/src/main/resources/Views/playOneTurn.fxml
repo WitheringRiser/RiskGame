@@ -288,7 +288,7 @@
     onAction="#displayPlayerInfo"
   />
   <Button text="Exit"
-        GridPane.rowIndex="8"
-        GridPane.columnIndex="5"
-        onAction="#back" />
+    GridPane.rowIndex="8"
+    GridPane.columnIndex="5"
+    onAction="#back"/>
 </GridPane>

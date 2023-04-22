@@ -57,7 +57,7 @@ public class SetUnitController implements Controller {
             }
             for (Territory t : territories) {
                 if (t.getName().equals(terrName)) {
-                    t.addUnits(number);
+                    t.addUnits(number,namePassword.get(0));
                     btn.setText(t.getName()+"   #Units: "+String.valueOf(t.getUnitsNumber()));
                     break;
                 }

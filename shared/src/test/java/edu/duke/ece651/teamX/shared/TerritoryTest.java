@@ -66,11 +66,30 @@ public class TerritoryTest {
   void testUnitDit() {
     Territory t1 = new Territory("RockyCliffs", 3);
     BasicUnit bu = new BasicUnit();
+    t1.addUnits(5, "Red");
     bu.upgradeLevel(2);
     t1.addUnits(bu, 4);
     HashMap<String, ArrayList<Integer> > unitDict = t1.getUnitsDit();
     assertEquals(2, unitDict.size());
-    assertEquals(3, unitDict.get("level_0_unit").size());
+    assertEquals(8, unitDict.get("level_0_unit").size());
     assertEquals(4, unitDict.get("level_2_unit").size());
+  }
+
+  @Test
+  void testCloak() {
+    Territory t1 = new Territory("RockyCliffs", 3);
+    t1.addCloak();
+    assertThrows(IllegalArgumentException.class, () -> t1.addCloak());
+    assertTrue(t1.isCloaked());
+    t1.resetCloak();
+    assertFalse(t1.isCloaked());
+    t1.addCloak();
+    t1.reduceOneCloak();
+    t1.reduceOneCloak();
+    assertTrue(t1.isCloaked());
+    t1.reduceOneCloak();
+    assertFalse(t1.isCloaked());
+    t1.reduceOneCloak();
+    assertFalse(t1.isCloaked());
   }
 }

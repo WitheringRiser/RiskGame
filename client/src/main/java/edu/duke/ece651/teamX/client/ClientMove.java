@@ -13,7 +13,7 @@ public class ClientMove extends ClientTurnAction<MoveSender> {
   }
 
   /**
-   * Find destination the units can move to 
+   * Find destination the units can move to
    */
   public ArrayList<Territory> findDestTerrs(Territory source) {
     if (!map.getOwner(source).equals(this.player)) {
@@ -43,6 +43,12 @@ public class ClientMove extends ClientTurnAction<MoveSender> {
     return dests;
   }
 
+
+  public int calculateCost(Territory source, Territory dest, int num){
+    int distance = MoveProcessor.getMinCostPathBetweenSourceDest(source, dest, map);
+    return num * distance;
+  }
+
   /**
    * 
    * @param source
@@ -50,16 +56,17 @@ public class ClientMove extends ClientTurnAction<MoveSender> {
    * @param indList
    * @throws IllegalArgumentException to indicate invalid movement
    */
-  public void perform_res(Territory source, Territory dest, ArrayList<Integer> indList) {
+  public void perform_res(Territory source, Territory dest, String name, int num) {
 
-    int distance = MoveProcessor.getMinCostPathBetweenSourceDest(source, dest, map);
-    int cost = indList.size()*distance;
-    if(cost>player.getFoodResource()){
-      throw new IllegalArgumentException("Food resource is not enough for the moving cost "+cost);
+    
+    int cost = calculateCost(source, dest, num);
+    if (cost > player.getFoodResource()) {
+      throw new IllegalArgumentException("Food resource is not enough for the moving cost " + cost);
     }
-    dest.addUnits(source.removeUnitsFromList(indList));
+    System.out.println(name);
+    dest.addUnits(source.removeLevelUnits(name, num));
     player.consumeFood(cost);
-    MoveSender ms = new MoveSender(source,dest,indList);
+    MoveSender ms = new MoveSender(source, dest, num, name);
     actions.add(ms);
   }
 }

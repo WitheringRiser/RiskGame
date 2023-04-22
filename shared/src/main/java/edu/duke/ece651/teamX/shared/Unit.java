@@ -13,4 +13,8 @@ public abstract class Unit implements Serializable {
   abstract public int getCost(int to);
 
   abstract public boolean upgradeLevel(int to);
+
+  public int getLevel() {
+    return level;
+  }
 }

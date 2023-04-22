@@ -283,8 +283,8 @@ public class Game implements Runnable {
     System.out.println("Upgrade:");
     for (UpgradeSender a : allUpgrades) {
       System.out.println("Upgrade " + a.getSource().getName() + "'s" +
-          Integer.toString(a.getIndex()) +
-          "th units to level " + Integer.toString(a.getToLevel()));
+          Integer.toString(a.getNum()) +
+          "units to level " + Integer.toString(a.getToLevel()));
     }
     System.out.println("Research:");
 //    for (ResearchSender a : allResearch) {
@@ -361,7 +361,7 @@ public class Game implements Runnable {
 
   private void incrementAllTerritoryByOneUnit() {
     for (Territory terr : map.getAllTerritories()) {
-      terr.addUnits(1);
+      terr.addUnits(1,map.getOwner(terr).getName());
     }
   }
 
@@ -405,8 +405,9 @@ public class Game implements Runnable {
     }
     printActions(allActions, allUpgrades, allResearchs);
     try {
-      handleActionSenders(allActions);
+      
       handleResearchUpgrade(allResearchs, allUpgrades);
+      handleActionSenders(allActions);
     } catch (IllegalArgumentException e) {
       // TODO: send back to client
     }

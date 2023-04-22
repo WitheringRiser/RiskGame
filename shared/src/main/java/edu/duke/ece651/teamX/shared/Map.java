@@ -7,154 +7,16 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import edu.duke.ece651.teamX.shared.*;
-import javafx.animation.PauseTransition;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.text.Font;
-import javafx.stage.Stage;
-import javafx.util.Duration;
-
-import java.awt.*;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import static javafx.scene.text.FontPosture.ITALIC;
-import static javafx.scene.text.FontWeight.BOLD;
 
 public class Map implements Serializable {
 
   private HashMap<Territory, Player> map_dict;
-
-  @FXML
-  private Button UpgradeBtn;
-  @FXML
-  private Button MoveBtn;
-  @FXML
-  private Button AttackBtn;
-  @FXML
-  private Button DoneBtn;
-
-  @FXML
-  private Label Food;
-  @FXML
-  private Label Tech;
-  @FXML
-  private Label AllianceInfo;
-
-  @FXML
-  private Button ButtonDesert;
-  @FXML
-  private Button ButtonMountains;
-  @FXML
-  private Button ButtonSwamp;
-  @FXML
-  private Button ButtonBeach;
-  @FXML
-  private Button ButtonSavanna;
-  @FXML
-  private Button ButtonJungle;
-  @FXML
-  private Button ButtonBambooForest;
-  @FXML
-  private Button ButtonDarkForest;
-  @FXML
-  private Button ButtonLukasTundra;
-  @FXML
-  private Button ButtonFrozenOcean;
-  @FXML
-  private Button ButtonPlateau;
-  @FXML
-  private Button ButtonDesertHills;
-
-  @FXML
-  private Button ButtonPlains;
-  @FXML
-  private Button ButtonRockyCliffs;
-  @FXML
-  private Button ButtonForest;
-  @FXML
-  private Button ButtonMesa;
-  @FXML
-  private Button ButtonLake;
-  @FXML
-  private Button ButtonRiver;
-  @FXML
-  private Button ButtonJinchengTaiga;
-  @FXML
-  private Button ButtonBadlands;
-  @FXML
-  private Button ButtonRussMushroomFields;
-  @FXML
-  private Button ButtonXinmengOcean;
-  @FXML
-  private Button ButtonSnowyBeach;
-  @FXML
-  private Button ButtonZhouCaves;
-
-  @FXML
-  private TreeView<String> Detail;
-  @FXML
-  private Label Prompt;
-
-  @FXML
-  private ImageView Figure;
-
-  private Stage Window;
-  private Boolean firstTime;
-
-  private Player CurrPlayer;
-  private HashMap<String, Button> ButtonMap;
-  private HashMap<Integer, ArrayList<Territory>> TerrMap;
-
-  private void InitButtonMap() {
-    ButtonMap = new HashMap<>();
-    ButtonMap.put("Desert", ButtonDesert);
-    ButtonMap.put("Mountains", ButtonMountains);
-    ButtonMap.put("Swamp", ButtonSwamp);
-    ButtonMap.put("Beach", ButtonBeach);
-    ButtonMap.put("Savanna", ButtonSavanna);
-    ButtonMap.put("Jungle", ButtonJungle);
-    ButtonMap.put("Bamboo Forest", ButtonBambooForest);
-    ButtonMap.put("Dark Forest", ButtonDarkForest);
-    ButtonMap.put("Lukas Tundra", ButtonLukasTundra);
-    ButtonMap.put("Frozen Ocean", ButtonFrozenOcean);
-    ButtonMap.put("Plateau", ButtonPlateau);
-    ButtonMap.put("Desert Hills", ButtonDesertHills);
-
-    ButtonMap.put("Plains", ButtonPlains);
-    ButtonMap.put("Rocky Cliffs", ButtonRockyCliffs);
-    ButtonMap.put("Forest", ButtonForest);
-    ButtonMap.put("Mesa", ButtonMesa);
-    ButtonMap.put("Lake", ButtonLake);
-    ButtonMap.put("River", ButtonRiver);
-    ButtonMap.put("Jincheng Taiga", ButtonJinchengTaiga);
-    ButtonMap.put("Badlands", ButtonBadlands);
-    ButtonMap.put("Russ Mushroom Fields", ButtonRussMushroomFields);
-    ButtonMap.put("Xinmeng Ocean", ButtonXinmengOcean);
-    ButtonMap.put("Snowy Beach", ButtonSnowyBeach);
-    ButtonMap.put("Zhou Caves", ButtonZhouCaves);
-  }
 
   /**
    * Construct a map by initializing an empty hashmap
    */
   public Map() {
     this.map_dict = new HashMap<>();
-  }
-
-  public Map(Player player, Stage Window, Boolean first) {
-    this.Window = Window;
-    this.CurrPlayer = player;
-    // this.TerrMap = player.map;
-    this.firstTime = first;
   }
 
   public int getTerritoryNum() {
@@ -225,6 +87,7 @@ public class Map implements Serializable {
       return false;
     }
     map_dict.put(terr, player);
+    terr.resetCloak();//reset cloaking status for new owner
     return true;
   }
 
