@@ -13,6 +13,9 @@ import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
+import javax.swing.text.LabelView;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -43,6 +46,7 @@ public class PlayTurnController implements Controller {
   private Territory sourceTerritory = null;
   private Territory destinationTerritory = null;
   private HashMap<String, Integer> unitSetting = new HashMap<>();
+  private HashMap<String, ArrayList<Integer>> unitUpgradeDic = new HashMap<>();
 
   TextField textField;
   TextField textField_toLevel;
@@ -121,26 +125,20 @@ public class PlayTurnController implements Controller {
   private void displayTerritoryInfo(Button button, Territory territory) {
     Iterator<Territory> iterator = territory.getNeighbours();
     String neighbors = StreamSupport.stream(
-            Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), false)
+        Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), false)
         .map(Territory::getName)
         .collect(Collectors.joining(", "));
     String content = "Territory: " + territory.getName() + "\n"
-        + "Owner: " + map.getOwner(territory).getName() + "\n"
         + "Neighbors: " + neighbors + "\n"
         + "Size: " + territory.getTerritorySize() + "\n";
 
-    // Get units information
-    StringBuilder units_info = new StringBuilder();
-    Iterable<Unit> allUnits = territory.getUnits();
-    for (Unit unit : allUnits) {
-      if (unit == null) {
-        units_info.append("null ");
-      } else {
-        units_info.append(unit.getName()).append(" ");
-      }
+    // TODO: change to frogView
+    content += "Owner: " + map.getOwner(territory).getName() + "\n";
+    content += "Units:\n";
+    HashMap<String, ArrayList<Integer>> unitDic = territory.getUnitsDit();
+    for (String typeName : unitDic.keySet()) {
+      content += "  - " + typeName + ": " + unitDic.get(typeName).size() + "\n";
     }
-    content += "Units: " + units_info.toString() + "\n";
-
     Tooltip territoryTooltip = new Tooltip(content);
     territoryTooltip.setStyle("-fx-font-size: 14;");
     territoryTooltip.setStyle("-fx-wrap-text: true;");
@@ -219,9 +217,11 @@ public class PlayTurnController implements Controller {
     try {
       switch (currentMode) {
         case UPGRADE:
-          // TODO:need to propogate right name and number, now is"stub_name" and 1
-          clientUpgrade.perform_res("stub_name", 1,
-              Integer.parseInt(textField_toLevel.getText()), territory);
+        sourceTerritory=territory;
+          openUnitsWindow();
+          clientUpgrade.perform(territory, unitUpgradeDic);
+          unitUpgradeDic.clear();
+          sourceTerritory=null;
           setNewLayout();
           break;
         case ATTACK:
@@ -230,6 +230,7 @@ public class PlayTurnController implements Controller {
             sourceTerritory = territory;
             System.out.println("sourceTerritory is " + sourceTerritory.getName());
             button.setStyle("-fx-background-color: yellow;");
+            openUnitsWindow();
             if (currentMode == GameMode.ATTACK) {
               filterClickableButtons(clientAttack.findDestTerrs(sourceTerritory));
             } else if (currentMode == GameMode.MOVE) {
@@ -239,14 +240,10 @@ public class PlayTurnController implements Controller {
             destinationTerritory = territory;
             System.out.println("destinationTerritory is " + destinationTerritory.getName());
             if (currentMode == GameMode.ATTACK) {
-              // TODO:need to propogate right name and num
-              clientAttack.perform_res(sourceTerritory, destinationTerritory, getUnitName(),
-                  getUnitNum());
+              clientAttack.perform(sourceTerritory, destinationTerritory, unitSetting);
               unitSetting.clear();
             } else if (currentMode == GameMode.MOVE) {
-              // TODO:need to propogate right name and num
-              clientMove.perform_res(sourceTerritory, destinationTerritory, getUnitName(),
-                  getUnitNum());
+              clientMove.perform(sourceTerritory, destinationTerritory, unitSetting);
               unitSetting.clear();
             }
             // reset and get new temporary map
@@ -337,56 +334,87 @@ public class PlayTurnController implements Controller {
     GeneralScreen<RoomController> rs = new GeneralScreen<>(rc);
   }
 
-  @FXML
+  private ComboBox<Integer> getComboBox(int minV, int maxV, int defaultV) {
+    ComboBox<Integer> comboBox = new ComboBox<>();
+    ObservableList<Integer> options = FXCollections.observableArrayList();
+    if (sourceTerritory == null) {
+      options.add(0);
+    } else {
+      for (int i = minV; i <= maxV; i++) {
+        options.add(i);
+      }
+    }
+    comboBox.setItems(options);
+    comboBox.setValue(defaultV);
+    return comboBox;
+  }
+
+  private void addUnitSetter(GridPane gridPane) {
+    Label nameTitle = new Label("Type");
+    Label amountTitle = new Label("Amount");
+    gridPane.add(nameTitle, 0, 0);
+    gridPane.add(amountTitle, 1, 0);
+    for (int level = 0; level <= 6; level++) {
+      Label levelLabel = new Label("Level " + level + ":");
+      ComboBox<Integer> comboBox = getComboBox(0, sourceTerritory.getUnitCountByLevel(level), 0);
+      comboBox.setId("unitLevel" + level);
+      gridPane.add(levelLabel, 0, level + 1);
+      gridPane.add(comboBox, 1, level + 1);
+    }
+  }
+
+  private void addToLevelSetter(GridPane gridPane) {
+    Label levelTitle = new Label("To Level");
+    gridPane.add(levelTitle, 2, 0);
+    for (int level = 0; level <= 6; level++) {
+      ComboBox<Integer> comboBox = getComboBox(level, 6, level);
+      comboBox.setId("toLevel" + level);
+      gridPane.add(comboBox, 2, level + 1);
+    }
+  }
+
+  private void addSaveButton(Stage unitsStage, GridPane gridPane) {
+    Button saveButton = new Button("Save");
+    gridPane.add(saveButton, 1, 9);
+    saveButton.setOnAction(event -> {
+      unitSetting.clear();
+      for (int level = 0; level <= 6; level++) {
+
+        ComboBox<Integer> comboBox = (ComboBox<Integer>) gridPane.lookup(
+            "#unitLevel" + level);
+        int selectedUnits = comboBox.getValue();
+        if (currentMode == GameMode.ATTACK || currentMode == GameMode.MOVE) {
+          unitSetting.put("level_" + level + "_unit", selectedUnits);
+        } else if (currentMode == GameMode.UPGRADE) {
+          ComboBox<Integer> comboBox2 = (ComboBox<Integer>) gridPane.lookup(
+              "#toLevel" + level);
+          int toLevel = comboBox2.getValue();
+          ArrayList<Integer> upInfo = new ArrayList<>();
+          upInfo.add(selectedUnits);
+          upInfo.add(toLevel);
+          unitUpgradeDic.put("level_" + level + "_unit", upInfo);
+        }
+      }
+      unitsStage.close();
+    });
+  }
+
   private void openUnitsWindow() {
     Stage unitsStage = new Stage();
     unitsStage.initModality(Modality.APPLICATION_MODAL);
     unitsStage.setTitle("Set Units");
-
-//    VBox comboBoxContainer = new VBox();
-//    comboBoxContainer.setSpacing(5);
-//    comboBoxContainer.setPadding(new Insets(10, 10, 10, 10));
-
     GridPane gridPane = new GridPane();
     gridPane.setVgap(10);
     gridPane.setHgap(10);
     gridPane.setPadding(new Insets(10, 10, 10, 10));
-
-    for (int level = 0; level <= 6; level++) {
-      Label levelLabel = new Label("Level " + level + ":");
-
-      ComboBox<Integer> comboBox = new ComboBox<>();
-      ObservableList<Integer> options = FXCollections.observableArrayList();
-      if (sourceTerritory == null) {
-        options.add(0);
-      } else {
-        for (int i = 0; i <= sourceTerritory.getUnitCountByLevel(level); i++) {
-          options.add(i);
-        }
-      }
-      comboBox.setItems(options);
-      comboBox.setValue(0);
-      comboBox.setId("unitLevel" + level);
-      gridPane.add(levelLabel, 0, level);
-      gridPane.add(comboBox, 1, level);
+    addUnitSetter(gridPane);
+    if (currentMode == GameMode.UPGRADE) {
+      addToLevelSetter(gridPane);
     }
-
-    Button saveButton = new Button("Save");
-    gridPane.add(saveButton, 1, 7);
-    saveButton.setOnAction(event -> {
-      unitSetting.clear();
-      for (int level = 0; level < 6; level++) {
-        ComboBox<Integer> comboBox = (ComboBox<Integer>) gridPane.lookup(
-            "#unitLevel" + level);
-        int selectedUnits = comboBox.getValue();
-        unitSetting.put("level_" + level + "_unit", selectedUnits);
-      }
-      unitsStage.close();
-    });
+    addSaveButton(unitsStage, gridPane);
 
     Scene unitsScene = new Scene(gridPane);
     unitsStage.setScene(unitsScene);
     unitsStage.showAndWait();
   }
-
 }
