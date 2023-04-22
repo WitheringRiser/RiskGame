@@ -240,13 +240,15 @@ public class PlayTurnController implements Controller {
             System.out.println("destinationTerritory is " + destinationTerritory.getName());
             if (currentMode == GameMode.ATTACK) {
               // TODO:need to propogate right name and num
-              clientAttack.perform_res(sourceTerritory, destinationTerritory, getUnitName(),
-                  getUnitNum());
+              // clientAttack.perform_res(sourceTerritory, destinationTerritory, getUnitName(),
+              //     getUnitNum());
+              clientAttack.perform(sourceTerritory, destinationTerritory, unitSetting);
               unitSetting.clear();
             } else if (currentMode == GameMode.MOVE) {
               // TODO:need to propogate right name and num
-              clientMove.perform_res(sourceTerritory, destinationTerritory, getUnitName(),
-                  getUnitNum());
+              // clientMove.perform_res(sourceTerritory, destinationTerritory, getUnitName(),
+              //     getUnitNum());
+              clientMove.perform(sourceTerritory, destinationTerritory, unitSetting);
               unitSetting.clear();
             }
             // reset and get new temporary map

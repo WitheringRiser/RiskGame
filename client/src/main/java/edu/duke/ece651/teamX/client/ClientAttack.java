@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import edu.duke.ece651.teamX.shared.*;
 import java.net.Socket;
 import java.util.Iterator;
-
+import java.util.HashMap;
 public class ClientAttack extends ClientTurnAction<AttackSender> {
 
   public ClientAttack(Socket s, Map m, Player ply) {
@@ -32,6 +32,9 @@ public class ClientAttack extends ClientTurnAction<AttackSender> {
     return dests;
   }
 
+  public int calculateCost(Territory source, Territory dest, int num){
+    return num * (source.getTerritorySize() + dest.getTerritorySize());
+  }
   /**
    * 
    * @param source
@@ -40,7 +43,7 @@ public class ClientAttack extends ClientTurnAction<AttackSender> {
    * @throw IllegalArgumentException to indicate the invalid action
    */
   public void perform_res(Territory source, Territory dest, String name, int num) {
-    int cost = num * (source.getTerritorySize() + dest.getTerritorySize());
+    int cost = calculateCost(source,dest,num);
     if (cost > player.getFoodResource()) {
       throw new IllegalArgumentException("The food resource is not enough for the attacking cost " + cost);
     }
@@ -48,7 +51,7 @@ public class ClientAttack extends ClientTurnAction<AttackSender> {
     player.consumeFood(cost);
     AttackSender atts = new AttackSender(source, dest, num, name);
     this.actions.add(atts);
-
   }
 
+  
 }
