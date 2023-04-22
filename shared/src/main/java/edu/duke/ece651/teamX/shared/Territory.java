@@ -11,6 +11,7 @@ public class Territory implements Serializable {
   private ArrayList<Territory> neighbours;
   private final String name; // a territory is uniquely defined by name
   private int cloaking;
+  private ArrayList<Spy> spies;
 
   /**
    * Constructs a Territory object with the specified name
@@ -22,6 +23,7 @@ public class Territory implements Serializable {
     this.neighbours = new ArrayList<Territory>();
     this.name = in_name;
     this.cloaking = 0;
+    this.spies=new ArrayList<>();
 
   }
 
@@ -220,6 +222,8 @@ public class Territory implements Serializable {
     cloaking = 0;
   }
 
+
+
   /**
    * Identify if this territory is cloaked for displaying
    *
@@ -237,5 +241,43 @@ public class Territory implements Serializable {
       }
     }
     return count;
+  }
+
+  public ArrayList<Integer> getSpyIndsFromPlayer(String playerName){
+    ArrayList<Integer> res  = new ArrayList<>();
+    for(int i = 0; i<spies.size();i++){
+        if(spies.get(i).getOwner().equals(playerName)){
+        res.add(i);
+      }
+    }
+    return res;
+  }
+
+  public void addSpies(ArrayList<Spy> inputSpies){
+    for(Spy s: inputSpies){
+      this.spies.add(s);
+    }
+  }
+
+  public ArrayList<Spy> removeSpies(String owner, int num){
+    ArrayList<Integer> inds = getSpyIndsFromPlayer(owner);
+    if(inds.size()<num){
+      throw new IllegalArgumentException("The Spy is not enough: have "+inds.size()+" but requested "+num);
+    }
+    ArrayList<Spy> resSpies = new ArrayList<>();
+    for(int i=0;i<num;i++){
+      resSpies.add(spies.get(inds.get(i)));
+    }
+    spies.removeAll(resSpies);
+    return resSpies;
+  }
+
+  /**
+   * Reset the movement info for spies
+   */
+  public void turnReset(){
+    for(Spy s: spies){
+      s.turnReset();
+    }
   }
 }

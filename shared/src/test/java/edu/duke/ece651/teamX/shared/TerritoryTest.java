@@ -73,6 +73,12 @@ public class TerritoryTest {
     assertEquals(2, unitDict.size());
     assertEquals(8, unitDict.get("level_0_unit").size());
     assertEquals(4, unitDict.get("level_2_unit").size());
+    assertEquals(8, t1.getUnitCountByLevel(0));
+    assertEquals(4, t1.getUnitCountByLevel(2));
+    assertThrows(IllegalArgumentException.class,
+                 () -> t1.removeLevelUnits("level_1_unit", 1));
+    assertThrows(IllegalArgumentException.class,
+                 () -> t1.removeLevelUnits("level_0_unit", 9));
   }
 
   @Test
@@ -91,5 +97,32 @@ public class TerritoryTest {
     assertFalse(t1.isCloaked());
     t1.reduceOneCloak();
     assertFalse(t1.isCloaked());
+  }
+
+  @Test
+  void testSpy() {
+    Territory t1 = new Territory("RockyCliffs", 3);
+    ArrayList<Spy> redSpies = new ArrayList<>();
+    for (int i = 0; i < 5; i++) {
+      redSpies.add(new Spy("Red"));
+    }
+    t1.addSpies(redSpies);
+    ArrayList<Spy> greenSpies = new ArrayList<>();
+    for (int i = 0; i < 3; i++) {
+      greenSpies.add(new Spy("Green"));
+    }
+    t1.addSpies(greenSpies);
+    assertEquals(greenSpies.size(), t1.getSpyIndsFromPlayer("Green").size());
+    assertEquals(0, t1.getSpyIndsFromPlayer("A").size());
+    ArrayList<Spy> res = t1.removeSpies("Red", 4);
+    assertEquals(1, t1.getSpyIndsFromPlayer("Red").size());
+    assertEquals(4, res.size());
+    assertThrows(IllegalArgumentException.class, () -> t1.removeSpies("Red", 2));
+
+    Spy s = greenSpies.get(0);
+    greenSpies.get(0).recordMove();
+    assertTrue(s.checkMove());
+    t1.turnReset();
+    assertFalse(s.checkMove());
   }
 }
