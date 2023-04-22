@@ -287,8 +287,16 @@
     text="Info"
     onAction="#displayPlayerInfo"
   />
+  <Button fx:id="setUnitButton"
+    GridPane.rowIndex="7"
+    GridPane.columnIndex="7"
+    GridPane.rowSpan="1"
+    GridPane.columnSpan="1"
+    text="setUnit"
+    onAction="#openUnitsWindow"
+  />
   <Button text="Exit"
-        GridPane.rowIndex="8"
-        GridPane.columnIndex="5"
-        onAction="#back" />
+    GridPane.rowIndex="8"
+    GridPane.columnIndex="5"
+    onAction="#back"/>
 </GridPane>
