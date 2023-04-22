@@ -362,6 +362,7 @@ public class Game implements Runnable {
   private void incrementAllTerritoryByOneUnit() {
     for (Territory terr : map.getAllTerritories()) {
       terr.addUnits(1,map.getOwner(terr).getName());
+      terr.turnReset();
     }
   }
 
