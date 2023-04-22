@@ -7,25 +7,30 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-
-import com.google.common.cache.Cache;
-
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class PlayTurnController implements Controller {
@@ -37,6 +42,7 @@ public class PlayTurnController implements Controller {
   private GameMode currentMode = GameMode.DEFAULT;
   private Territory sourceTerritory = null;
   private Territory destinationTerritory = null;
+  private HashMap<String, Integer> unitSetting = new HashMap<>();
 
   TextField textField;
   TextField textField_toLevel;
@@ -74,10 +80,13 @@ public class PlayTurnController implements Controller {
 
     System.out.println("player name = " + namePassword.get(0));
 
-    this.clientAttack = new ClientAttack(clientSocket, map, map.getPlayerByName(namePassword.get(0)));
+    this.clientAttack = new ClientAttack(clientSocket, map,
+        map.getPlayerByName(namePassword.get(0)));
     this.clientMove = new ClientMove(clientSocket, map, map.getPlayerByName(namePassword.get(0)));
-    this.clientResearch = new ClientResearch(clientSocket, map.getPlayerByName(namePassword.get(0)));
-    this.clientUpgrade = new ClientUpgrade(clientSocket, map, map.getPlayerByName(namePassword.get(0)));
+    this.clientResearch = new ClientResearch(clientSocket,
+        map.getPlayerByName(namePassword.get(0)));
+    this.clientUpgrade = new ClientUpgrade(clientSocket, map,
+        map.getPlayerByName(namePassword.get(0)));
     setNewLayout();
   }
 
@@ -112,7 +121,7 @@ public class PlayTurnController implements Controller {
   private void displayTerritoryInfo(Button button, Territory territory) {
     Iterator<Territory> iterator = territory.getNeighbours();
     String neighbors = StreamSupport.stream(
-        Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), false)
+            Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), false)
         .map(Territory::getName)
         .collect(Collectors.joining(", "));
     String content = "Territory: " + territory.getName() + "\n"
@@ -146,13 +155,6 @@ public class PlayTurnController implements Controller {
   }
 
   public void setTerrButtons(boolean isReset) {
-    textField = new TextField();
-    textField.setId("numText");
-    textField_toLevel = new TextField();
-    textField_toLevel.setId("numText");
-    gridPane.add(textField, 7, 7);
-    gridPane.add(textField_toLevel, 7, 8);
-
     for (Territory t : map.getAllTerritories()) {
       Button button = (Button) scene.lookup("#" + t.getName());
       if (map.getTerritoriesByPlayerName(namePassword.get(0)).contains(t)) {
@@ -237,13 +239,15 @@ public class PlayTurnController implements Controller {
             destinationTerritory = territory;
             System.out.println("destinationTerritory is " + destinationTerritory.getName());
             if (currentMode == GameMode.ATTACK) {
-              System.out.println("attack");
               // TODO:need to propogate right name and num
-              clientAttack.perform_res(sourceTerritory, destinationTerritory, getUnitName(), getUnitNum());
+              clientAttack.perform_res(sourceTerritory, destinationTerritory, getUnitName(),
+                  getUnitNum());
+              unitSetting.clear();
             } else if (currentMode == GameMode.MOVE) {
-              System.out.println("move");
               // TODO:need to propogate right name and num
-              clientMove.perform_res(sourceTerritory, destinationTerritory, getUnitName(), getUnitNum());
+              clientMove.perform_res(sourceTerritory, destinationTerritory, getUnitName(),
+                  getUnitNum());
+              unitSetting.clear();
             }
             // reset and get new temporary map
             currentMode = GameMode.DEFAULT;
@@ -331,6 +335,53 @@ public class PlayTurnController implements Controller {
     RoomController rc = new RoomController(stage, clientSocket, namePassword);
     rc.resetConnection();
     GeneralScreen<RoomController> rs = new GeneralScreen<>(rc);
+  }
+
+  @FXML
+  private void openUnitsWindow() {
+    Stage unitsStage = new Stage();
+    unitsStage.initModality(Modality.APPLICATION_MODAL);
+    unitsStage.setTitle("Set Units");
+
+    VBox comboBoxContainer = new VBox();
+    comboBoxContainer.setSpacing(5);
+    comboBoxContainer.setPadding(new Insets(10, 10, 10, 10));
+
+    for (int level = 0; level <= 6; level++) {
+      Label levelLabel = new Label("Level " + level + ":");
+      comboBoxContainer.getChildren().add(levelLabel);
+
+      ComboBox<Integer> comboBox = new ComboBox<>();
+      ObservableList<Integer> options = FXCollections.observableArrayList();
+      if (sourceTerritory == null) {
+        options.add(0);
+      } else {
+        for (int i = 0; i <= sourceTerritory.getUnitCountByLevel(level); i++) {
+          options.add(i);
+        }
+      }
+      comboBox.setItems(options);
+      comboBox.setValue(0);
+      comboBox.setId("unitLevel" + level);
+      comboBoxContainer.getChildren().add(comboBox);
+    }
+
+    Button saveButton = new Button("Save");
+    comboBoxContainer.getChildren().add(saveButton);
+    saveButton.setOnAction(event -> {
+      unitSetting.clear();
+      for (int level = 0; level < 6; level++) {
+        ComboBox<Integer> comboBox = (ComboBox<Integer>) comboBoxContainer.lookup(
+            "#unitLevel" + level);
+        int selectedUnits = comboBox.getValue();
+        unitSetting.put("level_" + level + "_unit", selectedUnits);
+      }
+      unitsStage.close();
+    });
+
+    Scene unitsScene = new Scene(comboBoxContainer);
+    unitsStage.setScene(unitsScene);
+    unitsStage.showAndWait();
   }
 
 }
