@@ -92,9 +92,20 @@ public class PlayTurnController implements Controller {
       } catch (Exception e) {
         resultText.setText("Invalid input number: " + index);
       }
-
     }
     return indexList;
+  }
+
+  // TODO:just stub function
+  private String getUnitName() {
+    String name = "level_0_unit";
+    return name;
+  }
+
+  // TODO:just stub function
+  private int getUnitNum() {
+    int num = 1;
+    return num;
   }
 
   @FXML
@@ -203,10 +214,11 @@ public class PlayTurnController implements Controller {
 
   private void handleTerritoryClick(Button button, Territory territory)
       throws IOException, ClassNotFoundException {
-    try{
+    try {
       switch (currentMode) {
         case UPGRADE:
-          clientUpgrade.perform_res(Integer.parseInt(textField.getText()),
+          // TODO:need to propogate right name and number, now is"stub_name" and 1
+          clientUpgrade.perform_res("stub_name", 1,
               Integer.parseInt(textField_toLevel.getText()), territory);
           setNewLayout();
           break;
@@ -226,10 +238,12 @@ public class PlayTurnController implements Controller {
             System.out.println("destinationTerritory is " + destinationTerritory.getName());
             if (currentMode == GameMode.ATTACK) {
               System.out.println("attack");
-              clientAttack.perform_res(sourceTerritory, destinationTerritory, getIndexList());
+              // TODO:need to propogate right name and num
+              clientAttack.perform_res(sourceTerritory, destinationTerritory, getUnitName(), getUnitNum());
             } else if (currentMode == GameMode.MOVE) {
               System.out.println("move");
-              clientMove.perform_res(sourceTerritory, destinationTerritory, getIndexList());
+              // TODO:need to propogate right name and num
+              clientMove.perform_res(sourceTerritory, destinationTerritory, getUnitName(), getUnitNum());
             }
             // reset and get new temporary map
             currentMode = GameMode.DEFAULT;
@@ -242,12 +256,11 @@ public class PlayTurnController implements Controller {
           setTerrButtons(true);
           break;
       }
-      
-    }
-    catch(IllegalArgumentException iae){
+
+    } catch (IllegalArgumentException iae) {
       resultText.setText(iae.getMessage());
     }
-    
+
   }
 
   @FXML
@@ -274,13 +287,12 @@ public class PlayTurnController implements Controller {
     currentMode = GameMode.DEFAULT;
     sourceTerritory = null;
     setTerrButtons(true);
-    try{
+    try {
       clientResearch.perform();
-    }
-    catch(IllegalArgumentException iae){
+    } catch (IllegalArgumentException iae) {
       resultText.setText(iae.getMessage());
     }
-    
+
   }
 
   @FXML

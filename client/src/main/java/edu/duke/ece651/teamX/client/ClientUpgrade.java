@@ -18,23 +18,29 @@ public class ClientUpgrade {
   protected Player player;
   protected ArrayList<UpgradeSender> actions;
 
-  public ClientUpgrade(Socket s, Map m,Player ply) {
+  public ClientUpgrade(Socket s, Map m, Player ply) {
     this.socket = s;
     this.communicate = new Communicate();
     this.map = m;
     this.player = ply;
     this.actions = new ArrayList<UpgradeSender>();
   }
-  
-  public void perform_res(int unitIndex, int toLevel, Territory source) {
-    String mes = this.player.upgradeUnit(source, unitIndex, toLevel);
-    if(mes!=null){
-      throw new IllegalArgumentException(mes);
+
+  public void perform_res(String name, int num, int toLevel, Territory source) {
+    ArrayList<Integer> indexList = source.getUnitsDit().get(name);
+    if (indexList.size() < num) {
+      throw new IllegalArgumentException("no enough units to upgrade");
     }
-    
+    for (int i = 0; i < num; ++i) {
+      String mes = this.player.upgradeUnit(source, indexList.get(i), toLevel);
+      if (mes != null) {
+        throw new IllegalArgumentException(mes);
+      }
+    }
+
     // this.player.consumeTech(source.getUnits().get(unitIndex).getCost(toLevel));
     // source.getUnits().get(unitIndex).upgradeLevel(toLevel);
-    this.actions.add(new UpgradeSender(source, unitIndex, toLevel));
+    this.actions.add(new UpgradeSender(source, name, num, toLevel));
   }
 
   public void commit() throws IOException {
