@@ -405,8 +405,9 @@ public class Game implements Runnable {
     }
     printActions(allActions, allUpgrades, allResearchs);
     try {
-      handleActionSenders(allActions);
+      
       handleResearchUpgrade(allResearchs, allUpgrades);
+      handleActionSenders(allActions);
     } catch (IllegalArgumentException e) {
       // TODO: send back to client
     }
