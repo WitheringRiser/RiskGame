@@ -283,8 +283,8 @@ public class Game implements Runnable {
     System.out.println("Upgrade:");
     for (UpgradeSender a : allUpgrades) {
       System.out.println("Upgrade " + a.getSource().getName() + "'s" +
-          Integer.toString(a.getIndex()) +
-          "th units to level " + Integer.toString(a.getToLevel()));
+          Integer.toString(a.getNum()) +
+          "units to level " + Integer.toString(a.getToLevel()));
     }
     System.out.println("Research:");
 //    for (ResearchSender a : allResearch) {

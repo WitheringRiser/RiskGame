@@ -8,8 +8,7 @@ public class MoveSender extends ActionSender {
     super(_source, _destination, _unitsNum);
   }
 
-  public MoveSender(Territory _source, Territory _destination, ArrayList<Integer> _indexList) {
-    super(_source, _destination, _indexList);
-
+  public MoveSender(Territory _source, Territory _destination, int _unitsNum, String name) {
+    super(_source, _destination, _unitsNum, name);
   }
 }

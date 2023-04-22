@@ -8,23 +8,18 @@ public class ActionSender implements Serializable {
   protected Territory source;
   protected Territory destination;
   protected int unitsNum;
-  protected ArrayList<Integer> indexList;
+  protected String name;
 
   public ActionSender(Territory _source, Territory _destination, int _unitsNum) {
     source = _source;
     destination = _destination;
     unitsNum = _unitsNum;
-    indexList = new ArrayList<>();
-    for (int i = 0; i < _unitsNum; ++i) {
-      indexList.add(i);
-    }
+    name = source.getUnits().get(0).getName();
   }
 
-  public ActionSender(Territory _source, Territory _destination, ArrayList<Integer> _indexList) {
-    source = _source;
-    destination = _destination;
-    unitsNum = _indexList.size();
-    indexList = _indexList;
+  public ActionSender(Territory _source, Territory _destination, int _unitsNum, String name) {
+    this(_source, _destination, _unitsNum);
+    this.name = name;
   }
 
   public Territory getSource() {
@@ -39,8 +34,8 @@ public class ActionSender implements Serializable {
     return unitsNum;
   }
 
-  public ArrayList<Integer> getIndexList() {
-    return indexList;
+  public String getName() {
+    return name;
   }
 
   @Override
@@ -52,7 +47,8 @@ public class ActionSender implements Serializable {
       ActionSender otherSender = (ActionSender) o;
       return source.equals(otherSender.getSource()) &&
           destination.equals(otherSender.getDestination()) &&
-          unitsNum == otherSender.getUnitsNum();
+          unitsNum == otherSender.getUnitsNum() &&
+          name == otherSender.getName();
     }
     return false;
   }
@@ -60,7 +56,7 @@ public class ActionSender implements Serializable {
   @Override
   public int hashCode() {
     String s = source.getName() + ", " + destination.getName() + ", " +
-        Integer.toString(unitsNum);
+      Integer.toString(unitsNum) + ", " + name;
     return s.hashCode();
   }
 }
