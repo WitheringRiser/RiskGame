@@ -12,6 +12,8 @@ public class Territory implements Serializable {
   private final String name; // a territory is uniquely defined by name
   private int cloaking;
   private ArrayList<Spy> spies;
+  private int shield_level;
+  private HashMap<Integer, Integer> shieldRule;
 
   /**
    * Constructs a Territory object with the specified name
@@ -23,8 +25,10 @@ public class Territory implements Serializable {
     this.neighbours = new ArrayList<Territory>();
     this.name = in_name;
     this.cloaking = 0;
-    this.spies=new ArrayList<>();
-
+    this.spies = new ArrayList<>();
+    this.shield_level = 0;
+    this.shieldRule = new HashMap<>();
+    setShieldRule();
   }
 
   public Territory(String in_name, int num) {
@@ -47,6 +51,12 @@ public class Territory implements Serializable {
     return neighbours.iterator();
   }
 
+  public void setShieldRule() {
+    shieldRule.put(1, 50);
+    shieldRule.put(2, 100);
+    shieldRule.put(3, 200);
+    shieldRule.put(4, 400);
+  }
 
   /*
    * public Iterator<Unit> getUnits() {
@@ -134,7 +144,6 @@ public class Territory implements Serializable {
     return removeUnitsFromList(indexList);
   }
 
-
   public ArrayList<Unit> getUnits() {
     return units;
   }
@@ -169,7 +178,6 @@ public class Territory implements Serializable {
       return -1;
     }
   }
-
 
   /**
    * Check if two territory are equals Currently only use name to compare
@@ -222,8 +230,6 @@ public class Territory implements Serializable {
     cloaking = 0;
   }
 
-
-
   /**
    * Identify if this territory is cloaked for displaying
    *
@@ -245,13 +251,14 @@ public class Territory implements Serializable {
 
   /**
    * For display purpose
+   * 
    * @param playerName
    * @return
    */
-  public ArrayList<Integer> getSpyIndsFromPlayer(String playerName){
-    ArrayList<Integer> res  = new ArrayList<>();
-    for(int i = 0; i<spies.size();i++){
-        if(spies.get(i).getOwner().equals(playerName)){
+  public ArrayList<Integer> getSpyIndsFromPlayer(String playerName) {
+    ArrayList<Integer> res = new ArrayList<>();
+    for (int i = 0; i < spies.size(); i++) {
+      if (spies.get(i).getOwner().equals(playerName)) {
         res.add(i);
       }
     }
@@ -260,33 +267,34 @@ public class Territory implements Serializable {
 
   /**
    * For move spy
+   * 
    * @param playerName
    * @return
    */
-  public ArrayList<Integer> getSpyMoveIndsFromPlayer(String playerName){
+  public ArrayList<Integer> getSpyMoveIndsFromPlayer(String playerName) {
     ArrayList<Integer> inds = getSpyIndsFromPlayer(playerName);
     ArrayList<Integer> res = new ArrayList<>();
-    for(int i: inds){
-      if(!spies.get(i).checkMove()){
+    for (int i : inds) {
+      if (!spies.get(i).checkMove()) {
         res.add(i);
       }
     }
     return res;
   }
 
-  public void addSpies(ArrayList<Spy> inputSpies){
-    for(Spy s: inputSpies){
+  public void addSpies(ArrayList<Spy> inputSpies) {
+    for (Spy s : inputSpies) {
       this.spies.add(s);
     }
   }
 
-  public ArrayList<Spy> removeSpies(String owner, int num){
+  public ArrayList<Spy> removeSpies(String owner, int num) {
     ArrayList<Integer> inds = getSpyMoveIndsFromPlayer(owner);
-    if(inds.size()<num){
-      throw new IllegalArgumentException("The Spy is not enough: have "+inds.size()+" but requested "+num);
+    if (inds.size() < num) {
+      throw new IllegalArgumentException("The Spy is not enough: have " + inds.size() + " but requested " + num);
     }
     ArrayList<Spy> resSpies = new ArrayList<>();
-    for(int i=0;i<num;i++){
+    for (int i = 0; i < num; i++) {
       Spy currS = spies.get(inds.get(i));
       currS.recordMove();
       resSpies.add(currS);
@@ -298,9 +306,26 @@ public class Territory implements Serializable {
   /**
    * Reset the movement info for spies
    */
-  public void turnReset(){
-    for(Spy s: spies){
+  public void turnReset() {
+    for (Spy s : spies) {
       s.turnReset();
     }
   }
+
+  public int getShieldLevel() {
+    return shield_level;
+  }
+
+  public int getShieldCost(int toLevel) {
+    return shieldRule.get(toLevel);
+  }
+
+  public void shieldTerritory(int toLevel) {
+    this.shield_level = toLevel;
+  }
+
+  public void releaseShield() {
+    this.shield_level = 0;
+  }
+
 }
