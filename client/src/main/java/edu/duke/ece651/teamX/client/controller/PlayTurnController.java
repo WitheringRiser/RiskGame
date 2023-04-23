@@ -39,7 +39,7 @@ import javafx.stage.Stage;
 public class PlayTurnController implements Controller {
 
   private enum GameMode {
-    DEFAULT, ATTACK, MOVE, UPGRADE, SPYMOVE, CLOAK
+    DEFAULT, ATTACK, MOVE, UPGRADE, SPYMOVE, CLOAK, SHIELD
   }
 
   private GameMode currentMode = GameMode.DEFAULT;
@@ -73,6 +73,7 @@ public class PlayTurnController implements Controller {
   private ClientUpgrade clientUpgrade;
   private ClientSpyMove clientSpyMove;
   private ClientCloak clientCloak;
+  private ClientShield clientShield;
   GameResult gameResult;
 
   public PlayTurnController(Stage stage, Socket socket, ArrayList<String> namepassword)
@@ -99,35 +100,10 @@ public class PlayTurnController implements Controller {
         map.getPlayerByName(namePassword.get(0)));
     this.clientSpyMove = new ClientSpyMove(clientSocket, map, map.getPlayerByName(namePassword.get(0)));
     this.clientCloak = new ClientCloak(clientSocket, map, map.getPlayerByName(namePassword.get(0)));
+    this.clientShield = new ClientShield(clientSocket, map,
+        map.getPlayerByName(namePassword.get(0)));
     setNewLayout();
 
-  }
-
-  private ArrayList<Integer> getIndexList() {
-    String indexString = textField.getText();
-    String[] indexArray = indexString.split(" ");
-    ArrayList<Integer> indexList = new ArrayList<>();
-    for (String index : indexArray) {
-      try {
-        indexList.add(Integer.parseInt(index));
-        resultText.setText("Added");
-      } catch (Exception e) {
-        resultText.setText("Invalid input number: " + index);
-      }
-    }
-    return indexList;
-  }
-
-  // TODO:just stub function
-  private String getUnitName() {
-    String name = "level_0_unit";
-    return name;
-  }
-
-  // TODO:just stub function
-  private int getUnitNum() {
-    int num = 1;
-    return num;
   }
 
   @FXML
@@ -256,6 +232,15 @@ public class PlayTurnController implements Controller {
           sourceTerritory = null;
           setNewLayout();
           break;
+        case SHIELD:
+          sourceTerritory = territory;
+          openUnitsWindow();
+          clientShield.perform(territory, 0);
+          clientUpgrade.perform(territory, unitUpgradeDic);
+          unitUpgradeDic.clear();
+          sourceTerritory = null;
+          setNewLayout();
+          break;
         case ATTACK:
         case MOVE:
         case SPYMOVE:
@@ -303,6 +288,13 @@ public class PlayTurnController implements Controller {
   }
 
   @FXML
+  private void onShieldButtonClick(ActionEvent event) {
+    resultText.setText("Please select a source Territory to add a shield on");
+    currentMode = GameMode.SHIELD;
+    sourceTerritory = null;
+  }
+
+  @FXML
   private void onAttackButtonClick(ActionEvent event) {
     resultText.setText("Please select a source Territory to start attack");
     currentMode = GameMode.ATTACK;
@@ -344,13 +336,12 @@ public class PlayTurnController implements Controller {
   }
 
   @FXML
-  private void onSpyMove(ActionEvent event) {    
+  private void onSpyMove(ActionEvent event) {
     currentMode = GameMode.SPYMOVE;
     ArrayList<Territory> findRes = clientSpyMove.findSourcTerritories();
-    if(findRes.size()>0){
+    if (findRes.size() > 0) {
       resultText.setText("Please select a source Territory that has your spies");
-    }
-    else{
+    } else {
       resultText.setText("You do not have spies available, please use upgrade to raise spies");
     }
     filterClickableButtons(findRes);
@@ -366,6 +357,7 @@ public class PlayTurnController implements Controller {
     clientUpgrade.commit();
     clientSpyMove.commit();
     clientCloak.commit();
+    clientShield.commit();
     refresh();
   }
 
@@ -379,6 +371,7 @@ public class PlayTurnController implements Controller {
     String content = "Tech Resources: " + player.getTechResource() + "\n";
     content += "Tech Level: " + player.getTechLevel() + "\n";
     content += "Food Resources: " + player.getFoodResource() + "\n";
+    content += "Gold: " + player.getGoldResource() + "\n";
 
     alert.setContentText(content);
     alert.showAndWait();
@@ -497,6 +490,26 @@ public class PlayTurnController implements Controller {
       unitSetting.put("Spy", selectedUnits);
       unitsStage.close();
     });
+  }
+
+  private void openLevelWindow() {
+    Stage unitsStage = new Stage();
+    unitsStage.initModality(Modality.APPLICATION_MODAL);
+    unitsStage.setTitle("Select level of shield you want to buy");
+    GridPane gridPane = new GridPane();
+    gridPane.setVgap(10);
+    gridPane.setHgap(10);
+    gridPane.setPadding(new Insets(10, 10, 10, 10));
+
+    addUnitSetter(gridPane);
+
+    
+      addToLevelSetter(unitsStage, gridPane);
+    
+
+    Scene unitsScene = new Scene(gridPane);
+    unitsStage.setScene(unitsScene);
+    unitsStage.showAndWait();
   }
 
   private void openUnitsWindow() {

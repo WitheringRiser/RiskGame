@@ -72,6 +72,9 @@ public class Player implements Serializable {
   public int getTechResource() {
     return this.tech_resources;
   }
+  public int getGoldResource() {
+    return this.gold_resources;
+  }
 
   public int getResearchNeedCost() {
     if (!this.researchRule.containsKey(tech_level)) {
