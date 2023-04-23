@@ -21,6 +21,16 @@ public class ClientCloak {
         this.actions = new ArrayList<>();
     }
 
+    public ArrayList<Territory> getSourcTerritories(){
+        ArrayList<Territory> res=new ArrayList<>();
+        for(Territory t: map.getTerritories(this.player)){
+            if(!t.isCloaked()){
+                res.add(t);
+            }
+        }
+        return res;
+    }
+
     public void perform(Territory source) {
         if (!player.getCanCloak()) {
             throw new IllegalArgumentException("This player cannot use cloak");

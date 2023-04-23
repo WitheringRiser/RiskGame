@@ -11,6 +11,16 @@ public class ClientSpyMove extends ClientTurnAction<SpyMoveSender> {
         super(s, m, ply);
     }
 
+    public ArrayList<Territory> findSourcTerritories(){
+        ArrayList<Territory> res = new ArrayList<>();
+        for(Territory t: map.getAllTerritories()){
+            if(t.getSpyMoveIndsFromPlayer(player.getName()).size()>0){
+                res.add(t);
+            }
+        }
+        return res;
+    }
+
     public ArrayList<Territory> findDestTerrs(Territory source) {
         ArrayList<Territory> res = new ArrayList<Territory>();
         Iterator<Territory> iter = source.getNeighbours();

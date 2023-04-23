@@ -13,23 +13,22 @@ public class ClientResearch {
   private Player player;
   private Communicate communicate;
   private ResearchSender sender;
-  private boolean isUnlockCloak;
 
   public ClientResearch(Socket socket, Player _player) {
     this.player = _player;
     this.sender = null;
     this.socket = socket;
-    isUnlockCloak=false;
+    // isUnlockCloak=false;
   }
 
-  public ClientResearch(Socket socket, Player _player,boolean unlock) {
-    this.player = _player;
-    this.sender = null;
-    this.socket = socket;
-    this.isUnlockCloak=unlock;
-  }
+  // public ClientResearch(Socket socket, Player _player,boolean unlock) {
+  //   this.player = _player;
+  //   this.sender = null;
+  //   this.socket = socket;
+  //   // this.isUnlockCloak=unlock;
+  // }
 
-  public void perform() {
+  public void perform(boolean isUnlockCloak) {
     
     if ( sender != null) {
       throw new IllegalArgumentException("You can not do research any more!");
