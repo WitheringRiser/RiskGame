@@ -16,10 +16,15 @@ public class ResearchProcessor {
     for (ResearchSender r : allResearch) {
       if (r != null) {
         Player p = map.getPlayerByName(r.getPlayer().getName());
-        if (!p.upgradeLevel()) {
-          throw new IllegalArgumentException(
-              "technology resources are not enough to upgrade technology level");
+        if (r.isUnlockCloak()) {
+          p.unlockCloak();
+        } else {
+          if (!p.upgradeLevel()) {
+            throw new IllegalArgumentException(
+                "technology resources are not enough to upgrade technology level");
+          }
         }
+
       }
     }
   }

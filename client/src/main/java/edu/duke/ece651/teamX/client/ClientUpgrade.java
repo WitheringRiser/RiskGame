@@ -5,11 +5,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import edu.duke.ece651.teamX.shared.Communicate;
-import edu.duke.ece651.teamX.shared.Map;
-import edu.duke.ece651.teamX.shared.Player;
-import edu.duke.ece651.teamX.shared.Territory;
-import edu.duke.ece651.teamX.shared.UpgradeSender;
+import edu.duke.ece651.teamX.shared.*;
 
 public class ClientUpgrade {
 
@@ -36,11 +32,25 @@ public class ClientUpgrade {
    */
   public void perform_res(String name, int num, int toLevel, Territory source) {
     ArrayList<Integer> indexList = source.getUnitsDit().get(name);
-    for (int i = 0; i < num; ++i) {
-      String mes = this.player.upgradeUnit(source, indexList.get(i), toLevel);
-      if (mes != null) {
-        throw new IllegalArgumentException(mes);
+    if (toLevel >= 0) {
+      for (int i = 0; i < num; ++i) {
+        String mes = this.player.upgradeUnit(source, indexList.get(i), toLevel);
+        if (mes != null) {
+          throw new IllegalArgumentException(mes);
+        }
       }
+    } else if (toLevel == -1) {
+      ArrayList<Unit> removedUnits=source.removeLevelUnits(name,num);
+      if(removedUnits.get(0).getLevel()<1){
+        source.addUnits(removedUnits);
+        throw new IllegalArgumentException("The unit level is less than 1");
+      }
+     ArrayList<Spy> spies = new ArrayList<Spy>();
+     for(int i=0;i<num;i++){
+      spies.add(new Spy(player.getName()));
+     }
+     source.addSpies(spies);
+     player.consumeTech(num*Spy.getSpyCost());
     }
     this.actions.add(new UpgradeSender(source, name, num, toLevel));
   }
@@ -61,11 +71,15 @@ public class ClientUpgrade {
         if (indexList.size() < num) {
           throw new IllegalArgumentException("No enough " + typeName + " to upgrade");
         }
-        if (toLevel > player.getTechLevel()) {
-          throw new IllegalArgumentException(
-              "Cannot upgrade to level " + toLevel + " as player is level " + player.getTechLevel());
+        if (toLevel >= 0) {
+          if (toLevel > player.getTechLevel()) {
+            throw new IllegalArgumentException(
+                "Cannot upgrade to level " + toLevel + " as player is level " + player.getTechLevel());
+          }
+          cost += num * source.getUnits().get(indexList.get(0)).getCost(toLevel);
+        } else if (toLevel == -1) {
+          cost += num * Spy.getSpyCost();
         }
-        cost += num * source.getUnits().get(indexList.get(0)).getCost(toLevel);
       }
     }
     if (cost > player.getTechResource()) {

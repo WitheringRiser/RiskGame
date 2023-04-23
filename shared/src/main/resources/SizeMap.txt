@@ -9,7 +9,7 @@ DarkForest-4
 LukasTundra-5
 FrozenOcean-3
 Plateau-8
-Desert Hills-4
+DesertHills-4
 Plains-5
 RockyCliffs-7
 Forest-5

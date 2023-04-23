@@ -39,7 +39,7 @@ import javafx.stage.Stage;
 public class PlayTurnController implements Controller {
 
   private enum GameMode {
-    DEFAULT, ATTACK, MOVE, UPGRADE
+    DEFAULT, ATTACK, MOVE, UPGRADE, SPYMOVE, CLOAK
   }
 
   private GameMode currentMode = GameMode.DEFAULT;
@@ -57,6 +57,9 @@ public class PlayTurnController implements Controller {
   @FXML
   private GridPane gridPane;
 
+  @FXML
+  private Button cloakButton;
+
   protected ArrayList<String> namePassword;
   protected Socket clientSocket;
   protected Stage stage;
@@ -67,6 +70,8 @@ public class PlayTurnController implements Controller {
   private ClientMove clientMove;
   private ClientResearch clientResearch;
   private ClientUpgrade clientUpgrade;
+  private ClientSpyMove clientSpyMove;
+  private ClientCloak clientCloak;
   GameResult gameResult;
 
   public PlayTurnController(Stage stage, Socket socket, ArrayList<String> namepassword)
@@ -91,7 +96,10 @@ public class PlayTurnController implements Controller {
         map.getPlayerByName(namePassword.get(0)));
     this.clientUpgrade = new ClientUpgrade(clientSocket, map,
         map.getPlayerByName(namePassword.get(0)));
+    this.clientSpyMove = new ClientSpyMove(clientSocket, map, map.getPlayerByName(namePassword.get(0)));
+    this.clientCloak = new ClientCloak(clientSocket, map, map.getPlayerByName(namePassword.get(0)));
     setNewLayout();
+
   }
 
   private ArrayList<Integer> getIndexList() {
@@ -189,7 +197,30 @@ public class PlayTurnController implements Controller {
     stage.setTitle("Play Game");
     stage.setScene(scene);
     setTerrButtons(false);
+    setCloakButtons();
     stage.show();
+  }
+
+  private void setCloakButtons() {
+    Player player = map.getPlayerByName(namePassword.get(0));
+    if (player.getCanCloak()) {
+      cloakButton.setText("Cloak");
+      cloakButton.setOnAction(event -> {
+        currentMode = GameMode.CLOAK;
+        filterClickableButtons(clientCloak.getSourcTerritories());
+        sourceTerritory = null;
+      });
+    } else {
+      cloakButton.setText("Unlock Cloak");
+      cloakButton.setOnAction(event -> {
+        try {
+          clientResearch.perform(true);
+        } catch (IllegalArgumentException iae) {
+          resultText.setText(iae.getMessage());
+        }
+      });
+
+    }
   }
 
   private void filterClickableButtons(ArrayList<Territory> territories) {
@@ -216,16 +247,23 @@ public class PlayTurnController implements Controller {
       throws IOException, ClassNotFoundException {
     try {
       switch (currentMode) {
+        case CLOAK:
+          sourceTerritory = territory;
+          clientCloak.perform(sourceTerritory);
+          sourceTerritory = null;
+          setNewLayout();
+          break;
         case UPGRADE:
-        sourceTerritory=territory;
+          sourceTerritory = territory;
           openUnitsWindow();
           clientUpgrade.perform(territory, unitUpgradeDic);
           unitUpgradeDic.clear();
-          sourceTerritory=null;
+          sourceTerritory = null;
           setNewLayout();
           break;
         case ATTACK:
         case MOVE:
+        case SPYMOVE:
           if (sourceTerritory == null) {
             sourceTerritory = territory;
             System.out.println("sourceTerritory is " + sourceTerritory.getName());
@@ -235,6 +273,8 @@ public class PlayTurnController implements Controller {
               filterClickableButtons(clientAttack.findDestTerrs(sourceTerritory));
             } else if (currentMode == GameMode.MOVE) {
               filterClickableButtons(clientMove.findDestTerrs(sourceTerritory));
+            } else if (currentMode == GameMode.SPYMOVE) {
+              filterClickableButtons(clientSpyMove.findDestTerrs(territory));
             }
           } else {
             destinationTerritory = territory;
@@ -244,6 +284,9 @@ public class PlayTurnController implements Controller {
               unitSetting.clear();
             } else if (currentMode == GameMode.MOVE) {
               clientMove.perform(sourceTerritory, destinationTerritory, unitSetting);
+              unitSetting.clear();
+            } else if (currentMode == GameMode.SPYMOVE) {
+              clientSpyMove.perform(sourceTerritory, destinationTerritory, unitSetting);
               unitSetting.clear();
             }
             // reset and get new temporary map
@@ -266,12 +309,14 @@ public class PlayTurnController implements Controller {
 
   @FXML
   private void onAttackButtonClick(ActionEvent event) {
+    resultText.setText("Please select a source Territory to start attack");
     currentMode = GameMode.ATTACK;
     sourceTerritory = null;
   }
 
   @FXML
   private void onMoveButtonClick(ActionEvent event) {
+    resultText.setText("Please select a source Territory to start move");
     currentMode = GameMode.MOVE;
     sourceTerritory = null;
   }
@@ -289,7 +334,7 @@ public class PlayTurnController implements Controller {
     sourceTerritory = null;
     setTerrButtons(true);
     try {
-      clientResearch.perform();
+      clientResearch.perform(false);
     } catch (IllegalArgumentException iae) {
       resultText.setText(iae.getMessage());
     }
@@ -298,7 +343,15 @@ public class PlayTurnController implements Controller {
 
   @FXML
   private void onUpgradeButtonClick(ActionEvent event) {
+    resultText.setText("Please select a source Territory to start upgrade");
     currentMode = GameMode.UPGRADE;
+    sourceTerritory = null;
+  }
+
+  @FXML
+  private void onSpyMove(ActionEvent event) {
+    currentMode = GameMode.SPYMOVE;
+    filterClickableButtons(clientSpyMove.findSourcTerritories());
     sourceTerritory = null;
   }
 
@@ -309,6 +362,8 @@ public class PlayTurnController implements Controller {
     clientAttack.commit();
     clientResearch.commit();
     clientUpgrade.commit();
+    clientSpyMove.commit();
+    clientCloak.commit();
     refresh();
   }
 
@@ -363,13 +418,47 @@ public class PlayTurnController implements Controller {
     }
   }
 
-  private void addToLevelSetter(GridPane gridPane) {
+  private void addSpySetter(GridPane gridPane){
+    Label nameTitle = new Label("Type");
+    Label amountTitle = new Label("Amount");
+    gridPane.add(nameTitle, 0, 0);
+    gridPane.add(amountTitle, 1, 0);
+    Label levelLabel = new Label("Spy:");
+    ComboBox<Integer> comboBox = getComboBox(0, sourceTerritory.getSpyMoveIndsFromPlayer(namePassword.get(0)).size(), 0);
+    comboBox.setId("Spies");
+    gridPane.add(levelLabel, 0, 1);
+    gridPane.add(comboBox, 1,  1);
+
+
+  }
+
+  private void addToLevelSetter(Stage unitsStage, GridPane gridPane) {
     Label levelTitle = new Label("To Level");
     gridPane.add(levelTitle, 2, 0);
     for (int level = 0; level <= 6; level++) {
       ComboBox<Integer> comboBox = getComboBox(level, 6, level);
       comboBox.setId("toLevel" + level);
       gridPane.add(comboBox, 2, level + 1);
+      if (level > 0) {
+        Button SpyButton = new Button("spy_" + level);
+        gridPane.add(SpyButton, 3, level + 1);
+        SpyButton.setText("To Spy");
+        SpyButton.setOnAction(event -> {
+          unitSetting.clear();
+          for (int l = 0; l <= 6; l++) {
+            ComboBox<Integer> comboBox2 = (ComboBox<Integer>) gridPane.lookup(
+                "#unitLevel" + l);
+            int selectedUnits = comboBox2.getValue();
+            ArrayList<Integer> upInfo = new ArrayList<>();
+            upInfo.add(selectedUnits);
+            upInfo.add(-1);
+            unitUpgradeDic.put("level_" + l + "_unit", upInfo);
+
+          }
+          unitsStage.close();
+        });
+      }
+
     }
   }
 
@@ -379,7 +468,6 @@ public class PlayTurnController implements Controller {
     saveButton.setOnAction(event -> {
       unitSetting.clear();
       for (int level = 0; level <= 6; level++) {
-
         ComboBox<Integer> comboBox = (ComboBox<Integer>) gridPane.lookup(
             "#unitLevel" + level);
         int selectedUnits = comboBox.getValue();
@@ -399,6 +487,18 @@ public class PlayTurnController implements Controller {
     });
   }
 
+  private void addSpySaveButton(Stage unitsStage, GridPane gridPane) {
+    Button saveButton = new Button("Save");
+    gridPane.add(saveButton, 2, 4);
+    saveButton.setOnAction(event -> {
+      unitSetting.clear();
+      ComboBox<Integer> comboBox = (ComboBox<Integer>) gridPane.lookup("#Spies");
+      int selectedUnits = comboBox.getValue();
+      unitSetting.put("Spy", selectedUnits);
+      unitsStage.close();
+    });
+  }
+
   private void openUnitsWindow() {
     Stage unitsStage = new Stage();
     unitsStage.initModality(Modality.APPLICATION_MODAL);
@@ -407,11 +507,21 @@ public class PlayTurnController implements Controller {
     gridPane.setVgap(10);
     gridPane.setHgap(10);
     gridPane.setPadding(new Insets(10, 10, 10, 10));
-    addUnitSetter(gridPane);
-    if (currentMode == GameMode.UPGRADE) {
-      addToLevelSetter(gridPane);
+    if(currentMode==GameMode.SPYMOVE){
+      addSpySetter(gridPane);
     }
-    addSaveButton(unitsStage, gridPane);
+    else{
+      addUnitSetter(gridPane);
+    }
+    
+    if (currentMode == GameMode.UPGRADE) {
+      addToLevelSetter(unitsStage, gridPane);
+    }
+    if (currentMode == GameMode.SPYMOVE) {
+      addSpySaveButton(unitsStage, gridPane);
+    } else {
+      addSaveButton(unitsStage, gridPane);
+    }
 
     Scene unitsScene = new Scene(gridPane);
     unitsStage.setScene(unitsScene);
