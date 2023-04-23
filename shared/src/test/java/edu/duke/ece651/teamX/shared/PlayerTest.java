@@ -29,10 +29,12 @@ public class PlayerTest {
     assertEquals(t1.getTechLevel(), 1);
     assertTrue(t1.upgradeLevel());
     assertEquals(t1.getTechLevel(), 2);
+    assertThrows(IllegalArgumentException.class, () -> t1.unlockCloak());
     assertTrue(t1.upgradeLevel());
     assertEquals(t1.getTechLevel(), 3);
     assertFalse(t1.upgradeLevel());
     assertEquals(t1.getTechLevel(), 3);
+    assertThrows(IllegalArgumentException.class, () -> t1.unlockCloak());
     t1.increaseAllResource(10000);
     assertTrue(t1.upgradeLevel());
     assertTrue(t1.upgradeLevel());

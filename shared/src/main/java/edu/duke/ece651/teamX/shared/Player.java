@@ -14,6 +14,7 @@ public class Player implements Serializable {
 
   private int tech_level;
   private HashMap<Integer, Integer> researchRule;
+  private boolean canCloak;
 
   public int numPlayers = 0;
 
@@ -38,7 +39,7 @@ public class Player implements Serializable {
 
     this.food_resources = 100; // Temporarily set at 100
     this.tech_resources = 100; // Temporarily set at 100
-
+    this.canCloak=false;    
     this.researchRule = new HashMap<Integer, Integer>();
     getResearchRule();
   }
@@ -173,5 +174,22 @@ public class Player implements Serializable {
       ans = ans * 17 + name.charAt(i);
     }
     return ans;
+  }
+
+  public boolean getCanCloak(){
+    return canCloak;
+  }
+  public void unlockCloak(){
+    if(canCloak){
+      throw new IllegalArgumentException("The player already can cloak");
+    }
+    if(tech_level<3){
+      throw new IllegalArgumentException("This player has not reached level 3 to unlock cloak");
+    }
+    if(tech_resources<CloakProcessor.getUnlockCloakCost()){
+      throw new IllegalArgumentException("This player does not have enough resource to unlock");
+    }
+    canCloak=true;
+    consumeTech(CloakProcessor.getUnlockCloakCost());
   }
 }

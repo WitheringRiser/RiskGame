@@ -287,10 +287,10 @@ public class Game implements Runnable {
           "units to level " + Integer.toString(a.getToLevel()));
     }
     System.out.println("Research:");
-//    for (ResearchSender a : allResearch) {
-//      System.out.println("Player " + a.getPlayer() +
-//          "want to improve his technology level");
-//    }
+    // for (ResearchSender a : allResearch) {
+    // System.out.println("Player " + a.getPlayer() +
+    // "want to improve his technology level");
+    // }
     System.out.println("---------------------\n");
   }
 
@@ -361,14 +361,20 @@ public class Game implements Runnable {
 
   private void incrementAllTerritoryByOneUnit() {
     for (Territory terr : map.getAllTerritories()) {
-      terr.addUnits(1,map.getOwner(terr).getName());
+      terr.addUnits(1, map.getOwner(terr).getName());
+      terr.turnReset();
     }
   }
 
-  private void handleResearchUpgrade(ArrayList<ResearchSender> allResearh, ArrayList<UpgradeSender> allUpgrades) {
+  private void handleAdvancedActions(ArrayList<ResearchSender> allResearh, ArrayList<UpgradeSender> allUpgrades,
+      ArrayList<SpyMoveSender> allSpymoves, ArrayList<CloakSender> allCloaks) {
     UpgradeProcessor up = new UpgradeProcessor(allUpgrades, map);
+    SpyMoveProcessor smp = new SpyMoveProcessor(allSpymoves, map);
+    CloakProcessor ckp = new CloakProcessor(allCloaks, map);
     ResearchProcessor rp = new ResearchProcessor(allResearh, map);
     up.resolveAllUpgrade();
+    smp.resolveAllSpyMove();
+    ckp.resolveAllCloaks();
     rp.resovleAllResearch();
   }
 
@@ -379,6 +385,8 @@ public class Game implements Runnable {
     ArrayList<ActionSender> allActions = new ArrayList<>();
     ArrayList<ResearchSender> allResearchs = new ArrayList<>();
     ArrayList<UpgradeSender> allUpgrades = new ArrayList<>();
+    ArrayList<SpyMoveSender> allSpyMoves = new ArrayList<>();
+    ArrayList<CloakSender> allCloaks = new ArrayList<>();
     for (Player player : getAllPlayers()) {
       // if this player has lost, skip
       if (gameResult.loserContains(player)) {
@@ -395,32 +403,35 @@ public class Game implements Runnable {
         ArrayList<AttackSender> attacks = (ArrayList<AttackSender>) Communicate.receiveObject(s);
         ResearchSender research = (ResearchSender) Communicate.receiveObject(s);
         ArrayList<UpgradeSender> upgrades = (ArrayList<UpgradeSender>) Communicate.receiveObject(s);
+        ArrayList<SpyMoveSender> spymoves = (ArrayList<SpyMoveSender>) Communicate.receiveObject(s);
+        ArrayList<CloakSender> cloaks = (ArrayList<CloakSender>) Communicate.receiveObject(s);
         allActions.addAll(moves);
         allActions.addAll(attacks);
         allResearchs.add(research);
         allUpgrades.addAll(upgrades);
+        allSpyMoves.addAll(spymoves);
+        allCloaks.addAll(cloaks);
       } catch (IOException ioe) { // if lose connection when receive --> skip
         continue;
       }
     }
     printActions(allActions, allUpgrades, allResearchs);
     try {
-      
-      handleResearchUpgrade(allResearchs, allUpgrades);
+      handleAdvancedActions(allResearchs, allUpgrades,allSpyMoves,allCloaks);
       handleActionSenders(allActions);
     } catch (IllegalArgumentException e) {
-      // TODO: send back to client
+      System.out.println(e.getMessage());
     }
   }
 
   // public void increaseALlPlayerResources(int num) {
-  //   Set<Player> players = new HashSet<Player>(map.getMap().values());
-  //   for (Player player : players) {
-  //     player.increaseAllResource(num);
-  //   }
+  // Set<Player> players = new HashSet<Player>(map.getMap().values());
+  // for (Player player : players) {
+  // player.increaseAllResource(num);
+  // }
   // }
 
-  //New version: increase resources based on num of territories
+  // New version: increase resources based on num of territories
   public void increaseALlPlayerResources(int num) {
     for (Player player : map.getMap().values()) {
       player.increaseAllResource(num);

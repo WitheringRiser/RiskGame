@@ -226,7 +226,7 @@
     styleClass="expandable,terrbtn"/>
 
   <Text fx:id="resultText"
-    GridPane.columnIndex="1"
+    GridPane.columnIndex="0"
     GridPane.rowIndex="8"
     GridPane.rowSpan="1"
     GridPane.columnSpan="7"/>
@@ -247,17 +247,9 @@
     text="Move"
     onAction="#onMoveButtonClick"
   />
-  <Button fx:id="defaultButton"
-    GridPane.rowIndex="7"
-    GridPane.columnIndex="2"
-    GridPane.rowSpan="1"
-    GridPane.columnSpan="1"
-    text="Cancel"
-    onAction="#defaultButtonClick"
-  />
   <Button fx:id="researchButton"
     GridPane.rowIndex="7"
-    GridPane.columnIndex="3"
+    GridPane.columnIndex="2"
     GridPane.rowSpan="1"
     GridPane.columnSpan="1"
     text="Research"
@@ -265,30 +257,58 @@
   />
   <Button fx:id="upgradeButton"
     GridPane.rowIndex="7"
-    GridPane.columnIndex="4"
+    GridPane.columnIndex="3"
     GridPane.rowSpan="1"
     GridPane.columnSpan="1"
     text="Upgrade"
     onAction="#onUpgradeButtonClick"
   />
-  <Button fx:id="doneButton"
+
+  <Button fx:id="spyButton"
     GridPane.rowIndex="7"
+    GridPane.columnIndex="4"
+    GridPane.rowSpan="1"
+    GridPane.columnSpan="1"
+    text="Spy"
+    onAction="#onSpyMove"
+  />
+
+  <Button fx:id="cloakButton"
+    GridPane.rowIndex="7"
+    GridPane.columnIndex="5"
+    GridPane.rowSpan="1"
+    GridPane.columnSpan="1"
+  />
+
+  
+  <Button fx:id="infoButton"
+    GridPane.rowIndex="7"
+    GridPane.columnIndex="7"
+    GridPane.rowSpan="1"
+    GridPane.columnSpan="1"
+    text="Info"
+    onAction="#displayPlayerInfo"
+  />
+
+<Button fx:id="doneButton"
+    GridPane.rowIndex="8"
     GridPane.columnIndex="5"
     GridPane.rowSpan="1"
     GridPane.columnSpan="1"
     text="Done"
     onAction="#doneButtonClick"
   />
-  <Button fx:id="infoButton"
-    GridPane.rowIndex="7"
+
+  <Button fx:id="defaultButton"
+    GridPane.rowIndex="8"
     GridPane.columnIndex="6"
     GridPane.rowSpan="1"
     GridPane.columnSpan="1"
-    text="Info"
-    onAction="#displayPlayerInfo"
+    text="Cancel"
+    onAction="#defaultButtonClick"
   />
   <Button text="Exit"
     GridPane.rowIndex="8"
-    GridPane.columnIndex="5"
+    GridPane.columnIndex="7"
     onAction="#back"/>
 </GridPane>
