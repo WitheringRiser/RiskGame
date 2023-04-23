@@ -447,6 +447,12 @@ public class Game implements Runnable {
     }
   }
 
+  public void releaseShield() {
+    for (Territory t : map.getAllTerritories()) {
+      t.releaseShield();
+    }
+  }
+
   /**
    * isolate for testing
    */
@@ -467,6 +473,7 @@ public class Game implements Runnable {
       playOneTurn(num_player);
       incrementAllTerritoryByOneUnit();
       increaseALlPlayerResources(5);
+      releaseShield();
     }
   }
 
