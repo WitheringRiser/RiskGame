@@ -170,6 +170,8 @@ public class PlayTurnController implements Controller {
           }
         });
       } else {
+        button.setOnAction(event -> {
+        });
         button.setStyle("-fx-background-color: grey ;");
       }
       if (!isReset) {
