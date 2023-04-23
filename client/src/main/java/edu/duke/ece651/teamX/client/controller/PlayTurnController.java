@@ -97,7 +97,8 @@ public class PlayTurnController implements Controller {
         map.getPlayerByName(namePassword.get(0)));
     this.clientUpgrade = new ClientUpgrade(clientSocket, map,
         map.getPlayerByName(namePassword.get(0)));
-    this.clientSpyMove = new ClientSpyMove(clientSocket, map, map.getPlayerByName(namePassword.get(0)));
+    this.clientSpyMove = new ClientSpyMove(clientSocket, map,
+        map.getPlayerByName(namePassword.get(0)));
     this.clientCloak = new ClientCloak(clientSocket, map, map.getPlayerByName(namePassword.get(0)));
     setNewLayout();
 
@@ -134,7 +135,7 @@ public class PlayTurnController implements Controller {
   private void displayTerritoryInfo(Button button, Territory territory) {
     Iterator<Territory> iterator = territory.getNeighbours();
     String neighbors = StreamSupport.stream(
-        Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), false)
+            Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), false)
         .map(Territory::getName)
         .collect(Collectors.joining(", "));
     String content = "Territory: " + territory.getName() + "\n"
@@ -161,20 +162,19 @@ public class PlayTurnController implements Controller {
         button.setStyle("-fx-background-color: blue ;");
         // Change color when pressed
         button.setOnMousePressed(e -> button.setStyle("-fx-background-color: darkblue;"));
-
+        button.setOnAction(event -> {
+          try {
+            handleTerritoryClick(button, t);
+          } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+          }
+        });
       } else {
         button.setStyle("-fx-background-color: grey ;");
       }
       if (!isReset) {
         displayTerritoryInfo(button, t);
       }
-      button.setOnAction(event -> {
-        try {
-          handleTerritoryClick(button, t);
-        } catch (IOException | ClassNotFoundException e) {
-          throw new RuntimeException(e);
-        }
-      });
     }
   }
 
@@ -344,13 +344,12 @@ public class PlayTurnController implements Controller {
   }
 
   @FXML
-  private void onSpyMove(ActionEvent event) {    
+  private void onSpyMove(ActionEvent event) {
     currentMode = GameMode.SPYMOVE;
     ArrayList<Territory> findRes = clientSpyMove.findSourcTerritories();
-    if(findRes.size()>0){
+    if (findRes.size() > 0) {
       resultText.setText("Please select a source Territory that has your spies");
-    }
-    else{
+    } else {
       resultText.setText("You do not have spies available, please use upgrade to raise spies");
     }
     filterClickableButtons(findRes);
@@ -426,7 +425,8 @@ public class PlayTurnController implements Controller {
     gridPane.add(nameTitle, 0, 0);
     gridPane.add(amountTitle, 1, 0);
     Label levelLabel = new Label("Spy:");
-    ComboBox<Integer> comboBox = getComboBox(0, sourceTerritory.getSpyMoveIndsFromPlayer(namePassword.get(0)).size(),
+    ComboBox<Integer> comboBox = getComboBox(0,
+        sourceTerritory.getSpyMoveIndsFromPlayer(namePassword.get(0)).size(),
         0);
     comboBox.setId("Spies");
     gridPane.add(levelLabel, 0, 1);
