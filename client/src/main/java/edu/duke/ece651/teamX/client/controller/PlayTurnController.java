@@ -344,9 +344,16 @@ public class PlayTurnController implements Controller {
   }
 
   @FXML
-  private void onSpyMove(ActionEvent event) {
+  private void onSpyMove(ActionEvent event) {    
     currentMode = GameMode.SPYMOVE;
-    filterClickableButtons(clientSpyMove.findSourcTerritories());
+    ArrayList<Territory> findRes = clientSpyMove.findSourcTerritories();
+    if(findRes.size()>0){
+      resultText.setText("Please select a source Territory that has your spies");
+    }
+    else{
+      resultText.setText("You do not have spies available, please use upgrade to raise spies");
+    }
+    filterClickableButtons(findRes);
     sourceTerritory = null;
   }
 
