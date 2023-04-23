@@ -40,13 +40,17 @@ public class ClientUpgrade {
         }
       }
     } else if (toLevel == -1) {
-     source.removeLevelUnits(name,num);
+      ArrayList<Unit> removedUnits=source.removeLevelUnits(name,num);
+      if(removedUnits.get(0).getLevel()<1){
+        source.addUnits(removedUnits);
+        throw new IllegalArgumentException("The unit level is less than 1");
+      }
      ArrayList<Spy> spies = new ArrayList<Spy>();
      for(int i=0;i<num;i++){
       spies.add(new Spy(player.getName()));
      }
      source.addSpies(spies);
-     player.consumeTech(num*CloakProcessor.getCloakCost());
+     player.consumeTech(num*Spy.getSpyCost());
     }
     this.actions.add(new UpgradeSender(source, name, num, toLevel));
   }
@@ -74,10 +78,7 @@ public class ClientUpgrade {
           }
           cost += num * source.getUnits().get(indexList.get(0)).getCost(toLevel);
         } else if (toLevel == -1) {
-          if (!player.getCanCloak()) {
-            throw new IllegalArgumentException("The Cloak function is locked");
-          }
-          cost += num * CloakProcessor.getCloakCost();
+          cost += num * Spy.getSpyCost();
         }
       }
     }
