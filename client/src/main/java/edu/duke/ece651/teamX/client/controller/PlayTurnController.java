@@ -64,6 +64,7 @@ public class PlayTurnController implements Controller {
   protected Socket clientSocket;
   protected Stage stage;
   protected Scene scene;
+  protected FrogView frogView;
 
   private Map map;
   private ClientAttack clientAttack;
@@ -80,15 +81,15 @@ public class PlayTurnController implements Controller {
     this.namePassword = namepassword;
     this.stage = stage;
     this.clientSocket = socket;
+    this.frogView = new FrogView(namepassword.get(0));
     refresh();
   }
 
   private void refresh() throws IOException, ClassNotFoundException {
     map = Communicate.receiveMap(clientSocket);
     gameResult = Communicate.receiveGameResult(clientSocket);
-
     System.out.println("player name = " + namePassword.get(0));
-
+    frogView.refreshMap(map);
     this.clientAttack = new ClientAttack(clientSocket, map,
         map.getPlayerByName(namePassword.get(0)));
     this.clientMove = new ClientMove(clientSocket, map, map.getPlayerByName(namePassword.get(0)));
@@ -139,14 +140,7 @@ public class PlayTurnController implements Controller {
     String content = "Territory: " + territory.getName() + "\n"
         + "Neighbors: " + neighbors + "\n"
         + "Size: " + territory.getTerritorySize() + "\n";
-
-    // TODO: change to frogView
-    content += "Owner: " + map.getOwner(territory).getName() + "\n";
-    content += "Units:\n";
-    HashMap<String, ArrayList<Integer>> unitDic = territory.getUnitsDit();
-    for (String typeName : unitDic.keySet()) {
-      content += "  - " + typeName + ": " + unitDic.get(typeName).size() + "\n";
-    }
+    content += frogView.getTerrInfo(territory.getName());
     Tooltip territoryTooltip = new Tooltip(content);
     territoryTooltip.setStyle("-fx-font-size: 14;");
     territoryTooltip.setStyle("-fx-wrap-text: true;");
@@ -196,6 +190,7 @@ public class PlayTurnController implements Controller {
     scene.getStylesheets().add(cssResource.toString());
     stage.setTitle("Play Game");
     stage.setScene(scene);
+    frogView.refreshMap(map);
     setTerrButtons(false);
     setCloakButtons();
     stage.show();
@@ -349,9 +344,16 @@ public class PlayTurnController implements Controller {
   }
 
   @FXML
-  private void onSpyMove(ActionEvent event) {
+  private void onSpyMove(ActionEvent event) {    
     currentMode = GameMode.SPYMOVE;
-    filterClickableButtons(clientSpyMove.findSourcTerritories());
+    ArrayList<Territory> findRes = clientSpyMove.findSourcTerritories();
+    if(findRes.size()>0){
+      resultText.setText("Please select a source Territory that has your spies");
+    }
+    else{
+      resultText.setText("You do not have spies available, please use upgrade to raise spies");
+    }
+    filterClickableButtons(findRes);
     sourceTerritory = null;
   }
 
@@ -418,17 +420,17 @@ public class PlayTurnController implements Controller {
     }
   }
 
-  private void addSpySetter(GridPane gridPane){
+  private void addSpySetter(GridPane gridPane) {
     Label nameTitle = new Label("Type");
     Label amountTitle = new Label("Amount");
     gridPane.add(nameTitle, 0, 0);
     gridPane.add(amountTitle, 1, 0);
     Label levelLabel = new Label("Spy:");
-    ComboBox<Integer> comboBox = getComboBox(0, sourceTerritory.getSpyMoveIndsFromPlayer(namePassword.get(0)).size(), 0);
+    ComboBox<Integer> comboBox = getComboBox(0, sourceTerritory.getSpyMoveIndsFromPlayer(namePassword.get(0)).size(),
+        0);
     comboBox.setId("Spies");
     gridPane.add(levelLabel, 0, 1);
-    gridPane.add(comboBox, 1,  1);
-
+    gridPane.add(comboBox, 1, 1);
 
   }
 
@@ -453,12 +455,10 @@ public class PlayTurnController implements Controller {
             upInfo.add(selectedUnits);
             upInfo.add(-1);
             unitUpgradeDic.put("level_" + l + "_unit", upInfo);
-
           }
           unitsStage.close();
         });
       }
-
     }
   }
 
@@ -507,13 +507,12 @@ public class PlayTurnController implements Controller {
     gridPane.setVgap(10);
     gridPane.setHgap(10);
     gridPane.setPadding(new Insets(10, 10, 10, 10));
-    if(currentMode==GameMode.SPYMOVE){
+    if (currentMode == GameMode.SPYMOVE) {
       addSpySetter(gridPane);
-    }
-    else{
+    } else {
       addUnitSetter(gridPane);
     }
-    
+
     if (currentMode == GameMode.UPGRADE) {
       addToLevelSetter(unitsStage, gridPane);
     }

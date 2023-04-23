@@ -226,7 +226,7 @@
     styleClass="expandable,terrbtn"/>
 
   <Text fx:id="resultText"
-    GridPane.columnIndex="1"
+    GridPane.columnIndex="0"
     GridPane.rowIndex="8"
     GridPane.rowSpan="1"
     GridPane.columnSpan="7"/>
