@@ -4,6 +4,7 @@ import edu.duke.ece651.teamX.client.*;
 import edu.duke.ece651.teamX.client.view.*;
 import edu.duke.ece651.teamX.shared.*;
 import java.io.IOException;
+import java.lang.invoke.LambdaConversionException;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class PlayTurnController implements Controller {
   private Territory destinationTerritory = null;
   private HashMap<String, Integer> unitSetting = new HashMap<>();
   private HashMap<String, ArrayList<Integer>> unitUpgradeDic = new HashMap<>();
-
+  private int shieldLevel = 0;
   TextField textField;
   TextField textField_toLevel;
 
@@ -234,10 +235,9 @@ public class PlayTurnController implements Controller {
           break;
         case SHIELD:
           sourceTerritory = territory;
-          openUnitsWindow();
-          clientShield.perform(territory, 0);
-          clientUpgrade.perform(territory, unitUpgradeDic);
-          unitUpgradeDic.clear();
+          openLevelWindow();
+          clientShield.perform(territory, this.shieldLevel);
+          this.shieldLevel = 0;
           sourceTerritory = null;
           setNewLayout();
           break;
@@ -413,6 +413,26 @@ public class PlayTurnController implements Controller {
     }
   }
 
+  private void addLevelSetter(GridPane gridPane) {
+    gridPane.add(new Label("Shield description:"), 0, 0, GridPane.REMAINING, 1);
+    gridPane.add(new Label("Level"), 0, 1);
+    gridPane.add(new Label("Cost of Gold"), 1, 1);
+    gridPane.add(new Label("Percent of Enemy it can Kill"), 2, 1);
+
+    int cost = 50;
+    for (int i = 1; i <= 4; ++i) {
+      gridPane.add(new Label(String.valueOf(i)), 0, i + 1);
+      gridPane.add(new Label(String.valueOf(cost)), 1, i + 1);
+      gridPane.add(new Label(String.valueOf(i * 25) + "%"), 2, i + 1);
+      cost = cost * 2;
+    }
+
+    ComboBox<Integer> comboBox = getComboBox(1, 4, 1);
+    comboBox.setId("ShiledLevel");
+    gridPane.add(new Label("Level you want"), 0, 6);
+    gridPane.add(comboBox, 1, 6, GridPane.REMAINING, 1);
+  }
+
   private void addSpySetter(GridPane gridPane) {
     Label nameTitle = new Label("Type");
     Label amountTitle = new Label("Amount");
@@ -453,6 +473,17 @@ public class PlayTurnController implements Controller {
         });
       }
     }
+  }
+
+  private void LevelSaveButton(Stage unitsStage, GridPane gridPane) {
+    Button saveButton = new Button("Save");
+    gridPane.add(saveButton, 1, 9);
+    saveButton.setOnAction(event -> {
+      ComboBox<Integer> comboBox = (ComboBox<Integer>) gridPane.lookup(
+          "#ShiledLevel");
+      this.shieldLevel = comboBox.getValue();
+      unitsStage.close();
+    });
   }
 
   private void addSaveButton(Stage unitsStage, GridPane gridPane) {
@@ -501,11 +532,8 @@ public class PlayTurnController implements Controller {
     gridPane.setHgap(10);
     gridPane.setPadding(new Insets(10, 10, 10, 10));
 
-    addUnitSetter(gridPane);
-
-    
-      addToLevelSetter(unitsStage, gridPane);
-    
+    addLevelSetter(gridPane);
+    LevelSaveButton(unitsStage, gridPane);
 
     Scene unitsScene = new Scene(gridPane);
     unitsStage.setScene(unitsScene);

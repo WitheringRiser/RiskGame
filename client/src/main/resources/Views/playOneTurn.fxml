@@ -280,10 +280,18 @@
     GridPane.columnSpan="1"
   />
 
+    <Button fx:id="shieldButton"
+    GridPane.rowIndex="7"
+    GridPane.columnIndex="6"
+    GridPane.rowSpan="1"
+    GridPane.columnSpan="1"
+    text="shield"
+    onAction="#onShieldButtonClick"
+  />
   
   <Button fx:id="infoButton"
     GridPane.rowIndex="7"
-    GridPane.columnIndex="7"
+    GridPane.columnIndex="8"
     GridPane.rowSpan="1"
     GridPane.columnSpan="1"
     text="Info"
