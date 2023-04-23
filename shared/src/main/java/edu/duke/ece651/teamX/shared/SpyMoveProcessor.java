@@ -13,8 +13,9 @@ public class SpyMoveProcessor {
     
     public void resolveAllSpyMove(){
         for(SpyMoveSender sms : allSpyMove){
-            Territory source = sms.getSource();
-            Territory dest = sms.getDestination();
+            
+            Territory source = map.getTerritoryByName(sms.getSource().getName());
+            Territory dest = map.getTerritoryByName(sms.getDestination().getName());
             Player owner = map.getPlayerByName(sms.getName());
             int num = sms.getUnitsNum();
             ArrayList<Integer> indexList = source.getSpyMoveIndsFromPlayer(sms.getName());
