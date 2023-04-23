@@ -1,10 +1,6 @@
 package edu.duke.ece651.teamX.client.controller;
 
-import edu.duke.ece651.teamX.client.*;
-import edu.duke.ece651.teamX.client.view.*;
-import edu.duke.ece651.teamX.shared.*;
 import java.io.IOException;
-import java.lang.invoke.LambdaConversionException;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
@@ -15,14 +11,27 @@ import java.util.Spliterators;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import javax.swing.text.LabelView;
-
+import edu.duke.ece651.teamX.client.ClientAttack;
+import edu.duke.ece651.teamX.client.ClientCloak;
+import edu.duke.ece651.teamX.client.ClientMove;
+import edu.duke.ece651.teamX.client.ClientResearch;
+import edu.duke.ece651.teamX.client.ClientShield;
+import edu.duke.ece651.teamX.client.ClientSpyMove;
+import edu.duke.ece651.teamX.client.ClientUpgrade;
+import edu.duke.ece651.teamX.client.view.GeneralScreen;
+import edu.duke.ece651.teamX.shared.Communicate;
+import edu.duke.ece651.teamX.shared.FrogView;
+import edu.duke.ece651.teamX.shared.GameResult;
+import edu.duke.ece651.teamX.shared.Map;
+import edu.duke.ece651.teamX.shared.Player;
+import edu.duke.ece651.teamX.shared.Territory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -32,7 +41,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -414,10 +422,11 @@ public class PlayTurnController implements Controller {
   }
 
   private void addLevelSetter(GridPane gridPane) {
+    gridPane.setAlignment(Pos.CENTER);
     gridPane.add(new Label("Shield description:"), 0, 0, GridPane.REMAINING, 1);
     gridPane.add(new Label("Level"), 0, 1);
     gridPane.add(new Label("Cost of Gold"), 1, 1);
-    gridPane.add(new Label("Percent of Enemy it can Kill"), 2, 1);
+    gridPane.add(new Label("Enemy it Kills"), 2, 1);
 
     int cost = 50;
     for (int i = 1; i <= 4; ++i) {
