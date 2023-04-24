@@ -3,13 +3,13 @@ package edu.duke.ece651.teamX.shared;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class FrogView {
+public class FogView {
   private HashMap<String, String> oldInfoMap;
   private HashMap<String, String> currentInfoMap;
   // private Map map;
   private String playerName;
 
-  public FrogView(String name) {
+  public FogView(String name) {
     playerName = name;
     oldInfoMap = new HashMap<>();
     currentInfoMap = new HashMap<>();

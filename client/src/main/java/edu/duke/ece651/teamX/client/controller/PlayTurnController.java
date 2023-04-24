@@ -21,7 +21,7 @@ import edu.duke.ece651.teamX.client.ClientSpyMove;
 import edu.duke.ece651.teamX.client.ClientUpgrade;
 import edu.duke.ece651.teamX.client.view.GeneralScreen;
 import edu.duke.ece651.teamX.shared.Communicate;
-import edu.duke.ece651.teamX.shared.FrogView;
+import edu.duke.ece651.teamX.shared.FogView;
 import edu.duke.ece651.teamX.shared.GameResult;
 import edu.duke.ece651.teamX.shared.Map;
 import edu.duke.ece651.teamX.shared.Player;
@@ -75,7 +75,7 @@ public class PlayTurnController implements Controller {
   protected Socket clientSocket;
   protected Stage stage;
   protected Scene scene;
-  protected FrogView frogView;
+  protected FogView fogView;
 
   private Map map;
   private ClientAttack clientAttack;
@@ -94,7 +94,7 @@ public class PlayTurnController implements Controller {
     this.namePassword = namepassword;
     this.stage = stage;
     this.clientSocket = socket;
-    this.frogView = new FrogView(namepassword.get(0));
+    this.fogView = new FogView(namepassword.get(0));
     refresh();
   }
 
@@ -102,7 +102,7 @@ public class PlayTurnController implements Controller {
     map = Communicate.receiveMap(clientSocket);
     gameResult = Communicate.receiveGameResult(clientSocket);
     System.out.println("player name = " + namePassword.get(0));
-    frogView.refreshMap(map);
+    fogView.refreshMap(map);
     this.clientAttack = new ClientAttack(clientSocket, map,
         map.getPlayerByName(namePassword.get(0)));
     this.clientMove = new ClientMove(clientSocket, map, map.getPlayerByName(namePassword.get(0)));
@@ -130,7 +130,7 @@ public class PlayTurnController implements Controller {
     String content = "Territory: " + territory.getName() + "\n"
         + "Neighbors: " + neighbors + "\n"
         + "Size: " + territory.getTerritorySize() + "\n";
-    content += frogView.getTerrInfo(territory.getName());
+    content += fogView.getTerrInfo(territory.getName());
     Tooltip territoryTooltip = new Tooltip(content);
     territoryTooltip.setStyle("-fx-font-size: 14;");
     territoryTooltip.setStyle("-fx-wrap-text: true;");
@@ -189,7 +189,7 @@ public class PlayTurnController implements Controller {
     scene.getStylesheets().add(cssResource.toString());
     stage.setTitle("Play Game");
     stage.setScene(scene);
-    frogView.refreshMap(map);
+    fogView.refreshMap(map);
     setTerrButtons(false);
     setCloakButtons();
     stage.show();
