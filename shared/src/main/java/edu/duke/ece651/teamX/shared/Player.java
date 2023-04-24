@@ -17,6 +17,8 @@ public class Player implements Serializable {
   private HashMap<Integer, Integer> researchRule;
   private boolean canCloak;
 
+  public int numPlayers = 0;
+
   /**
    * Construct a Player Object for passing player related information
    *
