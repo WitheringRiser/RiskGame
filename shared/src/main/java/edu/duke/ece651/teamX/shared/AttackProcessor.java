@@ -45,6 +45,14 @@ public class AttackProcessor {
     return allAttack;
   }
 
+  private ArrayList<Unit> getShield(ArrayList<Unit> attacker, int level) {
+    int num = (int) (level * 0.25 * attacker.size());
+    for (int i = 0; i < num; ++i) {
+      attacker.remove(0);
+    }
+    return attacker;
+  }
+
   private HashMap<Territory, ArrayList<Attacker>> getHashMap(ArrayList<AttackSender> allAttack) {
     HashMap<Territory, ArrayList<Attacker>> ans = new HashMap<Territory, ArrayList<Attacker>>();
     for (int i = 0; i < allAttack.size(); ++i) {
@@ -55,6 +63,7 @@ public class AttackProcessor {
       map.getOwner(enemy)
           .consumeFood(attack.getUnitsNum() * (enemy.getTerritorySize() + defender.getTerritorySize())); // consumes
                                                                                                          // food
+      attacker = getShield(attacker, defender.getShieldLevel());
       if (ans.containsKey(defender)) {
         ans.get(defender).add(new Attacker(attacker, map.getOwner(enemy)));
       } else {

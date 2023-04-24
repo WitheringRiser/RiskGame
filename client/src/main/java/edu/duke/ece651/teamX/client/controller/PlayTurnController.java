@@ -1,8 +1,5 @@
 package edu.duke.ece651.teamX.client.controller;
 
-import edu.duke.ece651.teamX.client.*;
-import edu.duke.ece651.teamX.client.view.*;
-import edu.duke.ece651.teamX.shared.*;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.URL;
@@ -14,14 +11,27 @@ import java.util.Spliterators;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import javax.swing.text.LabelView;
-
+import edu.duke.ece651.teamX.client.ClientAttack;
+import edu.duke.ece651.teamX.client.ClientCloak;
+import edu.duke.ece651.teamX.client.ClientMove;
+import edu.duke.ece651.teamX.client.ClientResearch;
+import edu.duke.ece651.teamX.client.ClientShield;
+import edu.duke.ece651.teamX.client.ClientSpyMove;
+import edu.duke.ece651.teamX.client.ClientUpgrade;
+import edu.duke.ece651.teamX.client.view.GeneralScreen;
+import edu.duke.ece651.teamX.shared.Communicate;
+import edu.duke.ece651.teamX.shared.FrogView;
+import edu.duke.ece651.teamX.shared.GameResult;
+import edu.duke.ece651.teamX.shared.Map;
+import edu.duke.ece651.teamX.shared.Player;
+import edu.duke.ece651.teamX.shared.Territory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -31,7 +41,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -39,7 +48,7 @@ import javafx.stage.Stage;
 public class PlayTurnController implements Controller {
 
   private enum GameMode {
-    DEFAULT, ATTACK, MOVE, UPGRADE, SPYMOVE, CLOAK
+    DEFAULT, ATTACK, MOVE, UPGRADE, SPYMOVE, CLOAK, SHIELD
   }
 
   private GameMode currentMode = GameMode.DEFAULT;
@@ -47,7 +56,7 @@ public class PlayTurnController implements Controller {
   private Territory destinationTerritory = null;
   private HashMap<String, Integer> unitSetting = new HashMap<>();
   private HashMap<String, ArrayList<Integer>> unitUpgradeDic = new HashMap<>();
-
+  private int shieldLevel = 0;
   TextField textField;
   TextField textField_toLevel;
 
@@ -73,6 +82,7 @@ public class PlayTurnController implements Controller {
   private ClientUpgrade clientUpgrade;
   private ClientSpyMove clientSpyMove;
   private ClientCloak clientCloak;
+  private ClientShield clientShield;
   GameResult gameResult;
 
   public PlayTurnController(Stage stage, Socket socket, ArrayList<String> namepassword)
@@ -100,35 +110,10 @@ public class PlayTurnController implements Controller {
     this.clientSpyMove = new ClientSpyMove(clientSocket, map,
         map.getPlayerByName(namePassword.get(0)));
     this.clientCloak = new ClientCloak(clientSocket, map, map.getPlayerByName(namePassword.get(0)));
+    this.clientShield = new ClientShield(clientSocket, map,
+        map.getPlayerByName(namePassword.get(0)));
     setNewLayout();
 
-  }
-
-  private ArrayList<Integer> getIndexList() {
-    String indexString = textField.getText();
-    String[] indexArray = indexString.split(" ");
-    ArrayList<Integer> indexList = new ArrayList<>();
-    for (String index : indexArray) {
-      try {
-        indexList.add(Integer.parseInt(index));
-        resultText.setText("Added");
-      } catch (Exception e) {
-        resultText.setText("Invalid input number: " + index);
-      }
-    }
-    return indexList;
-  }
-
-  // TODO:just stub function
-  private String getUnitName() {
-    String name = "level_0_unit";
-    return name;
-  }
-
-  // TODO:just stub function
-  private int getUnitNum() {
-    int num = 1;
-    return num;
   }
 
   @FXML
@@ -140,7 +125,8 @@ public class PlayTurnController implements Controller {
         .collect(Collectors.joining(", "));
     String content = "Territory: " + territory.getName() + "\n"
         + "Neighbors: " + neighbors + "\n"
-        + "Size: " + territory.getTerritorySize() + "\n";
+        + "Size: " + territory.getTerritorySize() + "\n"
+        + "Shield Level: " + territory.getShieldLevel() + "\n";
     content += frogView.getTerrInfo(territory.getName());
     Tooltip territoryTooltip = new Tooltip(content);
     territoryTooltip.setStyle("-fx-font-size: 14;");
@@ -258,6 +244,14 @@ public class PlayTurnController implements Controller {
           sourceTerritory = null;
           setNewLayout();
           break;
+        case SHIELD:
+          sourceTerritory = territory;
+          openLevelWindow();
+          clientShield.perform(territory, this.shieldLevel);
+          this.shieldLevel = 0;
+          sourceTerritory = null;
+          setNewLayout();
+          break;
         case ATTACK:
         case MOVE:
         case SPYMOVE:
@@ -302,6 +296,13 @@ public class PlayTurnController implements Controller {
       resultText.setText(iae.getMessage());
     }
 
+  }
+
+  @FXML
+  private void onShieldButtonClick(ActionEvent event) {
+    resultText.setText("Please select a source Territory to add a shield on");
+    currentMode = GameMode.SHIELD;
+    sourceTerritory = null;
   }
 
   @FXML
@@ -367,6 +368,7 @@ public class PlayTurnController implements Controller {
     clientUpgrade.commit();
     clientSpyMove.commit();
     clientCloak.commit();
+    clientShield.commit();
     refresh();
   }
 
@@ -380,6 +382,7 @@ public class PlayTurnController implements Controller {
     String content = "Tech Resources: " + player.getTechResource() + "\n";
     content += "Tech Level: " + player.getTechLevel() + "\n";
     content += "Food Resources: " + player.getFoodResource() + "\n";
+    content += "Gold: " + player.getGoldResource() + "\n";
 
     alert.setContentText(content);
     alert.showAndWait();
@@ -419,6 +422,27 @@ public class PlayTurnController implements Controller {
       gridPane.add(levelLabel, 0, level + 1);
       gridPane.add(comboBox, 1, level + 1);
     }
+  }
+
+  private void addLevelSetter(GridPane gridPane) {
+    gridPane.setAlignment(Pos.CENTER);
+    gridPane.add(new Label("Shield description:"), 0, 0, GridPane.REMAINING, 1);
+    gridPane.add(new Label("Level"), 0, 1);
+    gridPane.add(new Label("Cost of Gold"), 1, 1);
+    gridPane.add(new Label("Enemy it Kills"), 2, 1);
+
+    int cost = 50;
+    for (int i = 1; i <= 4; ++i) {
+      gridPane.add(new Label(String.valueOf(i)), 0, i + 1);
+      gridPane.add(new Label(String.valueOf(cost)), 1, i + 1);
+      gridPane.add(new Label(String.valueOf(i * 25) + "%"), 2, i + 1);
+      cost = cost * 2;
+    }
+
+    ComboBox<Integer> comboBox = getComboBox(1, 4, 1);
+    comboBox.setId("ShiledLevel");
+    gridPane.add(new Label("Level you want"), 0, 6);
+    gridPane.add(comboBox, 1, 6, GridPane.REMAINING, 1);
   }
 
   private void addSpySetter(GridPane gridPane) {
@@ -464,6 +488,17 @@ public class PlayTurnController implements Controller {
     }
   }
 
+  private void LevelSaveButton(Stage unitsStage, GridPane gridPane) {
+    Button saveButton = new Button("Save");
+    gridPane.add(saveButton, 1, 9);
+    saveButton.setOnAction(event -> {
+      ComboBox<Integer> comboBox = (ComboBox<Integer>) gridPane.lookup(
+          "#ShiledLevel");
+      this.shieldLevel = comboBox.getValue();
+      unitsStage.close();
+    });
+  }
+
   private void addSaveButton(Stage unitsStage, GridPane gridPane) {
     Button saveButton = new Button("Save");
     gridPane.add(saveButton, 1, 9);
@@ -499,6 +534,23 @@ public class PlayTurnController implements Controller {
       unitSetting.put("Spy", selectedUnits);
       unitsStage.close();
     });
+  }
+
+  private void openLevelWindow() {
+    Stage unitsStage = new Stage();
+    unitsStage.initModality(Modality.APPLICATION_MODAL);
+    unitsStage.setTitle("Select level of shield you want to buy");
+    GridPane gridPane = new GridPane();
+    gridPane.setVgap(10);
+    gridPane.setHgap(10);
+    gridPane.setPadding(new Insets(10, 10, 10, 10));
+
+    addLevelSetter(gridPane);
+    LevelSaveButton(unitsStage, gridPane);
+
+    Scene unitsScene = new Scene(gridPane);
+    unitsStage.setScene(unitsScene);
+    unitsStage.showAndWait();
   }
 
   private void openUnitsWindow() {

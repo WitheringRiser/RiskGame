@@ -266,7 +266,7 @@ public class Game implements Runnable {
 
   // print all actionsenders content, only for testing and debugging
   public void printActions(Iterable<ActionSender> allActions, ArrayList<UpgradeSender> allUpgrades,
-      ArrayList<ResearchSender> allResearch) {
+      ArrayList<ResearchSender> allResearch, ArrayList<ShieldSender> allshield) {
     System.out.println("---------------------\n");
     System.out.println("Attack:");
     for (AttackSender a : getAttackSenders(allActions)) {
@@ -291,6 +291,10 @@ public class Game implements Runnable {
     // System.out.println("Player " + a.getPlayer() +
     // "want to improve his technology level");
     // }
+    System.out.println("Shield:");
+    for (ShieldSender s : allshield) {
+      System.out.println(s.getSource().getName());
+    }
     System.out.println("---------------------\n");
   }
 
@@ -366,6 +370,11 @@ public class Game implements Runnable {
     }
   }
 
+  private void handleAllShields(ArrayList<ShieldSender> allShield) {
+    ShieldProcessor p = new ShieldProcessor(allShield, map);
+    p.resovleAllShield();
+  }
+
   private void handleAdvancedActions(ArrayList<ResearchSender> allResearh, ArrayList<UpgradeSender> allUpgrades,
       ArrayList<SpyMoveSender> allSpymoves, ArrayList<CloakSender> allCloaks) {
     UpgradeProcessor up = new UpgradeProcessor(allUpgrades, map);
@@ -387,6 +396,7 @@ public class Game implements Runnable {
     ArrayList<UpgradeSender> allUpgrades = new ArrayList<>();
     ArrayList<SpyMoveSender> allSpyMoves = new ArrayList<>();
     ArrayList<CloakSender> allCloaks = new ArrayList<>();
+    ArrayList<ShieldSender> allshield = new ArrayList<>();
     for (Player player : getAllPlayers()) {
       // if this player has lost, skip
       if (gameResult.loserContains(player)) {
@@ -405,19 +415,23 @@ public class Game implements Runnable {
         ArrayList<UpgradeSender> upgrades = (ArrayList<UpgradeSender>) Communicate.receiveObject(s);
         ArrayList<SpyMoveSender> spymoves = (ArrayList<SpyMoveSender>) Communicate.receiveObject(s);
         ArrayList<CloakSender> cloaks = (ArrayList<CloakSender>) Communicate.receiveObject(s);
+        ArrayList<ShieldSender> shields = (ArrayList<ShieldSender>) Communicate.receiveObject(s);
         allActions.addAll(moves);
         allActions.addAll(attacks);
         allResearchs.add(research);
         allUpgrades.addAll(upgrades);
         allSpyMoves.addAll(spymoves);
         allCloaks.addAll(cloaks);
+        allshield.addAll(shields);
       } catch (IOException ioe) { // if lose connection when receive --> skip
+        System.out.print(ioe.toString());
         continue;
       }
     }
-    printActions(allActions, allUpgrades, allResearchs);
+    printActions(allActions, allUpgrades, allResearchs, allshield);
     try {
-      handleAdvancedActions(allResearchs, allUpgrades,allSpyMoves,allCloaks);
+      handleAllShields(allshield);
+      handleAdvancedActions(allResearchs, allUpgrades, allSpyMoves, allCloaks);
       handleActionSenders(allActions);
     } catch (IllegalArgumentException e) {
       System.out.println(e.getMessage());
@@ -435,6 +449,12 @@ public class Game implements Runnable {
   public void increaseALlPlayerResources(int num) {
     for (Player player : map.getMap().values()) {
       player.increaseAllResource(num);
+    }
+  }
+
+  public void releaseShield() {
+    for (Territory t : map.getAllTerritories()) {
+      t.releaseShield();
     }
   }
 
@@ -458,6 +478,7 @@ public class Game implements Runnable {
       playOneTurn(num_player);
       incrementAllTerritoryByOneUnit();
       increaseALlPlayerResources(5);
+      releaseShield();
     }
   }
 
