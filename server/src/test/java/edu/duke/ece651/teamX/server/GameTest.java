@@ -135,8 +135,8 @@ public class GameTest {
   public void getMoveSenders_test() {
     Game game = new Game(3, 20);
     ArrayList<ActionSender> allActions = new ArrayList<>();
-    Territory source = new Territory("abc",2);
-    Territory dest = new Territory("def",2);
+    Territory source = new Territory("abc", 2);
+    Territory dest = new Territory("def", 2);
     MoveSender move_sender = new MoveSender(source, dest, 1);
     AttackSender attack_sender = new AttackSender(source, dest, 1);
     allActions.add(move_sender);

@@ -9,6 +9,7 @@ import edu.duke.ece651.teamX.shared.Player;
 import edu.duke.ece651.teamX.shared.ResearchSender;
 
 public class ClientResearch {
+
   private Socket socket;
   private Player player;
   private Communicate communicate;
@@ -29,25 +30,24 @@ public class ClientResearch {
   // }
 
   public void perform(boolean isUnlockCloak) {
-    
-    if ( sender != null) {
+
+    if (sender != null) {
       throw new IllegalArgumentException("You can not do research any more!");
     } else {
       int cost;
-      if(isUnlockCloak){
-        if(player.getTechLevel()<3){
+      if (isUnlockCloak) {
+        if (player.getTechLevel() < 3) {
           throw new IllegalArgumentException("You cannot unlock cloak now!");
         }
         cost = CloakProcessor.getUnlockCloakCost();
-      }
-      else{
+      } else {
         cost = player.getResearchNeedCost();
       }
-      if(cost > player.getTechResource() ){
+      if (cost > player.getTechResource()) {
         throw new IllegalArgumentException("You don not have enough resource for upgrade!");
       }
       player.consumeTech(cost);
-      sender = new ResearchSender(player,isUnlockCloak);      
+      sender = new ResearchSender(player, isUnlockCloak);
     }
   }
 

@@ -1,28 +1,31 @@
 .expandable {
-    -fx-wrap-text: true;
-    -fx-max-width: infinity;
-    -fx-max-height: infinity;
-    -fx-background-radius: 10, 10;
-    -fx-background-insets: 2, 5;
-    
+  -fx-wrap-text: true;
+  -fx-max-width: infinity;
+  -fx-max-height: infinity;
+  -fx-background-radius: 10, 10;
+  -fx-background-insets: 2, 5;
+
 }
+
 .terrbtn {
--fx-background-color: black,#012169;
--fx-text-fill: ivory;
--fx-background-radius: 10, 10;
--fx-background-insets: 2, 5;
+  -fx-background-color: black, #012169;
+  -fx-text-fill: ivory;
+  -fx-background-radius: 10, 10;
+  -fx-background-insets: 2, 5;
 }
+
 .terrbtn:hover {
--fx-background-color: #333355, #101169;
--fx-text-fill: ivory;
--fx-background-radius: 10, 10;
--fx-background-insets: 2, 5;
+  -fx-background-color: #333355, #101169;
+  -fx-text-fill: ivory;
+  -fx-background-radius: 10, 10;
+  -fx-background-insets: 2, 5;
 }
+
 .terrbtn:pressed {
--fx-background-color: #000029, #000149;
--fx-text-fill: ivory;
--fx-background-radius: 10, 10;
--fx-background-insets: 2, 5;
+  -fx-background-color: #000029, #000149;
+  -fx-text-fill: ivory;
+  -fx-background-radius: 10, 10;
+  -fx-background-insets: 2, 5;
 }
 
     

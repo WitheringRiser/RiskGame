@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
+
 public class FogViewTest {
+
   @Test
   public void test_FogView() {
     Territory t1 = new Territory("A", 3);

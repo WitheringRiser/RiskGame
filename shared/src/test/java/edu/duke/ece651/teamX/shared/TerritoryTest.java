@@ -7,6 +7,7 @@ import java.util.HashMap;
 import org.junit.jupiter.api.Test;
 
 public class TerritoryTest {
+
   @Test
   public void test_remove() {
     Territory t1 = new Territory("t1");
@@ -69,16 +70,16 @@ public class TerritoryTest {
     t1.addUnits(5, "Red");
     bu.upgradeLevel(2);
     t1.addUnits(bu, 4);
-    HashMap<String, ArrayList<Integer> > unitDict = t1.getUnitsDit();
+    HashMap<String, ArrayList<Integer>> unitDict = t1.getUnitsDit();
     assertEquals(2, unitDict.size());
     assertEquals(8, unitDict.get("level_0_unit").size());
     assertEquals(4, unitDict.get("level_2_unit").size());
     assertEquals(8, t1.getUnitCountByLevel(0));
     assertEquals(4, t1.getUnitCountByLevel(2));
     assertThrows(IllegalArgumentException.class,
-                 () -> t1.removeLevelUnits("level_1_unit", 1));
+        () -> t1.removeLevelUnits("level_1_unit", 1));
     assertThrows(IllegalArgumentException.class,
-                 () -> t1.removeLevelUnits("level_0_unit", 9));
+        () -> t1.removeLevelUnits("level_0_unit", 9));
   }
 
   @Test

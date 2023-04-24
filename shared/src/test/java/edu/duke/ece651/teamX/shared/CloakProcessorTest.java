@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
+
 public class CloakProcessorTest {
+
   @Test
   public void test_CloakProcessor() {
     Territory t1 = new Territory("A", 4);

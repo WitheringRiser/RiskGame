@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 public class BasicActionTest {
+
   @Test
   public void test_Basic() {
     Territory t1 = new Territory("T1", 3);

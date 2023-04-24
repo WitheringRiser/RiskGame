@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class FogView {
+
   private HashMap<String, String> oldInfoMap;
   private HashMap<String, String> currentInfoMap;
   // private Map map;
@@ -19,7 +20,7 @@ public class FogView {
     String content = "";
     content += "Owner: " + map.getOwner(t).getName() + "\n";
     content += "Units:\n";
-    HashMap<String, ArrayList<Integer> > unitDic = t.getUnitsDit();
+    HashMap<String, ArrayList<Integer>> unitDic = t.getUnitsDit();
     for (String typeName : unitDic.keySet()) {
       content += "  - " + typeName + ": " + unitDic.get(typeName).size() + "\n";
     }
@@ -33,11 +34,11 @@ public class FogView {
     return content;
   }
 
-  private String getFullViewWithSheild(Map map, Territory t){
+  private String getFullViewWithSheild(Map map, Territory t) {
 
     String content = "Shield Level: " + t.getShieldLevel() + "\n"
         + "Breaker Level: " + t.getBreakerLevel() + "\n";
-    content+=getFullView(map, t);
+    content += getFullView(map, t);
     return content;
   }
 
@@ -66,10 +67,9 @@ public class FogView {
         String content = oldInfoMap.get(t.getName());
         if (content.startsWith("==========================")) {
           currentInfoMap.put(t.getName(), content);
-        }
-        else {
+        } else {
           content = "==========================\n"
-                    + "Outdated Infomation:\n" + content + "==========================\n";
+              + "Outdated Infomation:\n" + content + "==========================\n";
           currentInfoMap.put(t.getName(), content);
         }
       }
@@ -79,8 +79,7 @@ public class FogView {
   public String getTerrInfo(String terr) {
     if (currentInfoMap.containsKey(terr)) {
       return currentInfoMap.get(terr);
-    }
-    else {
+    } else {
       return "";
     }
   }

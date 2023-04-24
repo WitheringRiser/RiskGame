@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import edu.duke.ece651.teamX.shared.*;
 
 public class ClientShield {
+
   private Socket socket;
   private Communicate communicate;
   protected Map map;
@@ -27,7 +28,6 @@ public class ClientShield {
   }
 
   /**
-   * 
    * @param source
    * @param toLevel: shield level
    */

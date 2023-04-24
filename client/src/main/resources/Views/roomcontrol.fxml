@@ -7,32 +7,32 @@
 <?import javafx.scene.text.*?>
 
 <GridPane xmlns:fx="http://javafx.com/fxml">
-    <columnConstraints>
-        <ColumnConstraints percentWidth="60" />
-        <ColumnConstraints percentWidth="60" />
-        <ColumnConstraints percentWidth="60" />
-    </columnConstraints>
-    <rowConstraints>
-        <RowConstraints percentHeight="90" />
-        <RowConstraints percentHeight="20" />
-    </rowConstraints>
-    <Button text="New Game"
-        GridPane.rowIndex="0"
-        GridPane.columnIndex="0"
-        styleClass="expandable,numbtn"
-        onAction="#createNewGame" />
-    <Button text="Join Game"
-        GridPane.rowIndex="0"
-        GridPane.columnIndex="1"
-        styleClass="expandable,numbtn"
-        onAction="#JoinNewGame" />
-    <Button text="My Games"
-        GridPane.rowIndex="0"
-        GridPane.columnIndex="2"
-        styleClass="expandable,numbtn"
-        onAction="#EnterMyGame" />
+  <columnConstraints>
+    <ColumnConstraints percentWidth="60"/>
+    <ColumnConstraints percentWidth="60"/>
+    <ColumnConstraints percentWidth="60"/>
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints percentHeight="90"/>
+    <RowConstraints percentHeight="20"/>
+  </rowConstraints>
+  <Button text="New Game"
+    GridPane.rowIndex="0"
+    GridPane.columnIndex="0"
+    styleClass="expandable,numbtn"
+    onAction="#createNewGame"/>
+  <Button text="Join Game"
+    GridPane.rowIndex="0"
+    GridPane.columnIndex="1"
+    styleClass="expandable,numbtn"
+    onAction="#JoinNewGame"/>
+  <Button text="My Games"
+    GridPane.rowIndex="0"
+    GridPane.columnIndex="2"
+    styleClass="expandable,numbtn"
+    onAction="#EnterMyGame"/>
 
-    <Text fx:id="resultText"
-        GridPane.columnIndex="1"
-        GridPane.rowIndex="1" />
+  <Text fx:id="resultText"
+    GridPane.columnIndex="1"
+    GridPane.rowIndex="1"/>
 </GridPane>

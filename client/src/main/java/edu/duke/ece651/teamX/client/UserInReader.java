@@ -13,8 +13,7 @@ public class UserInReader {
   private BufferedReader inputReader;
 
   /**
-   * Construct a UserInReader object The main job is to read from user and parse
-   * some input
+   * Construct a UserInReader object The main job is to read from user and parse some input
    *
    * @param input
    * @param out
@@ -40,7 +39,8 @@ public class UserInReader {
     boolean isValidInput = false;
     do {
       System.out
-          .print("To select units, please enter a list of unit indexes(integers) separated by commas or spaces: ");
+          .print(
+              "To select units, please enter a list of unit indexes(integers) separated by commas or spaces: ");
       String input = readString();
       String[] tokens = input.split("[,\\s]+");
       isValidInput = true;
@@ -48,7 +48,8 @@ public class UserInReader {
         try {
           int index = Integer.parseInt(token);
           if (index < min || index > max) {
-            System.out.println("Invalid input. All integers must be between " + min + " and " + max + ".");
+            System.out.println(
+                "Invalid input. All integers must be between " + min + " and " + max + ".");
             indexList.clear();
             isValidInput = false;
             break;

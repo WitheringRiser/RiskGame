@@ -124,7 +124,7 @@ public class PlayTurnController implements Controller {
   private void displayTerritoryInfo(Button button, Territory territory) {
     Iterator<Territory> iterator = territory.getNeighbours();
     String neighbors = StreamSupport.stream(
-        Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), false)
+            Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), false)
         .map(Territory::getName)
         .collect(Collectors.joining(", "));
     String content = "Territory: " + territory.getName() + "\n"

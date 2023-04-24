@@ -370,7 +370,8 @@ public class Game implements Runnable {
     }
   }
 
-  private void handleAllShieldsBreakers(ArrayList<ShieldSender> allShield, ArrayList<BreakerSender> allBreaker) {
+  private void handleAllShieldsBreakers(ArrayList<ShieldSender> allShield,
+      ArrayList<BreakerSender> allBreaker) {
     ShieldProcessor p = new ShieldProcessor(allShield, map);
     p.resovleAllShield();
 
@@ -378,7 +379,8 @@ public class Game implements Runnable {
     bp.resovleAllBreak();
   }
 
-  private void handleAdvancedActions(ArrayList<ResearchSender> allResearh, ArrayList<UpgradeSender> allUpgrades,
+  private void handleAdvancedActions(ArrayList<ResearchSender> allResearh,
+      ArrayList<UpgradeSender> allUpgrades,
       ArrayList<SpyMoveSender> allSpymoves, ArrayList<CloakSender> allCloaks) {
     UpgradeProcessor up = new UpgradeProcessor(allUpgrades, map);
     SpyMoveProcessor smp = new SpyMoveProcessor(allSpymoves, map);

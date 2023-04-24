@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 public class AdvancedUnitTest {
+
   @Test
   public void test_AdvancedUnit() {
     AdvancedUnit u1 = new AdvancedUnit("Red");

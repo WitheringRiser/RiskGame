@@ -44,13 +44,12 @@ public class ClientMove extends ClientTurnAction<MoveSender> {
   }
 
 
-  public int calculateCost(Territory source, Territory dest, int num){
+  public int calculateCost(Territory source, Territory dest, int num) {
     int distance = MoveProcessor.getMinCostPathBetweenSourceDest(source, dest, map);
     return num * distance;
   }
 
   /**
-   * 
    * @param source
    * @param dest
    * @param indList
@@ -58,7 +57,6 @@ public class ClientMove extends ClientTurnAction<MoveSender> {
    */
   public void perform_res(Territory source, Territory dest, String name, int num) {
 
-    
     int cost = calculateCost(source, dest, num);
     if (cost > player.getFoodResource()) {
       throw new IllegalArgumentException("Food resource is not enough for the moving cost " + cost);
