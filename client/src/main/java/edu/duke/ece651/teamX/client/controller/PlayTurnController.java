@@ -120,7 +120,7 @@ public class PlayTurnController implements Controller {
   private void displayTerritoryInfo(Button button, Territory territory) {
     Iterator<Territory> iterator = territory.getNeighbours();
     String neighbors = StreamSupport.stream(
-            Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), false)
+        Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), false)
         .map(Territory::getName)
         .collect(Collectors.joining(", "));
     String content = "Territory: " + territory.getName() + "\n"
@@ -145,7 +145,11 @@ public class PlayTurnController implements Controller {
     for (Territory t : map.getAllTerritories()) {
       Button button = (Button) scene.lookup("#" + t.getName());
       if (map.getTerritoriesByPlayerName(namePassword.get(0)).contains(t)) {
-        button.setStyle("-fx-background-color: blue ;");
+        if (t.getShieldLevel() == 0) {
+          button.setStyle("-fx-background-color: blue ;");
+        } else {
+          button.setStyle("-fx-background-color: gold ;");
+        }
         // Change color when pressed
         button.setOnMousePressed(e -> button.setStyle("-fx-background-color: darkblue;"));
         button.setOnAction(event -> {
