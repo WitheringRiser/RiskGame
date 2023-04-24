@@ -240,8 +240,8 @@
     onAction="#onAttackButtonClick"
   />
   <Button fx:id="moveButton"
-    GridPane.rowIndex="7"
-    GridPane.columnIndex="1"
+    GridPane.rowIndex="8"
+    GridPane.columnIndex="0"
     GridPane.rowSpan="1"
     GridPane.columnSpan="1"
     text="Move"
@@ -249,15 +249,15 @@
   />
   <Button fx:id="researchButton"
     GridPane.rowIndex="7"
-    GridPane.columnIndex="2"
+    GridPane.columnIndex="1"
     GridPane.rowSpan="1"
     GridPane.columnSpan="1"
     text="Research"
     onAction="#onResearchButtonClick"
   />
   <Button fx:id="upgradeButton"
-    GridPane.rowIndex="7"
-    GridPane.columnIndex="3"
+    GridPane.rowIndex="8"
+    GridPane.columnIndex="1"
     GridPane.rowSpan="1"
     GridPane.columnSpan="1"
     text="Upgrade"
@@ -266,7 +266,7 @@
 
   <Button fx:id="spyButton"
     GridPane.rowIndex="7"
-    GridPane.columnIndex="4"
+    GridPane.columnIndex="2"
     GridPane.rowSpan="1"
     GridPane.columnSpan="1"
     text="Spy"
@@ -274,24 +274,33 @@
   />
 
   <Button fx:id="cloakButton"
-    GridPane.rowIndex="7"
-    GridPane.columnIndex="5"
+    GridPane.rowIndex="8"
+    GridPane.columnIndex="2"
     GridPane.rowSpan="1"
     GridPane.columnSpan="1"
   />
 
     <Button fx:id="shieldButton"
     GridPane.rowIndex="7"
-    GridPane.columnIndex="6"
+    GridPane.columnIndex="3"
     GridPane.rowSpan="1"
     GridPane.columnSpan="1"
     text="Shield"
     onAction="#onShieldButtonClick"
+    />
+
+     <Button fx:id="breakerButton"
+    GridPane.rowIndex="8"
+    GridPane.columnIndex="3"
+    GridPane.rowSpan="1"
+    GridPane.columnSpan="1"
+    text="Breaker"
+    onAction="#onBreakerButtonClick"
   />
   
   <Button fx:id="infoButton"
     GridPane.rowIndex="7"
-    GridPane.columnIndex="7"
+    GridPane.columnIndex="5"
     GridPane.rowSpan="1"
     GridPane.columnSpan="1"
     text="Info"
@@ -299,7 +308,7 @@
   />
 
 <Button fx:id="doneButton"
-    GridPane.rowIndex="8"
+    GridPane.rowIndex="9"
     GridPane.columnIndex="5"
     GridPane.rowSpan="1"
     GridPane.columnSpan="1"
@@ -308,7 +317,7 @@
   />
 
   <Button fx:id="defaultButton"
-    GridPane.rowIndex="8"
+    GridPane.rowIndex="9"
     GridPane.columnIndex="6"
     GridPane.rowSpan="1"
     GridPane.columnSpan="1"
@@ -316,7 +325,7 @@
     onAction="#defaultButtonClick"
   />
   <Button text="Exit"
-    GridPane.rowIndex="8"
+    GridPane.rowIndex="9"
     GridPane.columnIndex="7"
     onAction="#back"/>
 </GridPane>
