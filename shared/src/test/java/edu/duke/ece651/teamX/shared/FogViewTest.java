@@ -4,9 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
-public class FrogViewTest {
+public class FogViewTest {
   @Test
-  public void test_FrogView() {
+  public void test_FogView() {
     Territory t1 = new Territory("A", 3);
     Territory t2 = new Territory("B", 3);
     Territory t3 = new Territory("C", 3);
@@ -18,7 +18,7 @@ public class FrogViewTest {
     m.addTerritory(t1, p1);
     m.addTerritory(t2, p1);
     m.addTerritory(t3, p2);
-    FrogView fv = new FrogView("Green");
+    FogView fv = new FogView("Green");
     assertEquals(fv.getTerrInfo("C").length(), 0);
     fv.refreshMap(m);
     assertTrue(fv.getTerrInfo("C").length() > 0);
