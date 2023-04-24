@@ -61,6 +61,7 @@ public class TerritoryInfoController implements Controller {
       return y;
     }
 
+    /*
     private void showChooseView(Player player, Stage Window) throws IOException {
       FXMLLoader loaderStart = new FXMLLoader(getClass().getResource("/Views/SelectNum.fxml"));
       loaderStart.setControllerFactory(c->{
@@ -70,6 +71,7 @@ public class TerritoryInfoController implements Controller {
       this.Window.setScene(scene);
       this.Window.show();
   }
+  */
 
   }
 

@@ -75,7 +75,7 @@ public class SelectNum {
         //**TO DO**: send the total number of players chosen by the first to the server
         
 
-        ShowView.MainPageView(this.CurrPlayer, this.Window, true);
+        //ShowView.MainPageView(this.CurrPlayer, this.Window, true);
     }
 
 
