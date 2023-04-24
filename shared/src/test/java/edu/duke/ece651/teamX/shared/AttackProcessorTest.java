@@ -65,7 +65,7 @@ public class AttackProcessorTest {
     map.addTerritory(t1, p1);
     map.addTerritory(t2, p1);
 
-    allAttack.add(new AttackSender(t1, t2, 11,t1.getUnits().get(0).getName()));
+    allAttack.add(new AttackSender(t1, t2, 11, t1.getUnits().get(0).getName()));
     allAttack.add(new AttackSender(t2, t1, 50));
 
     assertThrows(IllegalArgumentException.class, () -> new AttackProcessor(allAttack, map));
@@ -227,6 +227,49 @@ public class AttackProcessorTest {
     assertEquals(p2, map.getOwner(t1));
     assertEquals(100, t2.getUnitsNumber());
     assertEquals(p1, map.getOwner(t2));
+
+  }
+
+  @Test
+  public void test_shield() {
+    ArrayList<AttackSender> allAttack = new ArrayList<AttackSender>();
+    Territory t1 = new Territory("duke", 99);
+    Territory t2 = new Territory("cary", 80);
+    t2.shieldTerritory(4);
+    Player p1 = new Player("zhou", 20);
+    Player p2 = new Player("andre", 15);
+
+    t1.addNeighbors(t2);
+
+    Map map = new Map();
+    map.addTerritory(t1, p1);
+    map.addTerritory(t2, p2);
+
+    TextDisplayer displayer = new TextDisplayer(map);
+    System.out.println(displayer.display());
+
+    allAttack.add(new AttackSender(t1, t2, 50));
+
+    AttackProcessor ap = new AttackProcessor(allAttack, map, 0);
+    ap.resovleAllAttack();
+    System.out.println(displayer.display());
+    assertEquals(49, t1.getUnitsNumber());
+    assertEquals(p1, map.getOwner(t1));
+    assertEquals(80, t2.getUnitsNumber());
+    assertEquals(p2, map.getOwner(t2));
+
+    t1.addBreaker(4);
+    allAttack.clear();
+    allAttack.add(new AttackSender(t1, t2, 49));
+
+    AttackProcessor ap2 = new AttackProcessor(allAttack, map, 0);
+    ap2.resovleAllAttack();
+
+    System.out.println(displayer.display());
+    assertEquals(0, t1.getUnitsNumber());
+    assertEquals(p1, map.getOwner(t1));
+    assertEquals(27, t2.getUnitsNumber());
+    assertEquals(p2, map.getOwner(t2));
 
   }
 

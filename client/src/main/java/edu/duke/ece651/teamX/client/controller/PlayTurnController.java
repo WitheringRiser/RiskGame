@@ -1,8 +1,5 @@
 package edu.duke.ece651.teamX.client.controller;
 
-import edu.duke.ece651.teamX.client.*;
-import edu.duke.ece651.teamX.client.view.*;
-import edu.duke.ece651.teamX.shared.*;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.URL;
@@ -14,14 +11,28 @@ import java.util.Spliterators;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import javax.swing.text.LabelView;
-
+import edu.duke.ece651.teamX.client.ClientAttack;
+import edu.duke.ece651.teamX.client.ClientBreaker;
+import edu.duke.ece651.teamX.client.ClientCloak;
+import edu.duke.ece651.teamX.client.ClientMove;
+import edu.duke.ece651.teamX.client.ClientResearch;
+import edu.duke.ece651.teamX.client.ClientShield;
+import edu.duke.ece651.teamX.client.ClientSpyMove;
+import edu.duke.ece651.teamX.client.ClientUpgrade;
+import edu.duke.ece651.teamX.client.view.GeneralScreen;
+import edu.duke.ece651.teamX.shared.Communicate;
+import edu.duke.ece651.teamX.shared.FrogView;
+import edu.duke.ece651.teamX.shared.GameResult;
+import edu.duke.ece651.teamX.shared.Map;
+import edu.duke.ece651.teamX.shared.Player;
+import edu.duke.ece651.teamX.shared.Territory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -31,7 +42,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -39,7 +49,7 @@ import javafx.stage.Stage;
 public class PlayTurnController implements Controller {
 
   private enum GameMode {
-    DEFAULT, ATTACK, MOVE, UPGRADE, SPYMOVE, CLOAK
+    DEFAULT, ATTACK, MOVE, UPGRADE, SPYMOVE, CLOAK, SHIELD, BREAKER
   }
 
   private GameMode currentMode = GameMode.DEFAULT;
@@ -47,7 +57,8 @@ public class PlayTurnController implements Controller {
   private Territory destinationTerritory = null;
   private HashMap<String, Integer> unitSetting = new HashMap<>();
   private HashMap<String, ArrayList<Integer>> unitUpgradeDic = new HashMap<>();
-
+  private int shieldLevel = 0;
+  private int breakerLevel = 0;
   TextField textField;
   TextField textField_toLevel;
 
@@ -73,6 +84,8 @@ public class PlayTurnController implements Controller {
   private ClientUpgrade clientUpgrade;
   private ClientSpyMove clientSpyMove;
   private ClientCloak clientCloak;
+  private ClientShield clientShield;
+  private ClientBreaker clientBreaker;
   GameResult gameResult;
 
   public PlayTurnController(Stage stage, Socket socket, ArrayList<String> namepassword)
@@ -97,37 +110,14 @@ public class PlayTurnController implements Controller {
         map.getPlayerByName(namePassword.get(0)));
     this.clientUpgrade = new ClientUpgrade(clientSocket, map,
         map.getPlayerByName(namePassword.get(0)));
-    this.clientSpyMove = new ClientSpyMove(clientSocket, map, map.getPlayerByName(namePassword.get(0)));
+    this.clientSpyMove = new ClientSpyMove(clientSocket, map,
+        map.getPlayerByName(namePassword.get(0)));
     this.clientCloak = new ClientCloak(clientSocket, map, map.getPlayerByName(namePassword.get(0)));
+    this.clientShield = new ClientShield(clientSocket, map,
+        map.getPlayerByName(namePassword.get(0)));
+    this.clientBreaker = new ClientBreaker(clientSocket, map,
+        map.getPlayerByName(namePassword.get(0)));
     setNewLayout();
-
-  }
-
-  private ArrayList<Integer> getIndexList() {
-    String indexString = textField.getText();
-    String[] indexArray = indexString.split(" ");
-    ArrayList<Integer> indexList = new ArrayList<>();
-    for (String index : indexArray) {
-      try {
-        indexList.add(Integer.parseInt(index));
-        resultText.setText("Added");
-      } catch (Exception e) {
-        resultText.setText("Invalid input number: " + index);
-      }
-    }
-    return indexList;
-  }
-
-  // TODO:just stub function
-  private String getUnitName() {
-    String name = "level_0_unit";
-    return name;
-  }
-
-  // TODO:just stub function
-  private int getUnitNum() {
-    int num = 1;
-    return num;
   }
 
   @FXML
@@ -139,7 +129,9 @@ public class PlayTurnController implements Controller {
         .collect(Collectors.joining(", "));
     String content = "Territory: " + territory.getName() + "\n"
         + "Neighbors: " + neighbors + "\n"
-        + "Size: " + territory.getTerritorySize() + "\n";
+        + "Size: " + territory.getTerritorySize() + "\n"
+        + "Shield Level: " + territory.getShieldLevel() + "\n"
+        + "Breaker Level: " + territory.getBreakerLevel() + "\n";
     content += frogView.getTerrInfo(territory.getName());
     Tooltip territoryTooltip = new Tooltip(content);
     territoryTooltip.setStyle("-fx-font-size: 14;");
@@ -158,23 +150,32 @@ public class PlayTurnController implements Controller {
     for (Territory t : map.getAllTerritories()) {
       Button button = (Button) scene.lookup("#" + t.getName());
       if (map.getTerritoriesByPlayerName(namePassword.get(0)).contains(t)) {
-        button.setStyle("-fx-background-color: blue ;");
+        if (t.getShieldLevel() == 0 && t.getBreakerLevel() == 0) {
+          button.setStyle("-fx-background-color: blue ;");
+        } else if (t.getShieldLevel() == 0) {
+          button.setStyle("-fx-background-color: red ;");
+        } else if (t.getBreakerLevel() == 0) {
+          button.setStyle("-fx-background-color: gold ;");
+        } else {
+          button.setStyle("-fx-background-color: orange ;");
+        }
         // Change color when pressed
         button.setOnMousePressed(e -> button.setStyle("-fx-background-color: darkblue;"));
-
+        button.setOnAction(event -> {
+          try {
+            handleTerritoryClick(button, t);
+          } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+          }
+        });
       } else {
+        button.setOnAction(event -> {
+        });
         button.setStyle("-fx-background-color: grey ;");
       }
       if (!isReset) {
         displayTerritoryInfo(button, t);
       }
-      button.setOnAction(event -> {
-        try {
-          handleTerritoryClick(button, t);
-        } catch (IOException | ClassNotFoundException e) {
-          throw new RuntimeException(e);
-        }
-      });
     }
   }
 
@@ -256,6 +257,22 @@ public class PlayTurnController implements Controller {
           sourceTerritory = null;
           setNewLayout();
           break;
+        case SHIELD:
+          sourceTerritory = territory;
+          openLevelWindow();
+          clientShield.perform(territory, this.shieldLevel);
+          this.shieldLevel = 0;
+          sourceTerritory = null;
+          setNewLayout();
+          break;
+        case BREAKER:
+          sourceTerritory = territory;
+          openLevelWindow();
+          clientBreaker.perform(territory, this.breakerLevel);
+          this.breakerLevel = 0;
+          sourceTerritory = null;
+          setNewLayout();
+          break;
         case ATTACK:
         case MOVE:
         case SPYMOVE:
@@ -303,6 +320,20 @@ public class PlayTurnController implements Controller {
   }
 
   @FXML
+  private void onShieldButtonClick(ActionEvent event) {
+    resultText.setText("Please select a source Territory to add a shield on");
+    currentMode = GameMode.SHIELD;
+    sourceTerritory = null;
+  }
+
+  @FXML
+  private void onBreakerButtonClick(ActionEvent event) {
+    resultText.setText("Please select a source Territory to add a breaker on");
+    currentMode = GameMode.BREAKER;
+    sourceTerritory = null;
+  }
+
+  @FXML
   private void onAttackButtonClick(ActionEvent event) {
     resultText.setText("Please select a source Territory to start attack");
     currentMode = GameMode.ATTACK;
@@ -344,13 +375,12 @@ public class PlayTurnController implements Controller {
   }
 
   @FXML
-  private void onSpyMove(ActionEvent event) {    
+  private void onSpyMove(ActionEvent event) {
     currentMode = GameMode.SPYMOVE;
     ArrayList<Territory> findRes = clientSpyMove.findSourcTerritories();
-    if(findRes.size()>0){
+    if (findRes.size() > 0) {
       resultText.setText("Please select a source Territory that has your spies");
-    }
-    else{
+    } else {
       resultText.setText("You do not have spies available, please use upgrade to raise spies");
     }
     filterClickableButtons(findRes);
@@ -366,6 +396,8 @@ public class PlayTurnController implements Controller {
     clientUpgrade.commit();
     clientSpyMove.commit();
     clientCloak.commit();
+    clientShield.commit();
+    clientBreaker.commit();
     refresh();
   }
 
@@ -379,6 +411,7 @@ public class PlayTurnController implements Controller {
     String content = "Tech Resources: " + player.getTechResource() + "\n";
     content += "Tech Level: " + player.getTechLevel() + "\n";
     content += "Food Resources: " + player.getFoodResource() + "\n";
+    content += "Gold: " + player.getGoldResource() + "\n";
 
     alert.setContentText(content);
     alert.showAndWait();
@@ -420,13 +453,60 @@ public class PlayTurnController implements Controller {
     }
   }
 
+  private void addLevelSetter(GridPane gridPane) {
+    gridPane.setAlignment(Pos.CENTER);
+    gridPane.add(new Label("Shield description:"), 0, 0, GridPane.REMAINING, 1);
+    gridPane.add(new Label("Level"), 0, 1);
+    gridPane.add(new Label("Cost of Gold"), 1, 1);
+    gridPane.add(new Label("Enemy it Kills"), 2, 1);
+
+    int cost = 50;
+    for (int i = 1; i <= 4; ++i) {
+      gridPane.add(new Label(String.valueOf(i)), 0, i + 1);
+      gridPane.add(new Label(String.valueOf(cost)), 1, i + 1);
+      gridPane.add(new Label(String.valueOf(i * 25) + "%"), 2, i + 1);
+      cost = cost * 2;
+    }
+
+    ComboBox<Integer> comboBox = getComboBox(1, 4, 1);
+    comboBox.setId("ShiledLevel");
+    gridPane.add(new Label("Level you want"), 0, 6);
+    gridPane.add(comboBox, 1, 6, GridPane.REMAINING, 1);
+  }
+
+  private void addBreakerSetter(GridPane gridPane) {
+    gridPane.setAlignment(Pos.CENTER);
+    gridPane.add(new Label("Breaker description:"), 0, 0, GridPane.REMAINING, 1);
+    gridPane.add(new Label("Level"), 0, 1);
+    gridPane.add(new Label("Cost of Gold"), 1, 1);
+    gridPane.add(new Label("Shield it breaks"), 2, 1);
+
+    int cost = 25;
+    String shieldString = "";
+    String split = "";
+    for (int i = 1; i <= 4; ++i) {
+      shieldString += (split + String.valueOf(i));
+      gridPane.add(new Label(String.valueOf(i)), 0, i + 1);
+      gridPane.add(new Label(String.valueOf(cost)), 1, i + 1);
+      gridPane.add(new Label(shieldString), 2, i + 1);
+      cost = cost * 2;
+      split = ", ";
+    }
+
+    ComboBox<Integer> comboBox = getComboBox(1, 4, 1);
+    comboBox.setId("BreakerLevel");
+    gridPane.add(new Label("Level you want"), 0, 6);
+    gridPane.add(comboBox, 1, 6, GridPane.REMAINING, 1);
+  }
+
   private void addSpySetter(GridPane gridPane) {
     Label nameTitle = new Label("Type");
     Label amountTitle = new Label("Amount");
     gridPane.add(nameTitle, 0, 0);
     gridPane.add(amountTitle, 1, 0);
     Label levelLabel = new Label("Spy:");
-    ComboBox<Integer> comboBox = getComboBox(0, sourceTerritory.getSpyMoveIndsFromPlayer(namePassword.get(0)).size(),
+    ComboBox<Integer> comboBox = getComboBox(0,
+        sourceTerritory.getSpyMoveIndsFromPlayer(namePassword.get(0)).size(),
         0);
     comboBox.setId("Spies");
     gridPane.add(levelLabel, 0, 1);
@@ -460,6 +540,20 @@ public class PlayTurnController implements Controller {
         });
       }
     }
+  }
+
+  private void LevelSaveButton(Stage unitsStage, GridPane gridPane, String name, boolean isShield) {
+    Button saveButton = new Button("Save");
+    gridPane.add(saveButton, 1, 9);
+    saveButton.setOnAction(event -> {
+      ComboBox<Integer> comboBox = (ComboBox<Integer>) gridPane.lookup(name);
+      if (isShield) {
+        this.shieldLevel = comboBox.getValue();
+      } else {
+        this.breakerLevel = comboBox.getValue();
+      }
+      unitsStage.close();
+    });
   }
 
   private void addSaveButton(Stage unitsStage, GridPane gridPane) {
@@ -497,6 +591,27 @@ public class PlayTurnController implements Controller {
       unitSetting.put("Spy", selectedUnits);
       unitsStage.close();
     });
+  }
+
+  private void openLevelWindow() {
+    Stage unitsStage = new Stage();
+    unitsStage.initModality(Modality.APPLICATION_MODAL);
+    unitsStage.setTitle("Select level of tool you want to buy");
+    GridPane gridPane = new GridPane();
+    gridPane.setVgap(10);
+    gridPane.setHgap(10);
+    gridPane.setPadding(new Insets(10, 10, 10, 10));
+    if (currentMode == GameMode.SHIELD) {
+      addLevelSetter(gridPane);
+      LevelSaveButton(unitsStage, gridPane, "#ShiledLevel", true);
+    } else {
+      addBreakerSetter(gridPane);
+      LevelSaveButton(unitsStage, gridPane, "#BreakerLevel", false);
+    }
+
+    Scene unitsScene = new Scene(gridPane);
+    unitsStage.setScene(unitsScene);
+    unitsStage.showAndWait();
   }
 
   private void openUnitsWindow() {

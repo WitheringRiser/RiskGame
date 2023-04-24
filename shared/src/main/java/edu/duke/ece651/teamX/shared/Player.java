@@ -11,6 +11,7 @@ public class Player implements Serializable {
 
   private int food_resources;
   private int tech_resources;
+  private int gold_resources;
 
   private int tech_level;
   private HashMap<Integer, Integer> researchRule;
@@ -39,7 +40,9 @@ public class Player implements Serializable {
 
     this.food_resources = 100; // Temporarily set at 100
     this.tech_resources = 100; // Temporarily set at 100
-    this.canCloak=false;    
+    this.gold_resources = 100; // Temporarily set at 100
+
+    this.canCloak = false;
     this.researchRule = new HashMap<Integer, Integer>();
     getResearchRule();
   }
@@ -71,10 +74,13 @@ public class Player implements Serializable {
   public int getTechResource() {
     return this.tech_resources;
   }
+  public int getGoldResource() {
+    return this.gold_resources;
+  }
 
   public int getResearchNeedCost() {
-    if(!this.researchRule.containsKey(tech_level)){
-      throw new IllegalArgumentException("You are already in the hightest level "+tech_level);
+    if (!this.researchRule.containsKey(tech_level)) {
+      throw new IllegalArgumentException("You are already in the hightest level " + tech_level);
     }
     return this.researchRule.get(tech_level);
   }
@@ -90,6 +96,14 @@ public class Player implements Serializable {
       return false;
     }
     tech_resources -= num;
+    return true;
+  }
+
+  public boolean consumeGold(int num) {
+    if (gold_resources < num) {
+      return false;
+    }
+    gold_resources -= num;
     return true;
   }
 
@@ -146,11 +160,12 @@ public class Player implements Serializable {
     return null;
   }
 
-  public void increaseAllResource(int num){
+  public void increaseAllResource(int num) {
     this.food_resources += num;
     this.tech_resources += num;
+    this.gold_resources += num;
   }
-  
+
   /**
    * Check if two Player equals Compare name, number of units, and number of
    * territories
@@ -176,20 +191,21 @@ public class Player implements Serializable {
     return ans;
   }
 
-  public boolean getCanCloak(){
+  public boolean getCanCloak() {
     return canCloak;
   }
-  public void unlockCloak(){
-    if(canCloak){
+
+  public void unlockCloak() {
+    if (canCloak) {
       throw new IllegalArgumentException("The player already can cloak");
     }
-    if(tech_level<3){
+    if (tech_level < 3) {
       throw new IllegalArgumentException("This player has not reached level 3 to unlock cloak");
     }
-    if(tech_resources<CloakProcessor.getUnlockCloakCost()){
+    if (tech_resources < CloakProcessor.getUnlockCloakCost()) {
       throw new IllegalArgumentException("This player does not have enough resource to unlock");
     }
-    canCloak=true;
+    canCloak = true;
     consumeTech(CloakProcessor.getUnlockCloakCost());
   }
 }
