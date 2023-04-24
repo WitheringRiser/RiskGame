@@ -33,12 +33,20 @@ public class FrogView {
     return content;
   }
 
+  private String getFullViewWithSheild(Map map, Territory t){
+
+    String content = "Shield Level: " + t.getShieldLevel() + "\n"
+        + "Breaker Level: " + t.getBreakerLevel() + "\n";
+    content+=getFullView(map, t);
+    return content;
+  }
+
   public void refreshMap(Map map) {
     oldInfoMap = currentInfoMap;
     currentInfoMap = new HashMap<>();
     for (Territory t : map.getAllTerritories()) {
       if (map.getOwner(t).getName().equals(playerName)) {
-        currentInfoMap.put(t.getName(), getFullView(map, t));
+        currentInfoMap.put(t.getName(), getFullViewWithSheild(map, t));
         continue;
       }
       if (t.getSpyIndsFromPlayer(playerName).size() > 0) {
