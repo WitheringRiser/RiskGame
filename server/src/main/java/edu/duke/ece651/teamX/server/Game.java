@@ -266,7 +266,7 @@ public class Game implements Runnable {
 
   // print all actionsenders content, only for testing and debugging
   public void printActions(Iterable<ActionSender> allActions, ArrayList<UpgradeSender> allUpgrades,
-      ArrayList<ResearchSender> allResearch) {
+      ArrayList<ResearchSender> allResearch, ArrayList<ShieldSender> allshield) {
     System.out.println("---------------------\n");
     System.out.println("Attack:");
     for (AttackSender a : getAttackSenders(allActions)) {
@@ -291,6 +291,10 @@ public class Game implements Runnable {
     // System.out.println("Player " + a.getPlayer() +
     // "want to improve his technology level");
     // }
+    System.out.println("Shield:");
+    for (ShieldSender s : allshield) {
+      System.out.println(s.getSource().getName());
+    }
     System.out.println("---------------------\n");
   }
 
@@ -420,10 +424,11 @@ public class Game implements Runnable {
         allCloaks.addAll(cloaks);
         allshield.addAll(shields);
       } catch (IOException ioe) { // if lose connection when receive --> skip
+        System.out.print(ioe.toString());
         continue;
       }
     }
-    printActions(allActions, allUpgrades, allResearchs);
+    printActions(allActions, allUpgrades, allResearchs, allshield);
     try {
       handleAllShields(allshield);
       handleAdvancedActions(allResearchs, allUpgrades, allSpyMoves, allCloaks);

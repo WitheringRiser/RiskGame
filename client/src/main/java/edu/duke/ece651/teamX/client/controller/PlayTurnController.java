@@ -124,7 +124,8 @@ public class PlayTurnController implements Controller {
         .collect(Collectors.joining(", "));
     String content = "Territory: " + territory.getName() + "\n"
         + "Neighbors: " + neighbors + "\n"
-        + "Size: " + territory.getTerritorySize() + "\n";
+        + "Size: " + territory.getTerritorySize() + "\n"
+        + "Shield Level: " + territory.getShieldLevel() + "\n";
     content += frogView.getTerrInfo(territory.getName());
     Tooltip territoryTooltip = new Tooltip(content);
     territoryTooltip.setStyle("-fx-font-size: 14;");

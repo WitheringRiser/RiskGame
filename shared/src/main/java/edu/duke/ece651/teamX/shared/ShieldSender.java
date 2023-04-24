@@ -1,6 +1,8 @@
 package edu.duke.ece651.teamX.shared;
 
-public class ShieldSender {
+import java.io.Serializable;
+
+public class ShieldSender implements Serializable {
   private Territory source;
   private int toLevel;
 
