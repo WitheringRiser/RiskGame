@@ -32,7 +32,8 @@ public class MoveProcessor {
     }
   }
 
-  public static int getMinCostPathBetweenSourceDest(Territory source, Territory destination, Map map) {
+  public static int getMinCostPathBetweenSourceDest(Territory source, Territory destination,
+      Map map) {
     Player owner = map.getOwner(source);
 
     PriorityQueue<TerritoryWrapper> queue = new PriorityQueue<>(
@@ -71,7 +72,8 @@ public class MoveProcessor {
 
   public int consumeFood(Territory source, Territory destination, Map map, int unitsNum, int coef) {
     int cost = getMinCostPathBetweenSourceDest(source, destination, map);
-    return cost * coef * unitsNum == 0 ? 1 : cost * coef * unitsNum; // if cost is 0, then it's 1 (at least cost one)
+    return cost * coef * unitsNum == 0 ? 1
+        : cost * coef * unitsNum; // if cost is 0, then it's 1 (at least cost one)
   }
 
   private static class TerritoryWrapper {

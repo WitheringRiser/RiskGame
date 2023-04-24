@@ -263,7 +263,7 @@ public class Territory implements Serializable {
 
   /**
    * For display purpose
-   * 
+   *
    * @param playerName
    * @return
    */
@@ -279,7 +279,7 @@ public class Territory implements Serializable {
 
   /**
    * For move spy
-   * 
+   *
    * @param playerName
    * @return
    */
@@ -303,7 +303,8 @@ public class Territory implements Serializable {
   public ArrayList<Spy> removeSpies(String owner, int num) {
     ArrayList<Integer> inds = getSpyMoveIndsFromPlayer(owner);
     if (inds.size() < num) {
-      throw new IllegalArgumentException("The Spy is not enough: have " + inds.size() + " but requested " + num);
+      throw new IllegalArgumentException(
+          "The Spy is not enough: have " + inds.size() + " but requested " + num);
     }
     ArrayList<Spy> resSpies = new ArrayList<>();
     for (int i = 0; i < num; i++) {

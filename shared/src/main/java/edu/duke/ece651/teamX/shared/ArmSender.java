@@ -3,6 +3,7 @@ package edu.duke.ece651.teamX.shared;
 import java.io.Serializable;
 
 public class ArmSender implements Serializable {
+
   private Territory source;
   private int toLevel;
 

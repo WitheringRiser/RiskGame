@@ -21,7 +21,7 @@ public class ResearchSender implements Serializable {
     return player;
   }
 
-  public boolean isUnlockCloak(){
+  public boolean isUnlockCloak() {
     return unlockCloak;
   }
 }

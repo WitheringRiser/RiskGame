@@ -44,19 +44,20 @@ public abstract class ClientTurnAction<T extends ActionSender> implements Client
 
   public abstract void perform_res(Territory source, Territory dest, String name, int num);
 
-  public void perform(Territory source, Territory dest, HashMap<String, Integer> unitSetting ) {
-    int totalCost=0;
-    for(String typeName : unitSetting.keySet()){
-      totalCost+=calculateCost(source, dest, unitSetting.get(typeName));
+  public void perform(Territory source, Territory dest, HashMap<String, Integer> unitSetting) {
+    int totalCost = 0;
+    for (String typeName : unitSetting.keySet()) {
+      totalCost += calculateCost(source, dest, unitSetting.get(typeName));
     }
-    if(totalCost>player.getFoodResource()){
-      throw new IllegalArgumentException("The food resource is not enough for the total cost " + totalCost);
+    if (totalCost > player.getFoodResource()) {
+      throw new IllegalArgumentException(
+          "The food resource is not enough for the total cost " + totalCost);
     }
-    for(String typeName : unitSetting.keySet()){
+    for (String typeName : unitSetting.keySet()) {
       int num = unitSetting.get(typeName);
-      if(num>0){
-        perform_res(source, dest, typeName,num);
-      }      
+      if (num > 0) {
+        perform_res(source, dest, typeName, num);
+      }
     }
   }
 

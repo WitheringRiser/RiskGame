@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 public class ActionSenderTest {
+
   @Test
   public void test_equal() {
     ActionSender a1 = new ActionSender(new Territory("a", 2), new Territory("b", 2), 2);

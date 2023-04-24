@@ -61,8 +61,9 @@ public class AttackProcessor {
       Territory enemy = map.getTerritoryByName(attack.getSource().getName());
       ArrayList<Unit> attacker = enemy.removeLevelUnits(attack.getName(), attack.getUnitsNum());
       map.getOwner(enemy)
-          .consumeFood(attack.getUnitsNum() * (enemy.getTerritorySize() + defender.getTerritorySize())); // consumes
-                                                                                                         // food
+          .consumeFood(attack.getUnitsNum() * (enemy.getTerritorySize()
+              + defender.getTerritorySize())); // consumes
+      // food
       if (enemy.getBreakerLevel() < defender.getShieldLevel()) {
         attacker = getShield(attacker, defender.getShieldLevel());
       }

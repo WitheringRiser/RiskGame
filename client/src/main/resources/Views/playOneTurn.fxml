@@ -280,16 +280,16 @@
     GridPane.columnSpan="1"
   />
 
-    <Button fx:id="shieldButton"
+  <Button fx:id="shieldButton"
     GridPane.rowIndex="7"
     GridPane.columnIndex="3"
     GridPane.rowSpan="1"
     GridPane.columnSpan="1"
     text="Shield"
     onAction="#onShieldButtonClick"
-    />
+  />
 
-     <Button fx:id="breakerButton"
+  <Button fx:id="breakerButton"
     GridPane.rowIndex="8"
     GridPane.columnIndex="3"
     GridPane.rowSpan="1"
@@ -297,7 +297,7 @@
     text="Breaker"
     onAction="#onBreakerButtonClick"
   />
-  
+
   <Button fx:id="infoButton"
     GridPane.rowIndex="7"
     GridPane.columnIndex="5"
@@ -307,7 +307,7 @@
     onAction="#displayPlayerInfo"
   />
 
-<Button fx:id="doneButton"
+  <Button fx:id="doneButton"
     GridPane.rowIndex="8"
     GridPane.columnIndex="5"
     GridPane.rowSpan="1"
