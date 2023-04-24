@@ -8,7 +8,7 @@
 
 <GridPane fx:id="gridPane" xmlns:fx="http://javafx.com/fxml">
   <padding>
-    <Insets top="25" right="25" bottom="10" left="25"/>
+    <Insets top="25" right="25" bottom="25" left="25"/>
   </padding>
   <columnConstraints>
     <ColumnConstraints percentWidth="20"/>
@@ -227,7 +227,7 @@
 
   <Text fx:id="resultText"
     GridPane.columnIndex="0"
-    GridPane.rowIndex="8"
+    GridPane.rowIndex="9"
     GridPane.rowSpan="1"
     GridPane.columnSpan="7"/>
 
@@ -308,7 +308,7 @@
   />
 
 <Button fx:id="doneButton"
-    GridPane.rowIndex="9"
+    GridPane.rowIndex="8"
     GridPane.columnIndex="5"
     GridPane.rowSpan="1"
     GridPane.columnSpan="1"
@@ -317,7 +317,7 @@
   />
 
   <Button fx:id="defaultButton"
-    GridPane.rowIndex="9"
+    GridPane.rowIndex="8"
     GridPane.columnIndex="6"
     GridPane.rowSpan="1"
     GridPane.columnSpan="1"
@@ -325,7 +325,7 @@
     onAction="#defaultButtonClick"
   />
   <Button text="Exit"
-    GridPane.rowIndex="9"
+    GridPane.rowIndex="8"
     GridPane.columnIndex="7"
     onAction="#back"/>
 </GridPane>

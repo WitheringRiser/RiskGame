@@ -542,12 +542,16 @@ public class PlayTurnController implements Controller {
     }
   }
 
-  private void LevelSaveButton(Stage unitsStage, GridPane gridPane, String name) {
+  private void LevelSaveButton(Stage unitsStage, GridPane gridPane, String name, boolean isShield) {
     Button saveButton = new Button("Save");
     gridPane.add(saveButton, 1, 9);
     saveButton.setOnAction(event -> {
       ComboBox<Integer> comboBox = (ComboBox<Integer>) gridPane.lookup(name);
-      this.shieldLevel = comboBox.getValue();
+      if (isShield) {
+        this.shieldLevel = comboBox.getValue();
+      } else {
+        this.breakerLevel = comboBox.getValue();
+      }
       unitsStage.close();
     });
   }
@@ -599,10 +603,10 @@ public class PlayTurnController implements Controller {
     gridPane.setPadding(new Insets(10, 10, 10, 10));
     if (currentMode == GameMode.SHIELD) {
       addLevelSetter(gridPane);
-      LevelSaveButton(unitsStage, gridPane, "#ShiledLevel");
+      LevelSaveButton(unitsStage, gridPane, "#ShiledLevel", true);
     } else {
       addBreakerSetter(gridPane);
-      LevelSaveButton(unitsStage, gridPane, "#BreakerLevel");
+      LevelSaveButton(unitsStage, gridPane, "#BreakerLevel", false);
     }
 
     Scene unitsScene = new Scene(gridPane);
