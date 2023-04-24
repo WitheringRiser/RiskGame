@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import edu.duke.ece651.teamX.client.ClientAttack;
+import edu.duke.ece651.teamX.client.ClientBreaker;
 import edu.duke.ece651.teamX.client.ClientCloak;
 import edu.duke.ece651.teamX.client.ClientMove;
 import edu.duke.ece651.teamX.client.ClientResearch;
@@ -48,7 +49,7 @@ import javafx.stage.Stage;
 public class PlayTurnController implements Controller {
 
   private enum GameMode {
-    DEFAULT, ATTACK, MOVE, UPGRADE, SPYMOVE, CLOAK, SHIELD
+    DEFAULT, ATTACK, MOVE, UPGRADE, SPYMOVE, CLOAK, SHIELD, BREAKER
   }
 
   private GameMode currentMode = GameMode.DEFAULT;
@@ -57,6 +58,7 @@ public class PlayTurnController implements Controller {
   private HashMap<String, Integer> unitSetting = new HashMap<>();
   private HashMap<String, ArrayList<Integer>> unitUpgradeDic = new HashMap<>();
   private int shieldLevel = 0;
+  private int breakerLevel = 0;
   TextField textField;
   TextField textField_toLevel;
 
@@ -83,6 +85,7 @@ public class PlayTurnController implements Controller {
   private ClientSpyMove clientSpyMove;
   private ClientCloak clientCloak;
   private ClientShield clientShield;
+  private ClientBreaker clientBreaker;
   GameResult gameResult;
 
   public PlayTurnController(Stage stage, Socket socket, ArrayList<String> namepassword)
@@ -112,21 +115,23 @@ public class PlayTurnController implements Controller {
     this.clientCloak = new ClientCloak(clientSocket, map, map.getPlayerByName(namePassword.get(0)));
     this.clientShield = new ClientShield(clientSocket, map,
         map.getPlayerByName(namePassword.get(0)));
+    this.clientBreaker = new ClientBreaker(clientSocket, map,
+        map.getPlayerByName(namePassword.get(0)));
     setNewLayout();
-
   }
 
   @FXML
   private void displayTerritoryInfo(Button button, Territory territory) {
     Iterator<Territory> iterator = territory.getNeighbours();
     String neighbors = StreamSupport.stream(
-            Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), false)
+        Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), false)
         .map(Territory::getName)
         .collect(Collectors.joining(", "));
     String content = "Territory: " + territory.getName() + "\n"
         + "Neighbors: " + neighbors + "\n"
         + "Size: " + territory.getTerritorySize() + "\n"
-        + "Shield Level: " + territory.getShieldLevel() + "\n";
+        + "Shield Level: " + territory.getShieldLevel() + "\n"
+        + "Breaker Level: " + territory.getBreakerLevel() + "\n";
     content += frogView.getTerrInfo(territory.getName());
     Tooltip territoryTooltip = new Tooltip(content);
     territoryTooltip.setStyle("-fx-font-size: 14;");
@@ -145,7 +150,15 @@ public class PlayTurnController implements Controller {
     for (Territory t : map.getAllTerritories()) {
       Button button = (Button) scene.lookup("#" + t.getName());
       if (map.getTerritoriesByPlayerName(namePassword.get(0)).contains(t)) {
-        button.setStyle("-fx-background-color: blue ;");
+        if (t.getShieldLevel() == 0 && t.getBreakerLevel() == 0) {
+          button.setStyle("-fx-background-color: blue ;");
+        } else if (t.getShieldLevel() == 0) {
+          button.setStyle("-fx-background-color: red ;");
+        } else if (t.getBreakerLevel() == 0) {
+          button.setStyle("-fx-background-color: gold ;");
+        } else {
+          button.setStyle("-fx-background-color: orange ;");
+        }
         // Change color when pressed
         button.setOnMousePressed(e -> button.setStyle("-fx-background-color: darkblue;"));
         button.setOnAction(event -> {
@@ -252,6 +265,14 @@ public class PlayTurnController implements Controller {
           sourceTerritory = null;
           setNewLayout();
           break;
+        case BREAKER:
+          sourceTerritory = territory;
+          openLevelWindow();
+          clientBreaker.perform(territory, this.breakerLevel);
+          this.breakerLevel = 0;
+          sourceTerritory = null;
+          setNewLayout();
+          break;
         case ATTACK:
         case MOVE:
         case SPYMOVE:
@@ -302,6 +323,13 @@ public class PlayTurnController implements Controller {
   private void onShieldButtonClick(ActionEvent event) {
     resultText.setText("Please select a source Territory to add a shield on");
     currentMode = GameMode.SHIELD;
+    sourceTerritory = null;
+  }
+
+  @FXML
+  private void onBreakerButtonClick(ActionEvent event) {
+    resultText.setText("Please select a source Territory to add a breaker on");
+    currentMode = GameMode.BREAKER;
     sourceTerritory = null;
   }
 
@@ -369,6 +397,7 @@ public class PlayTurnController implements Controller {
     clientSpyMove.commit();
     clientCloak.commit();
     clientShield.commit();
+    clientBreaker.commit();
     refresh();
   }
 
@@ -445,6 +474,31 @@ public class PlayTurnController implements Controller {
     gridPane.add(comboBox, 1, 6, GridPane.REMAINING, 1);
   }
 
+  private void addBreakerSetter(GridPane gridPane) {
+    gridPane.setAlignment(Pos.CENTER);
+    gridPane.add(new Label("Breaker description:"), 0, 0, GridPane.REMAINING, 1);
+    gridPane.add(new Label("Level"), 0, 1);
+    gridPane.add(new Label("Cost of Gold"), 1, 1);
+    gridPane.add(new Label("Shield it breaks"), 2, 1);
+
+    int cost = 25;
+    String shieldString = "";
+    String split = "";
+    for (int i = 1; i <= 4; ++i) {
+      shieldString += (split + String.valueOf(i));
+      gridPane.add(new Label(String.valueOf(i)), 0, i + 1);
+      gridPane.add(new Label(String.valueOf(cost)), 1, i + 1);
+      gridPane.add(new Label(shieldString), 2, i + 1);
+      cost = cost * 2;
+      split = ", ";
+    }
+
+    ComboBox<Integer> comboBox = getComboBox(1, 4, 1);
+    comboBox.setId("BreakerLevel");
+    gridPane.add(new Label("Level you want"), 0, 6);
+    gridPane.add(comboBox, 1, 6, GridPane.REMAINING, 1);
+  }
+
   private void addSpySetter(GridPane gridPane) {
     Label nameTitle = new Label("Type");
     Label amountTitle = new Label("Amount");
@@ -488,13 +542,16 @@ public class PlayTurnController implements Controller {
     }
   }
 
-  private void LevelSaveButton(Stage unitsStage, GridPane gridPane) {
+  private void LevelSaveButton(Stage unitsStage, GridPane gridPane, String name, boolean isShield) {
     Button saveButton = new Button("Save");
     gridPane.add(saveButton, 1, 9);
     saveButton.setOnAction(event -> {
-      ComboBox<Integer> comboBox = (ComboBox<Integer>) gridPane.lookup(
-          "#ShiledLevel");
-      this.shieldLevel = comboBox.getValue();
+      ComboBox<Integer> comboBox = (ComboBox<Integer>) gridPane.lookup(name);
+      if (isShield) {
+        this.shieldLevel = comboBox.getValue();
+      } else {
+        this.breakerLevel = comboBox.getValue();
+      }
       unitsStage.close();
     });
   }
@@ -539,14 +596,18 @@ public class PlayTurnController implements Controller {
   private void openLevelWindow() {
     Stage unitsStage = new Stage();
     unitsStage.initModality(Modality.APPLICATION_MODAL);
-    unitsStage.setTitle("Select level of shield you want to buy");
+    unitsStage.setTitle("Select level of tool you want to buy");
     GridPane gridPane = new GridPane();
     gridPane.setVgap(10);
     gridPane.setHgap(10);
     gridPane.setPadding(new Insets(10, 10, 10, 10));
-
-    addLevelSetter(gridPane);
-    LevelSaveButton(unitsStage, gridPane);
+    if (currentMode == GameMode.SHIELD) {
+      addLevelSetter(gridPane);
+      LevelSaveButton(unitsStage, gridPane, "#ShiledLevel", true);
+    } else {
+      addBreakerSetter(gridPane);
+      LevelSaveButton(unitsStage, gridPane, "#BreakerLevel", false);
+    }
 
     Scene unitsScene = new Scene(gridPane);
     unitsStage.setScene(unitsScene);

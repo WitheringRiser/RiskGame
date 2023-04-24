@@ -248,14 +248,27 @@ public class AttackProcessorTest {
     TextDisplayer displayer = new TextDisplayer(map);
     System.out.println(displayer.display());
 
-    allAttack.add(new AttackSender(t1, t2, 99));
+    allAttack.add(new AttackSender(t1, t2, 50));
 
     AttackProcessor ap = new AttackProcessor(allAttack, map, 0);
     ap.resovleAllAttack();
     System.out.println(displayer.display());
-    assertEquals(0, t1.getUnitsNumber());
+    assertEquals(49, t1.getUnitsNumber());
     assertEquals(p1, map.getOwner(t1));
     assertEquals(80, t2.getUnitsNumber());
+    assertEquals(p2, map.getOwner(t2));
+
+    t1.addBreaker(4);
+    allAttack.clear();
+    allAttack.add(new AttackSender(t1, t2, 49));
+
+    AttackProcessor ap2 = new AttackProcessor(allAttack, map, 0);
+    ap2.resovleAllAttack();
+
+    System.out.println(displayer.display());
+    assertEquals(0, t1.getUnitsNumber());
+    assertEquals(p1, map.getOwner(t1));
+    assertEquals(27, t2.getUnitsNumber());
     assertEquals(p2, map.getOwner(t2));
 
   }
