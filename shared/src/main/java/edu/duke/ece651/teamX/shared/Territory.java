@@ -15,6 +15,9 @@ public class Territory implements Serializable {
   private int shield_level;
   private HashMap<Integer, Integer> shieldRule;
 
+  private int breaker_level;
+  private HashMap<Integer, Integer> breakerRule;
+
   /**
    * Constructs a Territory object with the specified name
    *
@@ -27,8 +30,11 @@ public class Territory implements Serializable {
     this.cloaking = 0;
     this.spies = new ArrayList<>();
     this.shield_level = 0;
+    this.breaker_level = 0;
     this.shieldRule = new HashMap<>();
+    this.breakerRule = new HashMap<>();
     setShieldRule();
+    setBreakerRule();
   }
 
   public Territory(String in_name, int num) {
@@ -56,6 +62,12 @@ public class Territory implements Serializable {
     shieldRule.put(2, 100);
     shieldRule.put(3, 200);
     shieldRule.put(4, 400);
+  }
+
+  public void setBreakerRule() {
+    for (int i : shieldRule.keySet()) {
+      breakerRule.put(i, shieldRule.get(i) / 2);
+    }
   }
 
   /*
@@ -326,6 +338,22 @@ public class Territory implements Serializable {
 
   public void releaseShield() {
     this.shield_level = 0;
+  }
+
+  public int getBreakerLevel() {
+    return breaker_level;
+  }
+
+  public int getBreakerCost(int toLevel) {
+    return breakerRule.get(toLevel);
+  }
+
+  public void addBreaker(int toLevel) {
+    this.breaker_level = toLevel;
+  }
+
+  public void releaseBreaker() {
+    this.breaker_level = 0;
   }
 
 }

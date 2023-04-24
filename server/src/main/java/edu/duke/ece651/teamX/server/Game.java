@@ -370,9 +370,12 @@ public class Game implements Runnable {
     }
   }
 
-  private void handleAllShields(ArrayList<ShieldSender> allShield) {
+  private void handleAllShieldsBreakers(ArrayList<ShieldSender> allShield, ArrayList<BreakerSender> allBreaker) {
     ShieldProcessor p = new ShieldProcessor(allShield, map);
     p.resovleAllShield();
+
+    BreakerProcessor bp = new BreakerProcessor(allBreaker, map);
+    bp.resovleAllBreak();
   }
 
   private void handleAdvancedActions(ArrayList<ResearchSender> allResearh, ArrayList<UpgradeSender> allUpgrades,
@@ -397,6 +400,7 @@ public class Game implements Runnable {
     ArrayList<SpyMoveSender> allSpyMoves = new ArrayList<>();
     ArrayList<CloakSender> allCloaks = new ArrayList<>();
     ArrayList<ShieldSender> allshield = new ArrayList<>();
+    ArrayList<BreakerSender> allbreaker = new ArrayList<>();
     for (Player player : getAllPlayers()) {
       // if this player has lost, skip
       if (gameResult.loserContains(player)) {
@@ -416,6 +420,7 @@ public class Game implements Runnable {
         ArrayList<SpyMoveSender> spymoves = (ArrayList<SpyMoveSender>) Communicate.receiveObject(s);
         ArrayList<CloakSender> cloaks = (ArrayList<CloakSender>) Communicate.receiveObject(s);
         ArrayList<ShieldSender> shields = (ArrayList<ShieldSender>) Communicate.receiveObject(s);
+        ArrayList<BreakerSender> breakers = (ArrayList<BreakerSender>) Communicate.receiveObject(s);
         allActions.addAll(moves);
         allActions.addAll(attacks);
         allResearchs.add(research);
@@ -423,6 +428,7 @@ public class Game implements Runnable {
         allSpyMoves.addAll(spymoves);
         allCloaks.addAll(cloaks);
         allshield.addAll(shields);
+        allbreaker.addAll(breakers);
       } catch (IOException ioe) { // if lose connection when receive --> skip
         System.out.print(ioe.toString());
         continue;
@@ -430,7 +436,7 @@ public class Game implements Runnable {
     }
     printActions(allActions, allUpgrades, allResearchs, allshield);
     try {
-      handleAllShields(allshield);
+      handleAllShieldsBreakers(allshield, allbreaker);
       handleAdvancedActions(allResearchs, allUpgrades, allSpyMoves, allCloaks);
       handleActionSenders(allActions);
     } catch (IllegalArgumentException e) {
@@ -455,6 +461,7 @@ public class Game implements Runnable {
   public void releaseShield() {
     for (Territory t : map.getAllTerritories()) {
       t.releaseShield();
+      t.releaseBreaker();
     }
   }
 
