@@ -167,6 +167,40 @@ public class AIDecisionMaker {
 
   }
 
+  private void doAttack(Territory sourceTerr, Territory destTerr) {
+    for (int level = 6; level >= 0; level--) {
+      for (int count_level = sourceTerr.getUnitCountByLevel(level); count_level >= 1;
+          count_level--) {
+        try {
+          HashMap<String, Integer> unitSetting = new HashMap<>();
+          unitSetting.put("level_" + level + "_unit", count_level);
+          clientAttack.perform(sourceTerr, destTerr, unitSetting);
+          break;
+        } catch (Exception ignored) {
+        }
+      }
+    }
+  }
+
+  private void tryAttack(int constantControl) {
+    Territory sourceTerr = null;
+    Territory destTerr = null;
+    int maxScore = Integer.MIN_VALUE;
+    for (Territory terr : getBoarderTerritories()) {
+      for (Territory enemy : clientAttack.findDestTerrs(terr)) {
+        int score_distance = getTerritoryEvaluation(terr) - getTerritoryEvaluation(enemy);
+        if (score_distance > maxScore) {
+          sourceTerr = terr;
+          destTerr = enemy;
+          maxScore = score_distance;
+        }
+      }
+    }
+    if (maxScore > constantControl) {
+      doAttack(sourceTerr, destTerr);
+    }
+  }
+
   /**
    * Decide to upgrade or do research based on the current tech resources
    *
@@ -185,6 +219,6 @@ public class AIDecisionMaker {
 
   public void make_decision() {
     decideUpgradeOrResearch(0.1);
-    getBoarderTerritories();
+    tryAttack(10);
   }
 }
