@@ -49,7 +49,7 @@ public class AIDecisionMaker {
    *
    * @return the boarder territories
    */
-  private Iterable<Territory> getBoarderTerritories() {
+  private ArrayList<Territory> getBoarderTerritories() {
     ArrayList<Territory> boarderTerritories = new ArrayList<>();
     for (Territory terr : map.getTerritories(this_player)) {
       if (map.getOwner(terr).equals(this_player)) {
@@ -129,25 +129,38 @@ public class AIDecisionMaker {
     return basicUnitStats.getOrDefault(level, 0);
   }
 
+  private void upgradeOneTerritory(Territory terr, int current_level) {
+    for (int count_level = terr.getUnitCountByLevel(current_level); count_level >= 0;
+        count_level--) {
+      try {
+        HashMap<String, ArrayList<Integer>> upgradeDic = new HashMap<>();
+
+        ArrayList<Integer> upInfo = new ArrayList<>();
+        upInfo.add(count_level);
+        upInfo.add(this_player.getTechLevel());
+
+        upgradeDic.put("level_" + current_level + "_unit", upInfo);
+
+        clientUpgrade.perform(terr, upgradeDic);
+        break;
+      } catch (Exception ignored) {
+      }
+    }
+  }
+
   private void doUpgrade() {
-    for (int level = this_player.getTechLevel() - 1; level >= 0; level--) {
-      for (Territory terr : getBoarderTerritories()) {
-        for (int count_level = terr.getUnitCountByLevel(level); count_level >= 0; count_level--) {
-          try {
-            HashMap<String, ArrayList<Integer>> upgradeDic = new HashMap<>();
+    // prioritize to upgrade the boarder territories
+    for (Territory terr : getBoarderTerritories()) {
+      for (int level = this_player.getTechLevel() - 1; level >= 0; level--) {
+        upgradeOneTerritory(terr, level);
+      }
+    }
 
-            ArrayList<Integer> upInfo = new ArrayList<>();
-            upInfo.add(count_level);
-            upInfo.add(this_player.getTechLevel());
-
-            upgradeDic.put("level_" + level + "_unit", upInfo);
-
-            clientUpgrade.perform(terr, upgradeDic);
-            break;
-          } catch (Exception e) {
-            System.out.println(e.getMessage());
-            continue;
-          }
+    // upgrade the non-boarder territories
+    for (Territory terr : map.getTerritories(this_player)) {
+      if (!getBoarderTerritories().contains(terr)) {
+        for (int level = this_player.getTechLevel() - 1; level >= 0; level--) {
+          upgradeOneTerritory(terr, level);
         }
       }
     }
