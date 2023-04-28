@@ -6,14 +6,13 @@ package edu.duke.ece651.teamX.client;
 import edu.duke.ece651.teamX.client.controller.*;
 import edu.duke.ece651.teamX.client.view.GeneralScreen;
 import edu.duke.ece651.teamX.shared.*;
+import edu.duke.ece651.teamX.shared.Communicate;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.ArrayList;
-
-import edu.duke.ece651.teamX.shared.Communicate;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -21,7 +20,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class App extends Application {
-
+  /*
   private ArrayList<String> authentication(Socket clientSocket, UserInReader uir)
       throws IOException, ClassNotFoundException {
     ArrayList<String> namePassword = new ArrayList<String>();
@@ -75,7 +74,7 @@ public class App extends Application {
     System.out.println(message);
     return null;
   }
-
+  */
   public static void main(String[] args) throws IOException, ClassNotFoundException {
     // int port;
     // if (args.length != 1) {
