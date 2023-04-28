@@ -1,5 +1,6 @@
 package edu.duke.ece651.teamX.client.controller;
 
+import edu.duke.ece651.teamX.client.AIDecisionMaker;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.URL;
@@ -388,6 +389,11 @@ public class PlayTurnController implements Controller {
   @FXML
   private void doneButtonClick(ActionEvent event) throws IOException, ClassNotFoundException {
     currentMode = GameMode.DEFAULT;
+    endOneTurn();
+    refresh();
+  }
+
+  private void endOneTurn() throws IOException {
     clientMove.commit();
     clientAttack.commit();
     clientResearch.commit();
@@ -396,7 +402,6 @@ public class PlayTurnController implements Controller {
     clientCloak.commit();
     clientShield.commit();
     clientBreaker.commit();
-    refresh();
   }
 
   @FXML
@@ -638,5 +643,15 @@ public class PlayTurnController implements Controller {
     Scene unitsScene = new Scene(gridPane);
     unitsStage.setScene(unitsScene);
     unitsStage.showAndWait();
+  }
+
+  @FXML
+  private void makeAIDecision() throws IOException, ClassNotFoundException {
+    AIDecisionMaker aiDecisionMaker = new AIDecisionMaker(this.map, this.clientAttack,
+        this.clientMove, this.clientResearch, this.clientUpgrade,
+        map.getPlayerByName(namePassword.get(0)));
+    aiDecisionMaker.make_decision();
+    endOneTurn();
+    refresh();
   }
 }
