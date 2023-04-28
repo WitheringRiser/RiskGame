@@ -307,6 +307,15 @@
     onAction="#displayPlayerInfo"
   />
 
+  <Button fx:id="AIDecision"
+    GridPane.rowIndex="7"
+    GridPane.columnIndex="6"
+    GridPane.rowSpan="1"
+    GridPane.columnSpan="1"
+    text="AIDecision"
+    onAction="#makeAIDecision"
+  />
+
   <Button fx:id="doneButton"
     GridPane.rowIndex="8"
     GridPane.columnIndex="5"
