@@ -63,23 +63,6 @@ public class AIDecisionMaker {
     return boarderTerritories;
   }
 
-  /**
-   * Find the best source territory to attack the enemy
-   *
-   * @return the best source territory
-   */
-  private Territory findBestAttackingSourceTerritory() {
-    int enemyLowestTerrEval = Integer.MAX_VALUE;
-    Territory bestAttackSource = null;
-    for (Territory terr : getBoarderTerritories()) {
-      for (Territory enemy : clientAttack.findDestTerrs(terr)) {
-        if (getTerritoryEvaluation(enemy) < enemyLowestTerrEval) {
-          bestAttackSource = terr;
-        }
-      }
-    }
-    return bestAttackSource;
-  }
 
   /**
    * Get the statistics of all basic units owned by this player in the map
