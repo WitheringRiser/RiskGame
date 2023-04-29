@@ -21,12 +21,20 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import javafx.scene.media.Media;  
+import javafx.scene.media.MediaPlayer;  
+import javafx.scene.media.MediaView;  
+import javafx.scene.media.AudioClip;
+import javafx.scene.layout.GridPane;
+
+
 
 public class CreateGameController implements Controller {
 
   protected ArrayList<String> namePassword;
   protected Socket clientSocket;
   protected Stage stage;
+  private GridPane gridPane;
 
   public CreateGameController(Stage st, Socket cs, ArrayList<String> np) {
     namePassword = np;
@@ -41,8 +49,15 @@ public class CreateGameController implements Controller {
     URL cssResource = getClass().getResource("/style/roomButton.css");
     Scene scene = new Scene(root, 640, 480);
     scene.getStylesheets().add(cssResource.toString());
+
+
+    
     stage.setTitle("Create a New Game");
     stage.setScene(scene);
+
+
+
+
     stage.show();
   }
 

@@ -14,6 +14,16 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundSize;
+
+import javafx.scene.layout.GridPane;
+
+
 import edu.duke.ece651.teamX.shared.Communicate;
 import javafx.stage.Stage;
 
@@ -64,6 +74,7 @@ public class LoginController implements Controller {
     loader.setController(this);
     Parent root = loader.load();
     Scene scene = new Scene(root, 640, 480);
+
 
     stage.setTitle("Login or Create Account");
     stage.setScene(scene);

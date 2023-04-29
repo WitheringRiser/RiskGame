@@ -20,6 +20,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.control.Label;
 import javafx.scene.Parent;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundSize;
 
 public class SelectGroupController implements Controller {
     protected ArrayList<String> namePassword;
@@ -59,7 +65,7 @@ public class SelectGroupController implements Controller {
     }
 
     public void displayGroups() {
-        String colors[] = { "red", "blue", "yellow", "green" };
+        String colors[] = { "indianred", "darkslateblue", "yellow", "green" };
         for (int i : territories.keySet()) {
             ArrayList<Territory> ts = territories.get(i);
             for (Territory t : ts) {
@@ -88,6 +94,9 @@ public class SelectGroupController implements Controller {
             stage.setTitle("Choose Territory");
             stage.setScene(scene);
             displayGroups();
+
+
+
             stage.show();
         } catch (Exception e) {
             System.out.println(e.getMessage());

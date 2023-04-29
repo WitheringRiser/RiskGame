@@ -21,6 +21,13 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.control.Label;
 import javafx.scene.Parent;
 
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundSize;
+
 public class SetUnitController implements Controller {
     // @FXML
     TextField textField;
@@ -83,7 +90,7 @@ public class SetUnitController implements Controller {
         gridPane.add(textField, 5, 7);
         for (Territory t : territories) {
             Button button = (Button) scene.lookup("#" + t.getName());
-            button.setStyle("-fx-background-color: blue ;");
+            button.setStyle("-fx-background-color: darkslateblue ;");
             button.setOnAction(event -> {
                 try {
                     setUnit(event);
@@ -104,6 +111,13 @@ public class SetUnitController implements Controller {
         stage.setTitle("Set Units");
         stage.setScene(scene);
         displayTerr();
+
+        Image image = new Image("photos/MenuBackground.png");
+        gridPane.setBackground(new Background(new BackgroundImage(image,BackgroundRepeat.NO_REPEAT,
+                                                              BackgroundRepeat.NO_REPEAT,
+                                                              BackgroundPosition.DEFAULT,
+                                                              new BackgroundSize(1.0, 1.0, true, true, false, false))));
+
         stage.show();
 
     }

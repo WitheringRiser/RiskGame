@@ -7,13 +7,13 @@
     
 }
 .terrbtn {
--fx-background-color: black,#012169;
+-fx-background-color: black,#483D8B;
 -fx-text-fill: ivory;
 -fx-background-radius: 10, 10;
 -fx-background-insets: 2, 5;
 }
 .terrbtn:hover {
--fx-background-color: #333355, #101169;
+-fx-background-color: #333355, #483D8B;
 -fx-text-fill: ivory;
 -fx-background-radius: 10, 10;
 -fx-background-insets: 2, 5;
