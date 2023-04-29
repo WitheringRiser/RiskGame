@@ -117,7 +117,7 @@ public class PlayTurnController implements Controller {
     this.namePassword = namepassword;
     this.stage = stage;
     this.clientSocket = socket;
-    this.frogView = new FrogView(namepassword.get(0));
+    this.fogView = new FogView(namepassword.get(0));
     //resultText.setFill(Color.IVORY); 
     refresh();
   }
@@ -239,7 +239,7 @@ public class PlayTurnController implements Controller {
     
     
 
-    frogView.refreshMap(map);
+    fogView.refreshMap(map);
     setTerrButtons(false);
     if (!isLost) {
       setCloakButtons();

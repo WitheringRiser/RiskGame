@@ -83,12 +83,6 @@ public class EnterGameController extends CreateGameController {
     });
     gridPane.add(backButton, 4, roomList.size() + 1);
 
-        Image image = new Image("photos/MenuBackground.png");
-        gridPane.setBackground(new Background(new BackgroundImage(image,BackgroundRepeat.NO_REPEAT,
-                                                              BackgroundRepeat.NO_REPEAT,
-                                                              BackgroundPosition.DEFAULT,
-                                                              new BackgroundSize(1.0, 1.0, true, true, false, false))));
-
     }
 
   public ArrayList<RoomSender> receiveRoomList() {
@@ -138,6 +132,13 @@ public class EnterGameController extends CreateGameController {
     // URL cssResource = getClass().getResource("/style/roomButton.css");
     Scene scene = new Scene(root, 640, 480);
     stage.setTitle("Enter a Game");
+
+    Image image = new Image("photos/MenuBackground.png");
+    gridPane.setBackground(new Background(new BackgroundImage(image,BackgroundRepeat.NO_REPEAT,
+                                                          BackgroundRepeat.NO_REPEAT,
+                                                          BackgroundPosition.DEFAULT,
+                                                          new BackgroundSize(1.0, 1.0, true, true, false, false))));
+
     stage.setScene(scene);
     stage.show();
 
