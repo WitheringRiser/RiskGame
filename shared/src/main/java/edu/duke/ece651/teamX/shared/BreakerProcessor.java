@@ -3,6 +3,7 @@ package edu.duke.ece651.teamX.shared;
 import java.util.ArrayList;
 
 public class BreakerProcessor {
+
   private ArrayList<BreakerSender> allBreaker;
   private Map map;
 

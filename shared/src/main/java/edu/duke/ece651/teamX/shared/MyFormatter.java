@@ -5,6 +5,7 @@ import org.json.*;
 
 // Parses world json files into useable objects
 public class MyFormatter {
+
   private int NumPlayers;
   private HashMap<String, Territory> terr_name_dict;
   private HashMap<String, JSONArray> terr_neighbor_dict;
@@ -20,7 +21,7 @@ public class MyFormatter {
    * a json file
    * converts a json string object into a map
    */
-  public void MapParse(HashMap<Integer, ArrayList<Territory> > Input, String MapJson) {
+  public void MapParse(HashMap<Integer, ArrayList<Territory>> Input, String MapJson) {
     if (NumPlayers < 2) {
       return;
     }
@@ -79,8 +80,7 @@ public class MyFormatter {
         if (terr_name_dict.containsKey(NeighName)) {
           Territory neighbor = terr_name_dict.get(NeighName);
           curr.addNeighbors(neighbor);
-        }
-        else {
+        } else {
           System.out.println(NeighName);
         }
       }
@@ -92,7 +92,7 @@ public class MyFormatter {
    * output: JSONObject
    * converts a map into a JSONObject
    */
-  public JSONObject MapCompose(HashMap<Integer, ArrayList<Territory> > territoryMap) {
+  public JSONObject MapCompose(HashMap<Integer, ArrayList<Territory>> territoryMap) {
     MapToJson myMaptoJson = new MapToJson(territoryMap);
     return myMaptoJson.getJSON();
   }

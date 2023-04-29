@@ -5,18 +5,18 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <GridPane fx:id="gridPane" xmlns:fx="http://javafx.com/fxml">
-    <padding>
-        <Insets top="25" right="25" bottom="10" left="25" />
-    </padding>
-    <columnConstraints>
-        <ColumnConstraints percentWidth="60" />
-        <ColumnConstraints percentWidth="60" />
-        <ColumnConstraints percentWidth="60" />
-        <ColumnConstraints percentWidth="60" />
-        <ColumnConstraints percentWidth="60" />
-    </columnConstraints>
-    <rowConstraints>
-        <RowConstraints percentHeight="10" />
-    </rowConstraints>
+  <padding>
+    <Insets top="25" right="25" bottom="10" left="25"/>
+  </padding>
+  <columnConstraints>
+    <ColumnConstraints percentWidth="60"/>
+    <ColumnConstraints percentWidth="60"/>
+    <ColumnConstraints percentWidth="60"/>
+    <ColumnConstraints percentWidth="60"/>
+    <ColumnConstraints percentWidth="60"/>
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints percentHeight="10"/>
+  </rowConstraints>
 
 </GridPane>

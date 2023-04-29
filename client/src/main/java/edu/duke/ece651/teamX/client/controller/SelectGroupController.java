@@ -28,41 +28,43 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundSize;
 
 public class SelectGroupController implements Controller {
-    protected ArrayList<String> namePassword;
-    protected Socket clientSocket;
-    protected Stage stage;
-    protected Scene scene;
-    private HashMap<Integer, ArrayList<Territory>> territories;
-    @FXML
-    Text resultText;
 
-    public SelectGroupController(Stage st, Socket cs, ArrayList<String> np, HashMap<Integer, ArrayList<Territory>> tsm) {
-        namePassword = np;
-        clientSocket = cs;
-        stage = st;
-        territories = tsm;
-    }
+  protected ArrayList<String> namePassword;
+  protected Socket clientSocket;
+  protected Stage stage;
+  protected Scene scene;
+  private HashMap<Integer, ArrayList<Territory>> territories;
+  @FXML
+  Text resultText;
 
-    @FXML
-    public void chooseGroup(ActionEvent ae) throws IOException, ClassNotFoundException {
-        Object source = ae.getSource();
+  public SelectGroupController(Stage st, Socket cs, ArrayList<String> np,
+      HashMap<Integer, ArrayList<Territory>> tsm) {
+    namePassword = np;
+    clientSocket = cs;
+    stage = st;
+    territories = tsm;
+  }
 
-        Button btn = (Button) source;
-        String terrName = btn.getId();
-        ArrayList<Territory> ts ;
-        for (int i : territories.keySet()) {
-            ts= territories.get(i);
-            for (Territory t : ts) {
-                if (t.getName().equals(terrName)) {
-                    Communicate.sendInt(clientSocket, i);
-                    SetUnitController suc = new SetUnitController(stage, clientSocket, namePassword, ts, 20);
-                    GeneralScreen<SetUnitController> rs = new GeneralScreen<>(suc);
-                    break;
-                }
-            }
+  @FXML
+  public void chooseGroup(ActionEvent ae) throws IOException, ClassNotFoundException {
+    Object source = ae.getSource();
+
+    Button btn = (Button) source;
+    String terrName = btn.getId();
+    ArrayList<Territory> ts;
+    for (int i : territories.keySet()) {
+      ts = territories.get(i);
+      for (Territory t : ts) {
+        if (t.getName().equals(terrName)) {
+          Communicate.sendInt(clientSocket, i);
+          SetUnitController suc = new SetUnitController(stage, clientSocket, namePassword, ts, 20);
+          GeneralScreen<SetUnitController> rs = new GeneralScreen<>(suc);
+          break;
         }
-        
+      }
     }
+
+  }
 
     public void displayGroups() {
         String colors[] = { "indianred", "darkslateblue", "yellow", "green" };
@@ -80,7 +82,7 @@ public class SelectGroupController implements Controller {
             }
         }
 
-    }
+  }
 
     public void setNewLayout() throws IOException {
         try {
@@ -102,5 +104,5 @@ public class SelectGroupController implements Controller {
             System.out.println(e.getMessage());
         }
 
-    }
+  }
 }

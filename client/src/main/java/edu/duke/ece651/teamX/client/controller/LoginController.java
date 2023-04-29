@@ -61,7 +61,7 @@ public class LoginController implements Controller {
     // System.out.println(mes);
     if (mes.length() == 0) {
       resultText.setText("Login success");
-      RoomController rc = new RoomController(stage,clientSocket,namePassword);
+      RoomController rc = new RoomController(stage, clientSocket, namePassword);
       GeneralScreen<RoomController> rs = new GeneralScreen<>(rc);
     } else {
       resultText.setText(mes);

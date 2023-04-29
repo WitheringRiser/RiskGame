@@ -17,8 +17,6 @@ public class Player implements Serializable {
   private HashMap<Integer, Integer> researchRule;
   private boolean canCloak;
 
-  public int numPlayers = 0;
-
   /**
    * Construct a Player Object for passing player related information
    *
@@ -74,6 +72,7 @@ public class Player implements Serializable {
   public int getTechResource() {
     return this.tech_resources;
   }
+
   public int getGoldResource() {
     return this.gold_resources;
   }
@@ -139,8 +138,7 @@ public class Player implements Serializable {
    *
    * @param index:   the index of the unit
    * @param toLevel: the level the unit upgrade to
-   * @return null if upgrade successfully, otherwise the string describe the
-   *         reason for failure
+   * @return null if upgrade successfully, otherwise the string describe the reason for failure
    */
   public String upgradeUnit(Territory source, int index, int toLevel) {
     ArrayList<Unit> units = source.getUnits();
@@ -167,8 +165,7 @@ public class Player implements Serializable {
   }
 
   /**
-   * Check if two Player equals Compare name, number of units, and number of
-   * territories
+   * Check if two Player equals Compare name, number of units, and number of territories
    */
   @Override
   public boolean equals(Object o) {

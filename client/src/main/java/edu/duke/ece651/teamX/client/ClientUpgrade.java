@@ -24,7 +24,6 @@ public class ClientUpgrade {
   }
 
   /**
-   * 
    * @param name    the type name of units
    * @param num     number of units to upgrade
    * @param toLevel to which level
@@ -40,23 +39,22 @@ public class ClientUpgrade {
         }
       }
     } else if (toLevel == -1) {
-      ArrayList<Unit> removedUnits=source.removeLevelUnits(name,num);
-      if(removedUnits.get(0).getLevel()<1){
+      ArrayList<Unit> removedUnits = source.removeLevelUnits(name, num);
+      if (removedUnits.get(0).getLevel() < 1) {
         source.addUnits(removedUnits);
         throw new IllegalArgumentException("The unit level is less than 1");
       }
-     ArrayList<Spy> spies = new ArrayList<Spy>();
-     for(int i=0;i<num;i++){
-      spies.add(new Spy(player.getName()));
-     }
-     source.addSpies(spies);
-     player.consumeTech(num*Spy.getSpyCost());
+      ArrayList<Spy> spies = new ArrayList<Spy>();
+      for (int i = 0; i < num; i++) {
+        spies.add(new Spy(player.getName()));
+      }
+      source.addSpies(spies);
+      player.consumeTech(num * Spy.getSpyCost());
     }
     this.actions.add(new UpgradeSender(source, name, num, toLevel));
   }
 
   /**
-   * 
    * @param source
    * @param upgradeDic <Name : <num, toLevel>>
    */
@@ -74,7 +72,8 @@ public class ClientUpgrade {
         if (toLevel >= 0) {
           if (toLevel > player.getTechLevel()) {
             throw new IllegalArgumentException(
-                "Cannot upgrade to level " + toLevel + " as player is level " + player.getTechLevel());
+                "Cannot upgrade to level " + toLevel + " as player is level "
+                    + player.getTechLevel());
           }
           cost += num * source.getUnits().get(indexList.get(0)).getCost(toLevel);
         } else if (toLevel == -1) {

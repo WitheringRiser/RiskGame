@@ -29,60 +29,63 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundSize;
 
 public class SetUnitController implements Controller {
-    // @FXML
-    TextField textField;
-    @FXML
-    Text resultText;
-    @FXML
-    private GridPane gridPane;
 
-    protected ArrayList<String> namePassword;
-    protected Socket clientSocket;
-    protected Stage stage;
-    protected Scene scene;
-    private ArrayList<Territory> territories;
-    private int remainUnit;
+  // @FXML
+  TextField textField;
+  @FXML
+  Text resultText;
+  @FXML
+  private GridPane gridPane;
 
-    public SetUnitController(Stage st, Socket cs, ArrayList<String> np, ArrayList<Territory> ts, int r) {
-        namePassword = np;
-        stage = st;
-        clientSocket = cs;
-        territories = ts;
-        remainUnit = r;
-    }
+  protected ArrayList<String> namePassword;
+  protected Socket clientSocket;
+  protected Stage stage;
+  protected Scene scene;
+  private ArrayList<Territory> territories;
+  private int remainUnit;
 
-    @FXML
-    public void setUnit(ActionEvent ae) throws IOException, ClassNotFoundException {
-        Object source = ae.getSource();
-        Button btn = (Button) source;
-        String terrName = btn.getId();
-        String uerIn = textField.getText();
-        try {
-            int number = Integer.parseInt(uerIn);
-            if (number < 0 || number > remainUnit) {
-                throw new IllegalArgumentException("");
-            }
-            for (Territory t : territories) {
-                if (t.getName().equals(terrName)) {
-                    t.addUnits(number,namePassword.get(0));
-                    btn.setText(t.getName()+"   #Units: "+String.valueOf(t.getUnitsNumber()));
-                    break;
-                }
-            }
+  public SetUnitController(Stage st, Socket cs, ArrayList<String> np, ArrayList<Territory> ts,
+      int r) {
+    namePassword = np;
+    stage = st;
+    clientSocket = cs;
+    territories = ts;
+    remainUnit = r;
+  }
 
-            remainUnit -= number;
-            resultText.setText("Success");
-            if (remainUnit == 0) {
-                resultText.setText("Set units done! Please wait...");
-                Communicate.sendObject(clientSocket, territories);
-                PlayTurnController playTurnController = new PlayTurnController(stage, clientSocket, namePassword);
-                GeneralScreen<PlayTurnController> generalScreen = new GeneralScreen<>(playTurnController);
-            }
-        } catch (Exception e) {
-            resultText.setText(" Please input a valid positive number <= " + remainUnit);
+  @FXML
+  public void setUnit(ActionEvent ae) throws IOException, ClassNotFoundException {
+    Object source = ae.getSource();
+    Button btn = (Button) source;
+    String terrName = btn.getId();
+    String uerIn = textField.getText();
+    try {
+      int number = Integer.parseInt(uerIn);
+      if (number < 0 || number > remainUnit) {
+        throw new IllegalArgumentException("");
+      }
+      for (Territory t : territories) {
+        if (t.getName().equals(terrName)) {
+          t.addUnits(number, namePassword.get(0));
+          btn.setText(t.getName() + "   #Units: " + String.valueOf(t.getUnitsNumber()));
+          break;
         }
+      }
 
+      remainUnit -= number;
+      resultText.setText("Success");
+      if (remainUnit == 0) {
+        resultText.setText("Set units done! Please wait...");
+        Communicate.sendObject(clientSocket, territories);
+        PlayTurnController playTurnController = new PlayTurnController(stage, clientSocket,
+            namePassword);
+        GeneralScreen<PlayTurnController> generalScreen = new GeneralScreen<>(playTurnController);
+      }
+    } catch (Exception e) {
+      resultText.setText(" Please input a valid positive number <= " + remainUnit);
     }
+
+  }
 
     public void displayTerr() {
         textField = new TextField();
@@ -120,6 +123,6 @@ public class SetUnitController implements Controller {
 
         stage.show();
 
-    }
+  }
 
 }

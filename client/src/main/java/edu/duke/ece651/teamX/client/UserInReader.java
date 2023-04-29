@@ -1,20 +1,17 @@
 package edu.duke.ece651.teamX.client;
 
 import edu.duke.ece651.teamX.shared.*;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
 public class UserInReader {
-
   private PrintStream out;
   private BufferedReader inputReader;
 
   /**
-   * Construct a UserInReader object The main job is to read from user and parse
-   * some input
+   * Construct a UserInReader object The main job is to read from user and parse some input
    *
    * @param input
    * @param out
@@ -34,13 +31,14 @@ public class UserInReader {
     String user_in = inputReader.readLine();
     return user_in;
   }
-
+  /*
   public ArrayList<Integer> readIndexList(int min, int max, int max_num) throws IOException {
     ArrayList<Integer> indexList = new ArrayList<>();
     boolean isValidInput = false;
     do {
       System.out
-          .print("To select units, please enter a list of unit indexes(integers) separated by commas or spaces: ");
+          .print(
+              "To select units, please enter a list of unit indexes(integers) separated by commas or spaces: ");
       String input = readString();
       String[] tokens = input.split("[,\\s]+");
       isValidInput = true;
@@ -48,7 +46,8 @@ public class UserInReader {
         try {
           int index = Integer.parseInt(token);
           if (index < min || index > max) {
-            System.out.println("Invalid input. All integers must be between " + min + " and " + max + ".");
+            System.out.println(
+                "Invalid input. All integers must be between " + min + " and " + max + ".");
             indexList.clear();
             isValidInput = false;
             break;
@@ -77,7 +76,7 @@ public class UserInReader {
     return indexList;
 
   }
-
+  */
   /**
    * Convert user input to an integer
    *
@@ -85,16 +84,18 @@ public class UserInReader {
    * @return -1 if the number is not valid
    * @return int >= 0 if user input a valid number
    */
+  /*
   public int getUserInt(String user_in) {
     try {
       int choice = Integer.parseInt(user_in);
       return choice;
-    } catch (NumberFormatException ex) {
+    }
+    catch (NumberFormatException ex) {
       out.println("Expect a valid number, but got \"" + user_in + "\"");
     }
     return -1;
   }
-
+  */
   /**
    * Directly read from user and return an int result
    *
@@ -102,11 +103,12 @@ public class UserInReader {
    * @return int >= 0 if user input a valid number
    * @throws IOException
    */
+  /*
   public int getUserInt() throws IOException {
     String user_in = inputReader.readLine();
     return getUserInt(user_in);
   }
-
+  */
   /**
    * Get a valid unit number input by client
    *
@@ -114,6 +116,7 @@ public class UserInReader {
    * @return -1 if user press B or b
    * @return a valid number of unit to use in later action
    */
+  /*
   public int enterNum(int max_num, String enterAgainPrompt) throws IOException {
     while (true) {
       String user_in = inputReader.readLine();
@@ -127,8 +130,10 @@ public class UserInReader {
       out.print(enterAgainPrompt);
     }
   }
-
-  public int enterNum(int min_num, int max_num, String enterAgainPrompt) throws IOException {
+  */
+  /*
+  public int enterNum(int min_num, int max_num, String enterAgainPrompt)
+      throws IOException {
     while (true) {
       int num = enterNum(max_num, enterAgainPrompt);
       if (num >= min_num) {
@@ -137,7 +142,7 @@ public class UserInReader {
       out.print(enterAgainPrompt);
     }
   }
-
+  */
   /**
    * @param max_num          is the maximum number of available units
    * @param startPrompt      is the start input prompt
@@ -145,13 +150,15 @@ public class UserInReader {
    * @return a valid number of unit to use in later action
    * @throws IOException
    */
-  public int enterNum(int max_num, String startPrompt, String enterAgainPrompt) throws IOException {
+  /*
+  public int enterNum(int max_num, String startPrompt, String enterAgainPrompt)
+      throws IOException {
     out.print(startPrompt);
     return enterNum(max_num, enterAgainPrompt);
   }
-
-  public int enterLevel(int tech_level, int resource, Unit unit)
-      throws IOException {
+  */
+  /*
+  public int enterLevel(int tech_level, int resource, Unit unit) throws IOException {
     out.print("please input the level you want the unit to upgrade to");
     while (true) {
       String user_in = inputReader.readLine();
@@ -160,12 +167,14 @@ public class UserInReader {
       }
       int level = getUserInt(user_in);
 
-      if (level > tech_level || unit.getCost(level) > resource || !unit.upgradeLevel(level)) {
+      if (level > tech_level || unit.getCost(level) > resource ||
+          !unit.upgradeLevel(level)) {
         out.print("level is invalid, please input again");
-      } else {
+      }
+      else {
         return level;
       }
-
     }
   }
+  */
 }

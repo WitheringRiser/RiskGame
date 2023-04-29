@@ -15,13 +15,13 @@
   <Text text="Welcome to RISK game!"
     GridPane.columnIndex="0" GridPane.rowIndex="0"
     GridPane.columnSpan="2"/>
-    <Text text="Please wait a few moments while we gather all players before we start..."
+  <Text text="Please wait a few moments while we gather all players before we start..."
     GridPane.columnIndex="0" GridPane.rowIndex="1"
     GridPane.columnSpan="2"/>
 
-    <Button text="Back"
-        GridPane.rowIndex="5"
-        GridPane.columnIndex="4"
-        styleClass="numbtn"
-        onAction="#back" />
+  <Button text="Back"
+    GridPane.rowIndex="5"
+    GridPane.columnIndex="4"
+    styleClass="numbtn"
+    onAction="#back"/>
 </GridPane>

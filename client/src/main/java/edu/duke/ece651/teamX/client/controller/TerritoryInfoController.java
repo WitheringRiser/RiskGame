@@ -35,8 +35,6 @@ public class TerritoryInfoController implements Controller {
     private int y;
     private int radius;
 
-    private Stage Window;
-
     public TerritoryButton(Territory territory, int x, int y, int radius) {
       super(x, y, radius);
       setFill(Color.DARKSLATEBLUE);
@@ -60,18 +58,6 @@ public class TerritoryInfoController implements Controller {
     public int getY() {
       return y;
     }
-
-    /*
-    private void showChooseView(Player player, Stage Window) throws IOException {
-      FXMLLoader loaderStart = new FXMLLoader(getClass().getResource("/Views/SelectNum.fxml"));
-      loaderStart.setControllerFactory(c->{
-          return new SelectNumber(player, Window);
-      });
-      Scene scene = new Scene(loaderStart.load());
-      this.Window.setScene(scene);
-      this.Window.show();
-  }
-  */
 
   }
 
@@ -171,8 +157,4 @@ public class TerritoryInfoController implements Controller {
     stage.setTitle("Territory Map");
     stage.show();
   }
-
-
-  
-
 }

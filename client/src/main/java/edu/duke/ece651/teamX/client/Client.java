@@ -140,7 +140,6 @@
 //     foodResource = f;
 //   }
 
-
 //   /**
 //    * Let client to player one turn
 //    *

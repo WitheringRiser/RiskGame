@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 
 public class ShieldProcessorTest {
+
   @Test
   public void test_resolve() {
     Territory t1 = new Territory("a", 3);
