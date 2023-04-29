@@ -31,4 +31,13 @@ public class GameResult implements Serializable {
     return losers.contains(p);
   }
 
+  public boolean loserContainsByPlayerNmae(String name) {
+    for (Player p : losers) {
+      if (p.getName().equals(name)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
 }
