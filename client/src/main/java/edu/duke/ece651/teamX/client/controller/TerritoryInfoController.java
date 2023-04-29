@@ -37,7 +37,7 @@ public class TerritoryInfoController implements Controller {
 
     public TerritoryButton(Territory territory, int x, int y, int radius) {
       super(x, y, radius);
-      setFill(Color.BLUE);
+      setFill(Color.DARKSLATEBLUE);
       setRadius(radius);
       this.territory = territory;
       this.x = x;

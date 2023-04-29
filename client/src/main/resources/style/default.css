@@ -990,6 +990,9 @@ VBox > .split-menu-button.last > .arrow-button {
 }
 
 .background {
-  -fx-background-color: #e6e6e6;
+  -fx-background-color: #ed8888;
 }
 
+.bodybg{
+  -fx-background-image: url("/photos/background.jpg")
+}

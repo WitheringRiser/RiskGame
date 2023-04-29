@@ -15,6 +15,15 @@ import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundSize;
 /*
  * For client to choose from:
  * 0 Start a new game
@@ -29,16 +38,18 @@ public class RoomController implements Controller {
   @FXML
   Text resultText;
 
-  /**
-   * @param st the stage
-   * @param cs the client socket created outside
-   * @param np the name password Arraylist
-   */
-  public RoomController(Stage st, Socket cs, ArrayList<String> np) {
-    stage = st;
-    clientSocket = cs;
-    namePassword = np;
-  }
+    /**
+     * 
+     * @param st the stage
+     * @param cs the client socket created outside
+     * @param np the name password Arraylist
+     */
+    public RoomController(Stage st, Socket cs, ArrayList<String> np) {
+        stage = st;
+        clientSocket = cs;
+        namePassword = np;
+        
+    }
 
   /**
    * Reconnect to the server to indicate choose game room again

@@ -12,6 +12,7 @@ import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+import java.nio.file.*;
 
 import edu.duke.ece651.teamX.client.ClientAttack;
 import edu.duke.ece651.teamX.client.ClientBreaker;
@@ -49,6 +50,22 @@ import javafx.stage.Modality;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.media.Media;  
+import javafx.scene.media.MediaPlayer;  
+import javafx.scene.media.MediaView;  
+import javafx.scene.media.AudioClip;
+import javafx.scene.paint.Color; 
+
+import java.io.File;
+
+
+
 public class PlayTurnController implements Controller {
 
   private enum GameMode {
@@ -69,6 +86,7 @@ public class PlayTurnController implements Controller {
 
   @FXML
   Text resultText;
+  
 
   @FXML
   private GridPane gridPane;
@@ -100,6 +118,7 @@ public class PlayTurnController implements Controller {
     this.stage = stage;
     this.clientSocket = socket;
     this.fogView = new FogView(namepassword.get(0));
+    //resultText.setFill(Color.IVORY); 
     refresh();
   }
 
@@ -163,9 +182,9 @@ public class PlayTurnController implements Controller {
       Button button = (Button) scene.lookup("#" + t.getName());
       if (map.getTerritoriesByPlayerName(namePassword.get(0)).contains(t)) {
         if (t.getShieldLevel() == 0 && t.getBreakerLevel() == 0) {
-          button.setStyle("-fx-background-color: blue ;");
+          button.setStyle("-fx-background-color: darkslateblue ;");
         } else if (t.getShieldLevel() == 0) {
-          button.setStyle("-fx-background-color: red ;");
+          button.setStyle("-fx-background-color: indianred ;");
         } else if (t.getBreakerLevel() == 0) {
           button.setStyle("-fx-background-color: gold ;");
         } else {
@@ -189,6 +208,11 @@ public class PlayTurnController implements Controller {
         displayTerritoryInfo(button, t);
       }
     }
+
+    //AudioClip sound = new AudioClip("sounds/background_music_game.mp3");
+    //sound.play();
+
+    
   }
 
   @Override
@@ -203,6 +227,18 @@ public class PlayTurnController implements Controller {
     scene.getStylesheets().add(cssResource.toString());
     stage.setTitle("Play Game");
     stage.setScene(scene);
+
+    Image image = new Image("photos/MenuBackground.png");
+    gridPane.setBackground(new Background(new BackgroundImage(image,BackgroundRepeat.NO_REPEAT,
+                                                              BackgroundRepeat.NO_REPEAT,
+                                                              BackgroundPosition.DEFAULT,
+                                                              new BackgroundSize(1.0, 1.0, true, true, false, false))));
+
+    
+
+    
+    
+
     fogView.refreshMap(map);
     setTerrButtons(false);
     if (!isLost) {
@@ -502,6 +538,9 @@ public class PlayTurnController implements Controller {
     Label amountTitle = new Label("Amount");
     gridPane.add(nameTitle, 0, 0);
     gridPane.add(amountTitle, 1, 0);
+
+    
+
     for (int level = 0; level <= 6; level++) {
       Label levelLabel = new Label("Level " + level + ":");
       ComboBox<Integer> comboBox = getComboBox(0, sourceTerritory.getUnitCountByLevel(level), 0);
