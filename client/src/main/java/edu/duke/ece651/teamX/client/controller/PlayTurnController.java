@@ -1,5 +1,6 @@
 package edu.duke.ece651.teamX.client.controller;
 
+import com.sun.tools.classfile.ConstantPool.CPRefInfo;
 import edu.duke.ece651.teamX.client.AIDecisionMaker;
 import java.io.IOException;
 import java.net.Socket;
@@ -45,6 +46,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 public class PlayTurnController implements Controller {
@@ -62,6 +64,8 @@ public class PlayTurnController implements Controller {
   private int breakerLevel = 0;
   TextField textField;
   TextField textField_toLevel;
+
+  private boolean isLost = false;
 
   @FXML
   Text resultText;
@@ -102,6 +106,15 @@ public class PlayTurnController implements Controller {
   private void refresh() throws IOException, ClassNotFoundException {
     map = Communicate.receiveMap(clientSocket);
     gameResult = Communicate.receiveGameResult(clientSocket);
+
+    if (gameResult.loserContainsByPlayerNmae(namePassword.get(0))) {
+      isLost = true;
+      resultText.setText("You Lost!");
+    }
+    if (gameResult.isWin()) {
+      openWinWindow(gameResult);
+    }
+
     System.out.println("player name = " + namePassword.get(0));
     fogView.refreshMap(map);
     this.clientAttack = new ClientAttack(clientSocket, map,
@@ -192,8 +205,14 @@ public class PlayTurnController implements Controller {
     stage.setScene(scene);
     fogView.refreshMap(map);
     setTerrButtons(false);
-    setCloakButtons();
+    if (!isLost) {
+      setCloakButtons();
+    }
     stage.show();
+
+    if (isLost) {
+      refresh();
+    }
   }
 
   private void setCloakButtons() {
@@ -320,6 +339,10 @@ public class PlayTurnController implements Controller {
 
   @FXML
   private void onShieldButtonClick(ActionEvent event) {
+    if (isLost) {
+      resultText.setText("You have lost the game, please wait for others to finish");
+      return;
+    }
     resultText.setText("Please select a source Territory to add a shield on");
     currentMode = GameMode.SHIELD;
     sourceTerritory = null;
@@ -327,6 +350,10 @@ public class PlayTurnController implements Controller {
 
   @FXML
   private void onBreakerButtonClick(ActionEvent event) {
+    if (isLost) {
+      resultText.setText("You have lost the game, please wait for others to finish");
+      return;
+    }
     resultText.setText("Please select a source Territory to add a breaker on");
     currentMode = GameMode.BREAKER;
     sourceTerritory = null;
@@ -334,6 +361,10 @@ public class PlayTurnController implements Controller {
 
   @FXML
   private void onAttackButtonClick(ActionEvent event) {
+    if (isLost) {
+      resultText.setText("You have lost the game, please wait for others to finish");
+      return;
+    }
     resultText.setText("Please select a source Territory to start attack");
     currentMode = GameMode.ATTACK;
     sourceTerritory = null;
@@ -341,6 +372,10 @@ public class PlayTurnController implements Controller {
 
   @FXML
   private void onMoveButtonClick(ActionEvent event) {
+    if (isLost) {
+      resultText.setText("You have lost the game, please wait for others to finish");
+      return;
+    }
     resultText.setText("Please select a source Territory to start move");
     currentMode = GameMode.MOVE;
     sourceTerritory = null;
@@ -348,6 +383,10 @@ public class PlayTurnController implements Controller {
 
   @FXML
   private void defaultButtonClick(ActionEvent event) {
+    if (isLost) {
+      resultText.setText("You have lost the game, please wait for others to finish");
+      return;
+    }
     currentMode = GameMode.DEFAULT;
     sourceTerritory = null;
     setTerrButtons(true);
@@ -355,6 +394,10 @@ public class PlayTurnController implements Controller {
 
   @FXML
   private void onResearchButtonClick(ActionEvent event) {
+    if (isLost) {
+      resultText.setText("You have lost the game, please wait for others to finish");
+      return;
+    }
     currentMode = GameMode.DEFAULT;
     sourceTerritory = null;
     setTerrButtons(true);
@@ -368,6 +411,10 @@ public class PlayTurnController implements Controller {
 
   @FXML
   private void onUpgradeButtonClick(ActionEvent event) {
+    if (isLost) {
+      resultText.setText("You have lost the game, please wait for others to finish");
+      return;
+    }
     resultText.setText("Please select a source Territory to start upgrade");
     currentMode = GameMode.UPGRADE;
     sourceTerritory = null;
@@ -375,6 +422,10 @@ public class PlayTurnController implements Controller {
 
   @FXML
   private void onSpyMove(ActionEvent event) {
+    if (isLost) {
+      resultText.setText("You have lost the game, please wait for others to finish");
+      return;
+    }
     currentMode = GameMode.SPYMOVE;
     ArrayList<Territory> findRes = clientSpyMove.findSourcTerritories();
     if (findRes.size() > 0) {
@@ -388,6 +439,10 @@ public class PlayTurnController implements Controller {
 
   @FXML
   private void doneButtonClick(ActionEvent event) throws IOException, ClassNotFoundException {
+    if (isLost) {
+      resultText.setText("You have lost the game, please wait for others to finish");
+      return;
+    }
     currentMode = GameMode.DEFAULT;
     endOneTurn();
     refresh();
@@ -617,6 +672,28 @@ public class PlayTurnController implements Controller {
     unitsStage.showAndWait();
   }
 
+  private void openWinWindow(GameResult gameResult) {
+    Stage winStage = new Stage();
+    winStage.initModality(Modality.APPLICATION_MODAL);
+    winStage.setTitle("Game Result");
+    Label label = new Label(gameResult.getWinner().getName() + " wins!");
+    GridPane gridPane = new GridPane();
+    gridPane.setVgap(10);
+    gridPane.setHgap(10);
+    gridPane.setPadding(new Insets(10, 10, 10, 10));
+    gridPane.add(label, 0, 0);
+
+    Button exitButton = new Button("Exit Game");
+    exitButton.setOnAction(event -> {
+      System.exit(0);
+    });
+    gridPane.add(exitButton, 0, 1);
+
+    Scene scene = new Scene(gridPane);
+    winStage.setScene(scene);
+    winStage.showAndWait();
+  }
+
   private void openUnitsWindow() {
     Stage unitsStage = new Stage();
     unitsStage.initModality(Modality.APPLICATION_MODAL);
@@ -647,6 +724,10 @@ public class PlayTurnController implements Controller {
 
   @FXML
   private void makeAIDecision() throws IOException, ClassNotFoundException {
+    if (isLost) {
+      resultText.setText("You have lost the game, please wait for others to finish");
+      return;
+    }
     AIDecisionMaker aiDecisionMaker = new AIDecisionMaker(this.map, this.clientAttack,
         this.clientMove, this.clientResearch, this.clientUpgrade,
         map.getPlayerByName(namePassword.get(0)));
