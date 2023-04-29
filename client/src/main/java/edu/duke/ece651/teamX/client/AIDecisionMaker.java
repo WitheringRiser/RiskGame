@@ -214,7 +214,7 @@ public class AIDecisionMaker {
       for (Territory enemy : clientAttack.findDestTerrs(terr)) {
         int score_distance = getTerritoryEvaluation(enemy) - getTerritoryEvaluation(terr);
         if (score_distance > constantControl) {
-          needAssistTerritories.add(enemy);
+          needAssistTerritories.add(terr);
         }
       }
     }
@@ -228,14 +228,18 @@ public class AIDecisionMaker {
     Territory source_terr = null;
     int MIN_DISTANCE = Integer.MAX_VALUE;
     for (Territory terr : map.getTerritories(this_player)) {
-      if (clientMove.findDestTerrs(terr).contains(dest_terr)) {
-        int distance = clientMove.calculateCost(terr, dest_terr, 1);
-        if (distance < MIN_DISTANCE) {
-          source_terr = terr;
-          MIN_DISTANCE = distance;
+      if (!getBoarderTerritories().contains(terr)) {
+        if (clientMove.findDestTerrs(terr).contains(dest_terr)) {
+          int distance = clientMove.calculateCost(terr, dest_terr, 1);
+          if (distance < MIN_DISTANCE) {
+            source_terr = terr;
+            MIN_DISTANCE = distance;
+          }
         }
       }
     }
+
+    System.out.println("source_terr: " + source_terr);
 
     if (source_terr != null) {
       for (int level = 6; level >= 0; level--) {
